@@ -7,7 +7,7 @@ id int NOT NULL AUTO_INCREMENT,
 firstname varchar(30),
 lastname varchar(30),
 username varchar(512) NOT NULL,
-password varchar(1000) NOT NULL,
+password varchar(30) NOT NULL,
 PRIMARY KEY (ID)
 );
 
@@ -31,7 +31,7 @@ id int NOT NULL AUTO_INCREMENT,
 firstname varchar(30),
 lastname varchar(30),
 username varchar(512) NOT NULL,
-password varchar(1000) NOT NULL,
+password varchar(30) NOT NULL,
 PRIMARY KEY (ID)
 );
 
