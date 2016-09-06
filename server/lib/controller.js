@@ -30,9 +30,52 @@ var allQuestions = {
 	]
 };
 
+var teachersumit = {
+uid: 1,
+questions: [
+{ question: 'what is the x kdjfd',
+categories: 'recursion',
+difficulty: 10
+},
+{ question: 'y times kdjfd',
+categories: 'logic',
+difficulty: 1
+}
+]
+}
+
 var teacher = {
 	submitProblems: function(req, res) {
-		res.json(teacherResponse);
+		var submission = req.body;
+
+		db.Teacher.findOne({where: {id: submission.uid}})
+		.then(function(teacher) {
+
+			var resultProblems = [];
+			submission.questions.forEach(function(question) {
+
+				db.Question.findOrCreate({where: {question: question.question, difficulty: question.difficulty}})
+				.spread(function(questionObj, createdQuestion) {
+
+					db.Category.findOrCreate({where: {name: question.categories}})
+					.spread(function(category, createdCategory) {
+
+						questionObj.setTeacher(teacher)
+						.then(function(questionSetTeacher) {
+
+							questionSetTeacher.setCategory(category)
+							.then(function(questionSetCategory) {
+
+								resultProblems.push(questionSetCategory.get({plain: true}));
+								if (resultProblems.length === submission.questions.length) {
+									res.json(resultProblems);
+								}
+							})
+						})
+					})
+				})
+			})
+		})
 	}
 };
 
