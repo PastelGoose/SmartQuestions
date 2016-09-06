@@ -22035,7 +22035,7 @@
 	        question: 'what\'s five times five',
 	        categories: 'logic',
 	        difficulty: 5,
-	        answered: false,
+	        answered: true,
 	        order: 1
 	      }, {
 	        questionId: 3,
@@ -22064,17 +22064,19 @@
 	        this.state.data.sort(function (a, b) {
 	          return a.order - b.order;
 	        }).map(function (question) {
-	          return _react2.default.createElement(
-	            'div',
-	            { key: question.order },
-	            _react2.default.createElement(
-	              'h3',
-	              null,
-	              'Question Component #',
-	              question.order
-	            ),
-	            _react2.default.createElement(_Question2.default, { question: question })
-	          );
+	          if (question.answered === false) {
+	            return _react2.default.createElement(
+	              'div',
+	              { key: question.order },
+	              _react2.default.createElement(
+	                'h3',
+	                null,
+	                'Question Component #',
+	                question.order
+	              ),
+	              _react2.default.createElement(_Question2.default, { question: question })
+	            );
+	          }
 	        })
 	      );
 	    }

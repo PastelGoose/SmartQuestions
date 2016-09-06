@@ -21,7 +21,7 @@ class Questions extends React.Component {
           question: 'what\'s five times five',
           categories: 'logic',
           difficulty: 5,
-          answered: false,
+          answered: true,
           order: 1
         },
         {
@@ -43,12 +43,14 @@ class Questions extends React.Component {
         <h2>Questions List Component</h2>
         {
           this.state.data.sort(function(a, b) { return a.order - b.order; }).map(function(question) {
-            return (
-              <div key={question.order}>
-                <h3>Question Component #{question.order}</h3>
-                <Question question={question} />
-              </div>
-            );
+            if (question.answered === false) {
+              return (
+                <div key={question.order}>
+                  <h3>Question Component #{question.order}</h3>
+                  <Question question={question} />
+                </div>
+              );
+            }
           })
         }
       </div>
