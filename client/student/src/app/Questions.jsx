@@ -9,18 +9,28 @@ class Questions extends React.Component {
     this.state = {
       data: [
         {
-          questionId: 1,
+          questionId: 2,
+          question: 'what\'s one times seven',
           categories: 'recursion',
-          difficulty: 10,
+          difficulty: 2,
+          answered: false,
+          order: 2
+        },
+        {
+          questionId: 1,
+          question: 'what\'s five times five',
+          categories: 'logic',
+          difficulty: 5,
           answered: false,
           order: 1
         },
         {
-          questionId: 2,
-          categories: 'logic',
-          difficulty: 10,
+          questionId: 3,
+          question: 'what\'s eleven times twelve',
+          categories: 'times-tables',
+          difficulty: 8,
           answered: false,
-          order: 2
+          order: 3
         }
       ]
     };
@@ -32,7 +42,7 @@ class Questions extends React.Component {
       <div>
         <h2>Questions List Component</h2>
         {
-          this.state.data.map(function(question) {
+          this.state.data.sort(function(a, b) { return a.order - b.order; }).map(function(question) {
             return (
               <div key={question.order}>
                 <h3>Question Component #{question.order}</h3>
@@ -48,5 +58,3 @@ class Questions extends React.Component {
 }
 
 export default Questions;
-
-
