@@ -15,7 +15,7 @@ var teacherResponse = {
 			difficulty: 10
 		}
 	]
-}
+};
 
 var allQuestions = {
 	data: [
@@ -36,7 +36,7 @@ var allQuestions = {
 			order: 2
 		}
 	]
-}
+};
 
 var teacher = {
 	submitProblems: function(req, res) {

@@ -26,7 +26,7 @@ Once the project moves into development, the press release can be used as a touc
 
 ## Summary ##
   > Give a summary of the product and the benefit. Assume the reader will not read anything else so make this paragraph good.
-  As a teacher, how do you offer practice problems to your student body that address the problem areas of all students? Do you cater to the needs of the worst student or the average? How do you challenge above-average students. We developed a system that allows you to help every student no matter what level they are on. 
+  As a teacher, how do you offer practice problems to your student body that address the problem areas of all students? Do you cater to the needs of the worst student or the average? How do you challenge above-average students? We developed a system that allows you to help every student no matter what level they are on. 
 
 ## Problem ##
   > Describe the problem your product solves.
@@ -39,7 +39,7 @@ Once the project moves into development, the press release can be used as a touc
 
 ## Quote from You ##
   > A quote from a spokesperson in your company.
-  "We want to empower teachers to do their job of empower each and every one of their students."
+  "We want to empower teachers to support each and every one of their students."
 
 ## How to Get Started ##
   > Describe how easy it is to get started.
@@ -47,7 +47,7 @@ Once the project moves into development, the press release can be used as a touc
 
 ## Customer Quote ##
   > Provide a quote from a hypothetical customer that describes how they experienced the benefit.
-  "Smart Questions allows me to help every student by offer them the right practice problems. I can also see where each student is struggling with and help them personally! It ensures no student is left behind."
+  "Smart Questions allows me to help every student by offering them the right practice problems. I can also see where each student is struggling and help them personally! It ensures no student is left behind."
 
 ## Closing and Call to Action ##
   > Wrap it up and give pointers where the reader should go next.

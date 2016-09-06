@@ -14,8 +14,8 @@ var Teacher = db.define('Teacher', {
 var Student = db.define('Student', {
 	firstname: Sequelize.STRING, 
 	lastname: Sequelize.STRING,
-	linkedin: Sequelize.STRING,
-	blurb: Sequelize.STRING,
+	username: Sequelize.STRING,
+	password: Sequelize.STRING,
 });
 
 var Question = db.define('Question', {
