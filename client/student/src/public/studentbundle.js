@@ -22035,7 +22035,7 @@
 	        question: 'what\'s five times five',
 	        categories: 'logic',
 	        difficulty: 5,
-	        answered: true,
+	        answered: false,
 	        order: 1
 	      }, {
 	        questionId: 3,
@@ -22053,6 +22053,13 @@
 	  _createClass(Questions, [{
 	    key: 'render',
 	    value: function render() {
+	      // This area has logic that sorts the questions by order, then displays the first problem that has
+	      // not yet been answered.  It only displays one problem at a time per render.  Once all the questions
+	      // have been answered, display "completed all questions".
+	      var problemFound = false;
+	      var problemsComplete = 0;
+	      var totalProblems = this.state.data.length;
+	
 	      return _react2.default.createElement(
 	        'div',
 	        null,
@@ -22061,10 +22068,19 @@
 	          null,
 	          'Questions List Component'
 	        ),
+	        // Order the data and find the first unanswered question
 	        this.state.data.sort(function (a, b) {
 	          return a.order - b.order;
 	        }).map(function (question) {
-	          if (question.answered === false) {
+	          // Keep track of how many questions we've answered so far
+	          if (question.answered === true) {
+	            problemsComplete++;
+	          }
+	          // If the current problem has not yet been answered, show it to the student.
+	          // If the first unanswered question has already been found in this map loop,
+	          //   do not display another.
+	          if (question.answered === false && problemFound === false) {
+	            problemFound = true;
 	            return _react2.default.createElement(
 	              'div',
 	              { key: question.order },
@@ -22074,8 +22090,25 @@
 	                'Question Component #',
 	                question.order
 	              ),
-	              _react2.default.createElement(_Question2.default, { question: question })
+	              _react2.default.createElement(_Question2.default, {
+	                question: question,
+	                totalProblems: totalProblems
+	              })
 	            );
+	            // If we make it here and this is true, that means the user answered all questions.
+	          } else if (problemsComplete === totalProblems) {
+	            return _react2.default.createElement(
+	              'div',
+	              { key: question.order },
+	              _react2.default.createElement(
+	                'h3',
+	                null,
+	                'You\'ve completed all the problems for the day!'
+	              )
+	            );
+	            // If we make it here, it means we are still looking for the first unanswered question
+	          } else {
+	            return;
 	          }
 	        })
 	      );
@@ -22094,7 +22127,7 @@
   \******************************/
 /***/ function(module, exports, __webpack_require__) {
 
-	'use strict';
+	"use strict";
 	
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
@@ -22109,31 +22142,63 @@
 	var Question = function Question(props) {
 	
 	  return _react2.default.createElement(
-	    'ul',
+	    "div",
 	    null,
 	    _react2.default.createElement(
-	      'li',
+	      "h2",
 	      null,
-	      'QuestionId: ',
-	      props.question.questionId
+	      "Question ",
+	      props.question.order,
+	      " of ",
+	      props.totalProblems
 	    ),
 	    _react2.default.createElement(
-	      'li',
+	      "ul",
 	      null,
-	      'Difficulty: ',
-	      props.question.difficulty
+	      _react2.default.createElement(
+	        "li",
+	        null,
+	        "Question: ",
+	        props.question.question
+	      ),
+	      _react2.default.createElement(
+	        "li",
+	        null,
+	        "QuestionId: ",
+	        props.question.questionId
+	      ),
+	      _react2.default.createElement(
+	        "li",
+	        null,
+	        "Difficulty: ",
+	        props.question.difficulty
+	      ),
+	      _react2.default.createElement(
+	        "li",
+	        null,
+	        "Categories: ",
+	        props.question.categories
+	      ),
+	      _react2.default.createElement(
+	        "li",
+	        null,
+	        "Answered: ",
+	        props.question.answered.toString()
+	      )
 	    ),
 	    _react2.default.createElement(
-	      'li',
+	      "p",
 	      null,
-	      'Categories: ',
-	      props.question.categories
+	      _react2.default.createElement("textarea", { type: "text", cols: "50", rows: "5" })
 	    ),
 	    _react2.default.createElement(
-	      'li',
+	      "p",
 	      null,
-	      'Answered: ',
-	      props.question.answered.toString()
+	      _react2.default.createElement(
+	        "button",
+	        null,
+	        "Submit Answer"
+	      )
 	    )
 	  );
 	};
