@@ -1,20 +1,12 @@
 var db = require('../db');
 
 var teacherResponse = {
-	data: [
-		{
-			questionId: 1,
-			question: 'what\'s two plus two',
-			category: 'recursion',
-			difficulty: 10
-		},
-		{
-			questionId: 2,
-			question: 'what\'s one times seven',
-			category: 'logic',
-			difficulty: 10
-		}
-	]
+	data: {
+		questionId: 1,
+		question: 'what\'s two plus two',
+		category: 'recursion',
+		difficulty: 10
+	}
 };
 
 var allQuestions = {
