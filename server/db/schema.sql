@@ -32,6 +32,7 @@ firstname varchar(30),
 lastname varchar(30),
 username varchar(512) NOT NULL,
 password varchar(30) NOT NULL,
+teacherId int,
 PRIMARY KEY (ID)
 );
 

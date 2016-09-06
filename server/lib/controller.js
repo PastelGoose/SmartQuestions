@@ -68,7 +68,7 @@ var teacher = {
 
 								resultProblems.push(questionSetCategory.get({plain: true}));
 								if (resultProblems.length === submission.questions.length) {
-									res.json(resultProblems);
+									res.json({data: resultProblems});
 								}
 							})
 						})
@@ -82,10 +82,24 @@ var teacher = {
 
 var student = {
 	respondOne: function(req, res) {
+		var uid = req.params.uid;
+
 		res.sendStatus(201);
 	},
 	retrieveQuestions: function(req, res) {
-		res.send(allQuestions);
+		console.log(req.body, req.params, req.query.uid)
+		var uid = req.query.uid;
+
+		db.Student.findById(uid)
+		.then(function(student) {
+			console.log('student', student);
+
+			db.Question.findAll({where: {teacherId: student.get('TeacherId')}})
+			.then(function(allQuestions) {
+				console.log('allQuestions', allQuestions);
+				res.json({data: allQuestions});
+			})
+		})
 	}
 }; 
 

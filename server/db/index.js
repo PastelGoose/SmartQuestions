@@ -50,6 +50,9 @@ var StudentCategory = db.define('StudentCategory', {
 Question.belongsTo(Teacher);
 Teacher.hasMany(Question);
 
+Student.belongsTo(Teacher);
+Teacher.hasMany(Student);
+
 Question.belongsTo(Category);
 Category.hasMany(Question);
 
