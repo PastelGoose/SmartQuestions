@@ -47,7 +47,6 @@ var StudentCategory = db.define('StudentCategory', {
 // 	isServed: Sequelize.BOOLEAN
 // });
 
-
 Question.belongsTo(Teacher);
 Teacher.hasMany(Question);
 
