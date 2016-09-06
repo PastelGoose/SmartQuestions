@@ -18,27 +18,37 @@ Once the project moves into development, the press release can be used as a touc
  
 ## Heading ##
   > Name the product in a way the reader (i.e. your target customers) will understand.
+  Smart Questions
 
 ## Sub-Heading ##
   > Describe who the market for the product is and what benefit they get. One sentence only underneath the title.
+  A way to intelligently offer students practice problems on areas they need to improve on by personalizing daily practice problems for each student.
 
 ## Summary ##
   > Give a summary of the product and the benefit. Assume the reader will not read anything else so make this paragraph good.
+  As a teacher, how do you offer practice problems to your student body that address the problem areas of all students? Do you cater to the needs of the worst student or the average? How do you challenge above-average students. We developed a system that allows you to help every student no matter what level they are on. 
 
 ## Problem ##
   > Describe the problem your product solves.
+  It is difficult for teachers to customize practice problems for each student. 
+
 
 ## Solution ##
   > Describe how your product elegantly solves the problem.
+   Our smart algorithm determines which areas the individual student needs to work on and offer a customized set of problems catering to each student. 
 
 ## Quote from You ##
   > A quote from a spokesperson in your company.
+  "We want to empower teachers to do their job of empower each and every one of their students."
 
 ## How to Get Started ##
   > Describe how easy it is to get started.
+  Teacher: Just submit your questions and invite your students to do the practice problems! 
 
 ## Customer Quote ##
   > Provide a quote from a hypothetical customer that describes how they experienced the benefit.
+  "Smart Questions allows me to help every student by offer them the right practice problems. I can also see where each student is struggling with and help them personally! It ensures no student is left behind."
 
 ## Closing and Call to Action ##
   > Wrap it up and give pointers where the reader should go next.
+  "Try us out now!"
