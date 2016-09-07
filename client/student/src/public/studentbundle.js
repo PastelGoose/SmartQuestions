@@ -22020,40 +22020,48 @@
 	  function Questions(props) {
 	    _classCallCheck(this, Questions);
 	
+	    // this.state = {
+	    //   data: [
+	    //     {
+	    //       id: 2,
+	    //       question: 'what\'s one times seven',
+	    //       CategoryId: 'recursion',
+	    //       difficulty: 2,
+	    //       answered: false,
+	    //       order: 2
+	    //     },
+	    //     {
+	    //       id: 1,
+	    //       question: 'what\'s five times five',
+	    //       CategoryId: 'logic',
+	    //       difficulty: 5,
+	    //       answered: false,
+	    //       order: 1
+	    //     },
+	    //     {
+	    //       id: 3,
+	    //       question: 'what\'s eleven times twelve',
+	    //       CategoryId: 'times-tables',
+	    //       difficulty: 8,
+	    //       answered: false,
+	    //       order: 3
+	    //     }
+	    //   ]
+	    // };
 	    var _this = _possibleConstructorReturn(this, (Questions.__proto__ || Object.getPrototypeOf(Questions)).call(this, props));
 	
-	    _this.state = {
-	      data: [{
-	        questionId: 2,
-	        question: 'what\'s one times seven',
-	        categories: 'recursion',
-	        difficulty: 2,
-	        answered: false,
-	        order: 2
-	      }, {
-	        questionId: 1,
-	        question: 'what\'s five times five',
-	        categories: 'logic',
-	        difficulty: 5,
-	        answered: false,
-	        order: 1
-	      }, {
-	        questionId: 3,
-	        question: 'what\'s eleven times twelve',
-	        categories: 'times-tables',
-	        difficulty: 8,
-	        answered: false,
-	        order: 3
-	      }]
-	    };
-	
+	    _this.state = { data: [] };
+	    //this.getQuestions();
 	    return _this;
 	  }
 	
 	  _createClass(Questions, [{
 	    key: 'getQuestions',
 	    value: function getQuestions() {
+	      console.log('getQuestions triggered');
+	
 	      var endpoint = 'http://192.168.1.65:4568/api/student/questions';
+	      var self = this;
 	
 	      $.ajax({
 	        method: 'GET',
@@ -22062,12 +22070,49 @@
 	        success: function success(data) {
 	          console.log('success');
 	          console.log(data);
+	          var tempData = data.data.slice();
+	          self.setState({ data: tempData });
+	          //console.log(self.state);
 	        },
 	        error: function error(err) {
 	          console.log('error');
 	          console.log(err);
 	        }
 	      });
+	
+	      // self.setState({
+	      //   data: [
+	      //     {
+	      //       id: 2,
+	      //       question: 'what\'s one times seven',
+	      //       CategoryId: 'recursion',
+	      //       difficulty: 2,
+	      //       answered: false,
+	      //       order: 2
+	      //     },
+	      //     {
+	      //       id: 1,
+	      //       question: 'what\'s five times five',
+	      //       CategoryId: 'logic',
+	      //       difficulty: 5,
+	      //       answered: false,
+	      //       order: 1
+	      //     },
+	      //     {
+	      //       id: 3,
+	      //       question: 'what\'s eleven times twelve',
+	      //       CategoryId: 'times-tables',
+	      //       difficulty: 8,
+	      //       answered: false,
+	      //       order: 3
+	      //     }
+	      //   ]
+	      // });
+	    }
+	  }, {
+	    key: 'componentDidMount',
+	    value: function componentDidMount() {
+	      this.getQuestions();
 	    }
 	  }, {
 	    key: 'postResponse',
@@ -22078,7 +22123,7 @@
 	      // $.ajax({
 	      //   method: 'POST',
 	      //   url: endpoint,
-	      //   data: {uid: uid, questionId: qid, answer: ans},
+	      //   data: {uid: uid, id: qid, answer: ans},
 	      //   success: function(data) {
 	      //     console.log('success');
 	      //     console.log(data);
@@ -22097,7 +22142,7 @@
 	      // After successful post, update the question on the state (answered: true)
 	      var tempStateData = this.state.data.slice();
 	      tempStateData.forEach(function (question) {
-	        if (question.questionId === qid) {
+	        if (question.id === qid) {
 	          question.answered = true;
 	        }
 	      });
@@ -22107,7 +22152,7 @@
 	
 	    // "{
 	    //  uid: 343,
-	    //  questionid: 2,
+	    //  id: 2,
 	    //  answer: “x is the multiple..”
 	    //  }"
 	
@@ -22131,7 +22176,7 @@
 	        ),
 	        _react2.default.createElement(
 	          'button',
-	          { onClick: this.getQuestions },
+	          { onClick: this.getQuestions.bind(this) },
 	          'Get All Questions'
 	        ),
 	        // Order the data and find the first unanswered question
@@ -22225,8 +22270,8 @@
 	      _react2.default.createElement(
 	        "li",
 	        null,
-	        "QuestionId: ",
-	        props.question.questionId
+	        "id: ",
+	        props.question.id
 	      ),
 	      _react2.default.createElement(
 	        "li",
@@ -22238,7 +22283,7 @@
 	        "li",
 	        null,
 	        "Categories: ",
-	        props.question.categories
+	        props.question.CategoryId
 	      ),
 	      _react2.default.createElement(
 	        "li",
@@ -22264,7 +22309,7 @@
 	            if (ans === '') {
 	              return;
 	            }
-	            props.postResponse(2, props.question.questionId, ans);
+	            props.postResponse(2, props.question.id, ans);
 	          } },
 	        "Submit Answer"
 	      )

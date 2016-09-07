@@ -6,41 +6,45 @@ class Questions extends React.Component {
 
   constructor(props) {
     super(props);
-    this.state = {
-      data: [
-        {
-          questionId: 2,
-          question: 'what\'s one times seven',
-          categories: 'recursion',
-          difficulty: 2,
-          answered: false,
-          order: 2
-        },
-        {
-          questionId: 1,
-          question: 'what\'s five times five',
-          categories: 'logic',
-          difficulty: 5,
-          answered: false,
-          order: 1
-        },
-        {
-          questionId: 3,
-          question: 'what\'s eleven times twelve',
-          categories: 'times-tables',
-          difficulty: 8,
-          answered: false,
-          order: 3
-        }
-      ]
-    };
-
+    // this.state = {
+    //   data: [
+    //     {
+    //       id: 2,
+    //       question: 'what\'s one times seven',
+    //       CategoryId: 'recursion',
+    //       difficulty: 2,
+    //       answered: false,
+    //       order: 2
+    //     },
+    //     {
+    //       id: 1,
+    //       question: 'what\'s five times five',
+    //       CategoryId: 'logic',
+    //       difficulty: 5,
+    //       answered: false,
+    //       order: 1
+    //     },
+    //     {
+    //       id: 3,
+    //       question: 'what\'s eleven times twelve',
+    //       CategoryId: 'times-tables',
+    //       difficulty: 8,
+    //       answered: false,
+    //       order: 3
+    //     }
+    //   ]
+    // };
+    this.state = {data: []};
+    //this.getQuestions();
   }
 
   
   getQuestions() {
+    console.log('getQuestions triggered');
+
     var endpoint = 'http://192.168.1.65:4568/api/student/questions';
-    
+    var self = this;
+
     $.ajax({
       method: 'GET',
       url: endpoint,
@@ -48,13 +52,49 @@ class Questions extends React.Component {
       success: function(data) {
         console.log('success');
         console.log(data);
+        var tempData = data.data.slice();
+        self.setState({data: tempData});
+        //console.log(self.state);
+
       },
       error: function(err) {
         console.log('error');
         console.log(err);
       }
     });
+    
+    // self.setState({
+    //   data: [
+    //     {
+    //       id: 2,
+    //       question: 'what\'s one times seven',
+    //       CategoryId: 'recursion',
+    //       difficulty: 2,
+    //       answered: false,
+    //       order: 2
+    //     },
+    //     {
+    //       id: 1,
+    //       question: 'what\'s five times five',
+    //       CategoryId: 'logic',
+    //       difficulty: 5,
+    //       answered: false,
+    //       order: 1
+    //     },
+    //     {
+    //       id: 3,
+    //       question: 'what\'s eleven times twelve',
+    //       CategoryId: 'times-tables',
+    //       difficulty: 8,
+    //       answered: false,
+    //       order: 3
+    //     }
+    //   ]
+    // });
+  }
 
+  componentDidMount() {
+    this.getQuestions();
   }
 
   postResponse(uid, qid, ans) {
@@ -64,7 +104,7 @@ class Questions extends React.Component {
     // $.ajax({
     //   method: 'POST',
     //   url: endpoint,
-    //   data: {uid: uid, questionId: qid, answer: ans},
+    //   data: {uid: uid, id: qid, answer: ans},
     //   success: function(data) {
     //     console.log('success');
     //     console.log(data);
@@ -83,7 +123,7 @@ class Questions extends React.Component {
     // After successful post, update the question on the state (answered: true)
     var tempStateData = this.state.data.slice();
     tempStateData.forEach(function(question) {
-      if (question.questionId === qid) {
+      if (question.id === qid) {
         question.answered = true;
       }
     });
@@ -93,7 +133,7 @@ class Questions extends React.Component {
 
 // "{
 //  uid: 343,
-//  questionid: 2,
+//  id: 2,
 //  answer: “x is the multiple..”
 //  }"
 
@@ -104,12 +144,11 @@ class Questions extends React.Component {
     var problemFound = false;
     var problemsComplete = 0;
     var totalProblems = this.state.data.length;
-    
 
     return (
       <div>
         <h2>Questions List Component</h2>
-        <button onClick={this.getQuestions}>Get All Questions</button>
+        <button onClick={this.getQuestions.bind(this)}>Get All Questions</button>
         { // Order the data and find the first unanswered question
           this.state.data.sort(function(a, b) { return a.order - b.order; }).map(function(question) {
             // Keep track of how many questions we've answered so far
@@ -119,7 +158,10 @@ class Questions extends React.Component {
             // If the current problem has not yet been answered, show it to the student.
             // If the first unanswered question has already been found in this map loop,
             //   do not display another.
-            if ((question.answered === false) && (problemFound === false)) {
+            if (
+              (question.answered === false) && 
+              (problemFound === false)
+              ) {
               problemFound = true;
               return (
                 <div key={question.order}>
