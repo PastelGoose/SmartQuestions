@@ -45,23 +45,20 @@ var teacher = {
 
 				db.Question.findOrCreate({where: {question: question.question, difficulty: question.difficulty}})
 				.spread(function(questionObj, createdQuestion) {
-
-					db.Category.findOrCreate({where: {name: question.category}})
+					return questionObj.setTeacher(teacher);
+				})
+				.then(function(questionSetTeacher) {					
+					return db.Category.findOrCreate({where: {name: question.category}})
 					.spread(function(category, createdCategory) {
-
-						questionObj.setTeacher(teacher)
-						.then(function(questionSetTeacher) {
-
-							questionSetTeacher.setCategory(category)
-							.then(function(questionSetCategory) {
-
-								resultQuestions.push(questionSetCategory.get({plain: true}));
-								if (resultQuestions.length === submission.questions.length) {
-									res.json({data: resultQuestions});
-								}
-							})
-						})
+						return questionSetTeacher.setCategory(category);
 					})
+				})
+				.then(function(questionSetCategory) {
+					console.log('waaah', questionSetCategory)
+					resultQuestions.push(questionSetCategory.get({plain: true}));
+					if (resultQuestions.length === submission.questions.length) {
+						res.json({data: resultQuestions});
+					}
 				})
 			})
 		})
@@ -91,6 +88,9 @@ var teacher = {
 				ids.push(question.id);
 			})
 			console.log('ids', ids);
+			if(ids.length === 0 ) {
+				res.json({data: []})
+			}
 			db.Question.findAll({
 				where: {id: 
 					{$in: [ids]}
@@ -109,7 +109,7 @@ var teacher = {
 					if(questionResult.Students && questionResult.Students.length !== 0 && questionResult.Category) {
 						console.log('questionresult', questionResult)
 						var result = {
-							question: questionsResult.question,
+							questionText: questionResult.question,
 							difficulty: questionResult.difficulty,
 							category: questionResult.Category.name,
 							questionId: questionResult.id,
@@ -129,7 +129,7 @@ var teacher = {
 		})
 	},
 	postGrades: function(req, res) {
-		
+
 	}
 };
   // {

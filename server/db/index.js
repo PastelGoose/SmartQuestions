@@ -30,6 +30,7 @@ var Category = db.define('Category', {
 var StudentQuestion = db.define('StudentQuestion', {
 	isViewed: Sequelize.BOOLEAN,
 	isAnswered: Sequelize.BOOLEAN,
+	// answerDate: Sequelize.DATE,
 	answer: Sequelize.STRING,
 	confidenceScore: Sequelize.INTEGER,
 	isQueued: Sequelize.BOOLEAN,
