@@ -39,7 +39,7 @@ class Add extends React.Component {
       ]
     }
 
-    var rootUrl = process.env.ROOT_URL || 'http://192.168.1.65:4568';
+    var rootUrl = window.location.origin || 'http://192.168.1.65:4568';
 
     $.ajax({
       url: rootUrl + '/api/teacher/question',
