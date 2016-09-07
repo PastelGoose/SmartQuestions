@@ -12,8 +12,12 @@ const Question = function(props) {
         <li>Categories: {props.question.categories}</li>
         <li>Answered: {props.question.answered.toString()}</li>
       </ul>
-      <p><textarea type="text" cols="50" rows="5" /></p>
-      <p><button>Submit Answer</button></p>
+      <p><textarea id="student-response" type="text" cols="50" rows="5" /></p>
+      <p><button onClick={ () => { 
+        //console.log(props.postResponse);
+        var ans = document.getElementById('student-response').value;
+        props.postResponse(2, props.question.questionId, ans); 
+      }}>Submit Answer</button></p>
     </div>
   );
 

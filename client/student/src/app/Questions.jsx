@@ -37,8 +37,8 @@ class Questions extends React.Component {
 
   }
 
+  
   getQuestions() {
-    console.log('getQuestions function triggered');
     var endpoint = 'http://192.168.1.65:4568/api/student/questions';
     
     $.ajax({
@@ -58,8 +58,37 @@ class Questions extends React.Component {
   }
 
   postResponse(uid, qid, ans) {
-    console.log('uid, qid, ans: ', uid, qid, ans);
-    console.log('test of THIS binding. state is: ', this.state.data);
+
+    var endpoint = 'http://192.168.1.65:4568/api/student/questions';
+    
+    // $.ajax({
+    //   method: 'POST',
+    //   url: endpoint,
+    //   data: {uid: uid, questionId: qid, answer: ans},
+    //   success: function(data) {
+    //     console.log('success');
+    //     console.log(data);
+    //   },
+    //   error: function(err) {
+    //     console.log('error');
+    //     console.log(err);
+    //   }
+    // });
+
+    console.log('Question submitted!');
+    console.log('uid: ', uid);
+    console.log('qid: ', qid);
+    console.log('ans: ', ans);
+    
+    // After successful post, update the question on the state (answered: true)
+    var tempStateData = this.state.data.slice();
+    tempStateData.forEach(function(question) {
+      if (question.questionId === qid) {
+        question.answered = true;
+      }
+    });
+    // Then set the new state with one more question answered.
+    this.setState({data: tempStateData});
   }
 
 // "{
@@ -75,6 +104,7 @@ class Questions extends React.Component {
     var problemFound = false;
     var problemsComplete = 0;
     var totalProblems = this.state.data.length;
+    
 
     return (
       <div>
@@ -112,7 +142,7 @@ class Questions extends React.Component {
             } else {
               return;
             }
-          })
+          }.bind(this))
         }
       </div>
     );
