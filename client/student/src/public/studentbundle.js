@@ -22150,12 +22150,6 @@
 	            return _react2.default.createElement(
 	              'div',
 	              { key: question.order },
-	              _react2.default.createElement(
-	                'h3',
-	                null,
-	                'Question Component #',
-	                question.order
-	              ),
 	              _react2.default.createElement(_Question2.default, {
 	                question: question,
 	                totalProblems: totalProblems,
@@ -22266,6 +22260,10 @@
 	        { onClick: function onClick() {
 	            //console.log(props.postResponse);
 	            var ans = document.getElementById('student-response').value;
+	            // If no response was given, do not submit
+	            if (ans === '') {
+	              return;
+	            }
 	            props.postResponse(2, props.question.questionId, ans);
 	          } },
 	        "Submit Answer"

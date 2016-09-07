@@ -16,6 +16,10 @@ const Question = function(props) {
       <p><button onClick={ () => { 
         //console.log(props.postResponse);
         var ans = document.getElementById('student-response').value;
+        // If no response was given, do not submit
+        if (ans === '') {
+          return;
+        }
         props.postResponse(2, props.question.questionId, ans); 
       }}>Submit Answer</button></p>
     </div>

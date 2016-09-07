@@ -58,7 +58,7 @@ class Questions extends React.Component {
   }
 
   postResponse(uid, qid, ans) {
-
+    
     var endpoint = 'http://192.168.1.65:4568/api/student/questions';
     
     // $.ajax({
@@ -123,7 +123,6 @@ class Questions extends React.Component {
               problemFound = true;
               return (
                 <div key={question.order}>
-                  <h3>Question Component #{question.order}</h3>
                   <Question 
                     question={question} 
                     totalProblems={totalProblems}
