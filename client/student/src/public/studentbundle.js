@@ -22051,6 +22051,39 @@
 	  }
 	
 	  _createClass(Questions, [{
+	    key: 'getQuestions',
+	    value: function getQuestions() {
+	      console.log('getQuestions function triggered');
+	      var endpoint = 'http://192.168.1.65:4568/api/student/questions';
+	
+	      $.ajax({
+	        method: 'GET',
+	        url: endpoint,
+	        data: { uid: 2 },
+	        success: function success(data) {
+	          console.log('success');
+	          console.log(data);
+	        },
+	        error: function error(err) {
+	          console.log('error');
+	          console.log(err);
+	        }
+	      });
+	    }
+	  }, {
+	    key: 'postResponse',
+	    value: function postResponse(uid, qid, ans) {
+	      console.log('uid, qid, ans: ', uid, qid, ans);
+	      console.log('test of THIS binding. state is: ', this.state.data);
+	    }
+	
+	    // "{
+	    //  uid: 343,
+	    //  questionid: 2,
+	    //  answer: “x is the multiple..”
+	    //  }"
+	
+	  }, {
 	    key: 'render',
 	    value: function render() {
 	      // This area has logic that sorts the questions by order, then displays the first problem that has
@@ -22067,6 +22100,11 @@
 	          'h2',
 	          null,
 	          'Questions List Component'
+	        ),
+	        _react2.default.createElement(
+	          'button',
+	          { onClick: this.getQuestions },
+	          'Get All Questions'
 	        ),
 	        // Order the data and find the first unanswered question
 	        this.state.data.sort(function (a, b) {
@@ -22092,7 +22130,8 @@
 	              ),
 	              _react2.default.createElement(_Question2.default, {
 	                question: question,
-	                totalProblems: totalProblems
+	                totalProblems: totalProblems,
+	                postResponse: this.postResponse.bind(this)
 	              })
 	            );
 	            // If we make it here and this is true, that means the user answered all questions.

@@ -37,6 +37,37 @@ class Questions extends React.Component {
 
   }
 
+  getQuestions() {
+    console.log('getQuestions function triggered');
+    var endpoint = 'http://192.168.1.65:4568/api/student/questions';
+    
+    $.ajax({
+      method: 'GET',
+      url: endpoint,
+      data: {uid: 2},
+      success: function(data) {
+        console.log('success');
+        console.log(data);
+      },
+      error: function(err) {
+        console.log('error');
+        console.log(err);
+      }
+    });
+
+  }
+
+  postResponse(uid, qid, ans) {
+    console.log('uid, qid, ans: ', uid, qid, ans);
+    console.log('test of THIS binding. state is: ', this.state.data);
+  }
+
+// "{
+//  uid: 343,
+//  questionid: 2,
+//  answer: “x is the multiple..”
+//  }"
+
   render() {
     // This area has logic that sorts the questions by order, then displays the first problem that has
     // not yet been answered.  It only displays one problem at a time per render.  Once all the questions
@@ -48,6 +79,7 @@ class Questions extends React.Component {
     return (
       <div>
         <h2>Questions List Component</h2>
+        <button onClick={this.getQuestions}>Get All Questions</button>
         { // Order the data and find the first unanswered question
           this.state.data.sort(function(a, b) { return a.order - b.order; }).map(function(question) {
             // Keep track of how many questions we've answered so far
@@ -65,6 +97,7 @@ class Questions extends React.Component {
                   <Question 
                     question={question} 
                     totalProblems={totalProblems}
+                    postResponse={this.postResponse.bind(this)}
                   />
                 </div>
               );
