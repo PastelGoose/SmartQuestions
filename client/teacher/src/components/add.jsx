@@ -5,10 +5,6 @@ class Add extends React.Component {
   constructor() {
     super();
     this.state= {category: '', difficulty: 0, questionText: ''};
-    // this.handleCategories = () => this.handleCategories();
-    // this.handleDifficulty = () => this.handleDifficulty();
-    // this.handleQuestionText = () => this.handleQuestionText();
-    // this.handleSubmit = () => this.handleSubmit();
   }
 
   handleCategories(event) {
@@ -43,8 +39,10 @@ class Add extends React.Component {
       ]
     }
 
+    var rootUrl = process.env.ROOT_URL || 'http://192.168.1.65:4568';
+
     $.ajax({
-      url: "http://192.168.1.65:4568/api/teacher/question",
+      url: rootUrl + '/api/teacher/question',
       dataType: 'json',
       type: 'POST',
       data: dataObject,
@@ -65,9 +63,16 @@ class Add extends React.Component {
             placeholder="Category" 
             value={ this.state.category }
             onChange={ this.handleCategories.bind(this) }/><br/>
-          <input type="number" value = { this.state.difficulty } placeholder="Difficulty" onChange={this.handleDifficulty.bind(this) }/><br/>
-          <input className="question-text-input" type="text" value={this.state.questionText} placeholder="Question Text" onChange={this.handleQuestionText.bind(this)}/><br/>
-          <input type="submit" value="Submit"/>
+          <input type="number" 
+            value = { this.state.difficulty } 
+            placeholder="Difficulty" 
+            onChange={this.handleDifficulty.bind(this) }/><br/>
+          <input className="question-text-input" 
+            type="text" value={this.state.questionText} 
+            placeholder="Question Text" 
+            onChange={this.handleQuestionText.bind(this)}/><br/>
+          <input type="submit" 
+            value="Submit"/>
         </form>
       </div>
     );
