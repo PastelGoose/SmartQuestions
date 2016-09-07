@@ -46,6 +46,8 @@ isViewed boolean NOT NULL DEFAULT 0,
 isAnswered boolean NOT NULL DEFAULT 0,
 confidenceScore int DEFAULT 3,
 isQueued boolean NOT NULL DEFAULT 0,
+isGraded boolean DEFAULT 0,
+grade int,
 PRIMARY KEY (ID)
 );
 

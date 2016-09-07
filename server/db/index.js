@@ -28,14 +28,23 @@ var Category = db.define('Category', {
 });
 
 var StudentQuestion = db.define('StudentQuestion', {
-	teacherId: Sequelize.INTEGER,
 	isViewed: Sequelize.BOOLEAN,
 	isAnswered: Sequelize.BOOLEAN,
 	answer: Sequelize.STRING,
 	confidenceScore: Sequelize.INTEGER,
 	isQueued: Sequelize.BOOLEAN,
-	orderInQueue: Sequelize.INTEGER
+	orderInQueue: Sequelize.INTEGER,
+	isGraded: Sequelize.BOOLEAN,
+	grade: Sequelize.INTEGER
 });
+    // { id: 4,
+    //    firstname: 'damien',
+    //    lastname: 'mccool',
+    //    username: 'mrteacher',
+    //    password: 'hackreactor',
+    //    TeacherId: 1,
+    //    Questions: [] },
+
 
 var StudentCategory = db.define('StudentCategory', {
 	competencyScore: Sequelize.INTEGER,
