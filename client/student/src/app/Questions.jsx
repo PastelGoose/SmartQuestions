@@ -6,91 +6,58 @@ class Questions extends React.Component {
 
   constructor(props) {
     super(props);
-    // this.state = {
-    //   data: [
-    //     {
-    //       id: 2,
-    //       question: 'what\'s one times seven',
-    //       CategoryId: 'recursion',
-    //       difficulty: 2,
-    //       answered: false,
-    //       order: 2
-    //     },
-    //     {
-    //       id: 1,
-    //       question: 'what\'s five times five',
-    //       CategoryId: 'logic',
-    //       difficulty: 5,
-    //       answered: false,
-    //       order: 1
-    //     },
-    //     {
-    //       id: 3,
-    //       question: 'what\'s eleven times twelve',
-    //       CategoryId: 'times-tables',
-    //       difficulty: 8,
-    //       answered: false,
-    //       order: 3
-    //     }
-    //   ]
-    // };
     this.state = {data: []};
-    //this.getQuestions();
   }
 
-  
   getQuestions() {
-    console.log('getQuestions triggered');
+    //console.log('getQuestions triggered');
 
-    var endpoint = 'http://192.168.1.65:4568/api/student/questions';
-    var self = this;
+    //var endpoint = 'http://192.168.1.65:4568/api/student/questions';
+    // $.ajax({
+    //   method: 'GET',
+    //   url: endpoint,
+    //   data: {uid: 2},
+    //   success: function(results) {
+    //     console.log('success');
+    //     console.log(results);
+    //     this.setState(results);
 
-    $.ajax({
-      method: 'GET',
-      url: endpoint,
-      data: {uid: 2},
-      success: function(data) {
-        console.log('success');
-        console.log(data);
-        var tempData = data.data.slice();
-        self.setState({data: tempData});
-        //console.log(self.state);
-
-      },
-      error: function(err) {
-        console.log('error');
-        console.log(err);
-      }
-    });
-    
-    // self.setState({
-    //   data: [
-    //     {
-    //       id: 2,
-    //       question: 'what\'s one times seven',
-    //       CategoryId: 'recursion',
-    //       difficulty: 2,
-    //       answered: false,
-    //       order: 2
-    //     },
-    //     {
-    //       id: 1,
-    //       question: 'what\'s five times five',
-    //       CategoryId: 'logic',
-    //       difficulty: 5,
-    //       answered: false,
-    //       order: 1
-    //     },
-    //     {
-    //       id: 3,
-    //       question: 'what\'s eleven times twelve',
-    //       CategoryId: 'times-tables',
-    //       difficulty: 8,
-    //       answered: false,
-    //       order: 3
-    //     }
-    //   ]
+    //   },
+    //   error: function(err) {
+    //     console.log('error');
+    //     console.log(err);
+    //   }
     // });
+
+    // Dummy data without ajax
+    this.setState({
+      data: [
+        {
+          questionId: 2,
+          question: 'what\'s one times seven',
+          categories: 'recursion',
+          difficulty: 2,
+          answered: false,
+          order: 2
+        },
+        {
+          questionId: 1,
+          question: 'what\'s five times five',
+          categories: 'logic',
+          difficulty: 5,
+          answered: false,
+          order: 1
+        },
+        {
+          questionId: 3,
+          question: 'what\'s eleven times twelve',
+          categories: 'times-tables',
+          difficulty: 8,
+          answered: false,
+          order: 3
+        }
+      ]
+    });
   }
 
   componentDidMount() {
@@ -99,15 +66,15 @@ class Questions extends React.Component {
 
   postResponse(uid, qid, ans) {
     
-    var endpoint = 'http://192.168.1.65:4568/api/student/questions';
+    //var endpoint = 'http://192.168.1.65:4568/api/student/questions';
     
     // $.ajax({
     //   method: 'POST',
     //   url: endpoint,
-    //   data: {uid: uid, id: qid, answer: ans},
-    //   success: function(data) {
+    //   data: {uid: uid, questionId: qid, answer: ans},
+    //   success: function(results) {
     //     console.log('success');
-    //     console.log(data);
+    //     console.log(results);
     //   },
     //   error: function(err) {
     //     console.log('error');
@@ -115,15 +82,22 @@ class Questions extends React.Component {
     //   }
     // });
 
+    // Note: Client post data should be in this form
+    // "{
+    //  uid: 343,
+    //  questionid: 2,
+    //  answer: “x is the multiple..”
+    //  }"
     console.log('Question submitted!');
     console.log('uid: ', uid);
     console.log('qid: ', qid);
     console.log('ans: ', ans);
     
     // After successful post, update the question on the state (answered: true)
+    // Slice used here so we don't modify the state directly without setState.
     var tempStateData = this.state.data.slice();
     tempStateData.forEach(function(question) {
-      if (question.id === qid) {
+      if (question.questionId === qid) {
         question.answered = true;
       }
     });
@@ -131,11 +105,6 @@ class Questions extends React.Component {
     this.setState({data: tempStateData});
   }
 
-// "{
-//  uid: 343,
-//  id: 2,
-//  answer: “x is the multiple..”
-//  }"
 
   render() {
     // This area has logic that sorts the questions by order, then displays the first problem that has
@@ -144,6 +113,7 @@ class Questions extends React.Component {
     var problemFound = false;
     var problemsComplete = 0;
     var totalProblems = this.state.data.length;
+    
 
     return (
       <div>
@@ -158,10 +128,7 @@ class Questions extends React.Component {
             // If the current problem has not yet been answered, show it to the student.
             // If the first unanswered question has already been found in this map loop,
             //   do not display another.
-            if (
-              (question.answered === false) && 
-              (problemFound === false)
-              ) {
+            if ((question.answered === false) && (problemFound === false)) {
               problemFound = true;
               return (
                 <div key={question.order}>

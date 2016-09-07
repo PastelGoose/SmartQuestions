@@ -22020,94 +22020,59 @@
 	  function Questions(props) {
 	    _classCallCheck(this, Questions);
 	
-	    // this.state = {
-	    //   data: [
-	    //     {
-	    //       id: 2,
-	    //       question: 'what\'s one times seven',
-	    //       CategoryId: 'recursion',
-	    //       difficulty: 2,
-	    //       answered: false,
-	    //       order: 2
-	    //     },
-	    //     {
-	    //       id: 1,
-	    //       question: 'what\'s five times five',
-	    //       CategoryId: 'logic',
-	    //       difficulty: 5,
-	    //       answered: false,
-	    //       order: 1
-	    //     },
-	    //     {
-	    //       id: 3,
-	    //       question: 'what\'s eleven times twelve',
-	    //       CategoryId: 'times-tables',
-	    //       difficulty: 8,
-	    //       answered: false,
-	    //       order: 3
-	    //     }
-	    //   ]
-	    // };
 	    var _this = _possibleConstructorReturn(this, (Questions.__proto__ || Object.getPrototypeOf(Questions)).call(this, props));
 	
 	    _this.state = { data: [] };
-	    //this.getQuestions();
 	    return _this;
 	  }
 	
 	  _createClass(Questions, [{
 	    key: 'getQuestions',
 	    value: function getQuestions() {
-	      console.log('getQuestions triggered');
+	      //console.log('getQuestions triggered');
 	
-	      var endpoint = 'http://192.168.1.65:4568/api/student/questions';
-	      var self = this;
+	      //var endpoint = 'http://192.168.1.65:4568/api/student/questions';
+	      // $.ajax({
+	      //   method: 'GET',
+	      //   url: endpoint,
+	      //   data: {uid: 2},
+	      //   success: function(results) {
+	      //     console.log('success');
+	      //     console.log(results);
+	      //     this.setState(results);
 	
-	      $.ajax({
-	        method: 'GET',
-	        url: endpoint,
-	        data: { uid: 2 },
-	        success: function success(data) {
-	          console.log('success');
-	          console.log(data);
-	          var tempData = data.data.slice();
-	          self.setState({ data: tempData });
-	          //console.log(self.state);
-	        },
-	        error: function error(err) {
-	          console.log('error');
-	          console.log(err);
-	        }
-	      });
-	
-	      // self.setState({
-	      //   data: [
-	      //     {
-	      //       id: 2,
-	      //       question: 'what\'s one times seven',
-	      //       CategoryId: 'recursion',
-	      //       difficulty: 2,
-	      //       answered: false,
-	      //       order: 2
-	      //     },
-	      //     {
-	      //       id: 1,
-	      //       question: 'what\'s five times five',
-	      //       CategoryId: 'logic',
-	      //       difficulty: 5,
-	      //       answered: false,
-	      //       order: 1
-	      //     },
-	      //     {
-	      //       id: 3,
-	      //       question: 'what\'s eleven times twelve',
-	      //       CategoryId: 'times-tables',
-	      //       difficulty: 8,
-	      //       answered: false,
-	      //       order: 3
-	      //     }
-	      //   ]
+	      //   },
+	      //   error: function(err) {
+	      //     console.log('error');
+	      //     console.log(err);
+	      //   }
 	      // });
+	
+	      // Dummy data without ajax
+	      this.setState({
+	        data: [{
+	          questionId: 2,
+	          question: 'what\'s one times seven',
+	          categories: 'recursion',
+	          difficulty: 2,
+	          answered: false,
+	          order: 2
+	        }, {
+	          questionId: 1,
+	          question: 'what\'s five times five',
+	          categories: 'logic',
+	          difficulty: 5,
+	          answered: false,
+	          order: 1
+	        }, {
+	          questionId: 3,
+	          question: 'what\'s eleven times twelve',
+	          categories: 'times-tables',
+	          difficulty: 8,
+	          answered: false,
+	          order: 3
+	        }]
+	      });
 	    }
 	  }, {
 	    key: 'componentDidMount',
@@ -22118,15 +22083,15 @@
 	    key: 'postResponse',
 	    value: function postResponse(uid, qid, ans) {
 	
-	      var endpoint = 'http://192.168.1.65:4568/api/student/questions';
+	      //var endpoint = 'http://192.168.1.65:4568/api/student/questions';
 	
 	      // $.ajax({
 	      //   method: 'POST',
 	      //   url: endpoint,
-	      //   data: {uid: uid, id: qid, answer: ans},
-	      //   success: function(data) {
+	      //   data: {uid: uid, questionId: qid, answer: ans},
+	      //   success: function(results) {
 	      //     console.log('success');
-	      //     console.log(data);
+	      //     console.log(results);
 	      //   },
 	      //   error: function(err) {
 	      //     console.log('error');
@@ -22134,28 +22099,28 @@
 	      //   }
 	      // });
 	
+	      // Note: Client post data should be in this form
+	      // "{
+	      //  uid: 343,
+	      //  questionid: 2,
+	      //  answer: “x is the multiple..”
+	      //  }"
 	      console.log('Question submitted!');
 	      console.log('uid: ', uid);
 	      console.log('qid: ', qid);
 	      console.log('ans: ', ans);
 	
 	      // After successful post, update the question on the state (answered: true)
+	      // Slice used here so we don't modify the state directly without setState.
 	      var tempStateData = this.state.data.slice();
 	      tempStateData.forEach(function (question) {
-	        if (question.id === qid) {
+	        if (question.questionId === qid) {
 	          question.answered = true;
 	        }
 	      });
 	      // Then set the new state with one more question answered.
 	      this.setState({ data: tempStateData });
 	    }
-	
-	    // "{
-	    //  uid: 343,
-	    //  id: 2,
-	    //  answer: “x is the multiple..”
-	    //  }"
-	
 	  }, {
 	    key: 'render',
 	    value: function render() {
@@ -22233,7 +22198,7 @@
   \******************************/
 /***/ function(module, exports, __webpack_require__) {
 
-	"use strict";
+	'use strict';
 	
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
@@ -22247,71 +22212,72 @@
 	
 	var Question = function Question(props) {
 	
+	  var handleSubmit = function handleSubmit() {
+	    var ans = document.getElementById('student-response').value;
+	    // If no response was given, do not submit
+	    if (ans === '') {
+	      return;
+	    }
+	    props.postResponse(2, props.question.questionId, ans);
+	  };
+	
 	  return _react2.default.createElement(
-	    "div",
+	    'div',
 	    null,
 	    _react2.default.createElement(
-	      "h2",
+	      'h2',
 	      null,
-	      "Question ",
+	      'Question ',
 	      props.question.order,
-	      " of ",
+	      ' of ',
 	      props.totalProblems
 	    ),
 	    _react2.default.createElement(
-	      "ul",
+	      'ul',
 	      null,
 	      _react2.default.createElement(
-	        "li",
+	        'li',
 	        null,
-	        "Question: ",
+	        'Question: ',
 	        props.question.question
 	      ),
 	      _react2.default.createElement(
-	        "li",
+	        'li',
 	        null,
-	        "id: ",
-	        props.question.id
+	        'QuestionId: ',
+	        props.question.questionId
 	      ),
 	      _react2.default.createElement(
-	        "li",
+	        'li',
 	        null,
-	        "Difficulty: ",
+	        'Difficulty: ',
 	        props.question.difficulty
 	      ),
 	      _react2.default.createElement(
-	        "li",
+	        'li',
 	        null,
-	        "Categories: ",
-	        props.question.CategoryId
+	        'Categories: ',
+	        props.question.categories
 	      ),
 	      _react2.default.createElement(
-	        "li",
+	        'li',
 	        null,
-	        "Answered: ",
+	        'Answered: ',
 	        props.question.answered.toString()
 	      )
 	    ),
 	    _react2.default.createElement(
-	      "p",
+	      'p',
 	      null,
-	      _react2.default.createElement("textarea", { id: "student-response", type: "text", cols: "50", rows: "5" })
+	      _react2.default.createElement('textarea', { id: 'student-response', type: 'text', cols: '50', rows: '5' })
 	    ),
 	    _react2.default.createElement(
-	      "p",
+	      'p',
 	      null,
 	      _react2.default.createElement(
-	        "button",
-	        { onClick: function onClick() {
-	            //console.log(props.postResponse);
-	            var ans = document.getElementById('student-response').value;
-	            // If no response was given, do not submit
-	            if (ans === '') {
-	              return;
-	            }
-	            props.postResponse(2, props.question.id, ans);
-	          } },
-	        "Submit Answer"
+	        'button',
+	        { onClick: handleSubmit },
+	        'Submit Answer'
 	      )
 	    )
 	  );
