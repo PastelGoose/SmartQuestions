@@ -28,6 +28,7 @@ var Category = db.define('Category', {
 });
 
 var StudentQuestion = db.define('StudentQuestion', {
+	teacherId: Sequelize.INTEGER,
 	isViewed: Sequelize.BOOLEAN,
 	isAnswered: Sequelize.BOOLEAN,
 	answer: Sequelize.STRING,
@@ -56,6 +57,9 @@ Teacher.hasMany(Student);
 
 Question.belongsTo(Category);
 Category.hasMany(Question);
+
+// Question.belongsToMany(Student, {as: '', through: 'QueuedQuestion'})
+// Student.belongsToMany(Question, {as: '', through: 'QueuedQuestion'})
 
 Question.belongsToMany(Student, {through: 'StudentQuestion'})
 Student.belongsToMany(Question, {through: 'StudentQuestion'})

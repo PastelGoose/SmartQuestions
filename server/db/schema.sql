@@ -44,7 +44,7 @@ orderInQueue int,
 answer varchar(1000),
 isViewed boolean NOT NULL DEFAULT 0,
 isAnswered boolean NOT NULL DEFAULT 0,
-confidenceScore int,
+confidenceScore int DEFAULT 3,
 isQueued boolean NOT NULL DEFAULT 0,
 PRIMARY KEY (ID)
 );
@@ -54,7 +54,7 @@ id int NOT NULL AUTO_INCREMENT,
 studentId varchar(30) NOT NULL,
 categoryId varchar(30) NOT NULL,
 createdAt datetime NOT NULL DEFAULT NOW(),
-competencyScore int,
+competencyScore int DEFAULT 3,
 isImproving boolean,
 PRIMARY KEY (ID)
 );
