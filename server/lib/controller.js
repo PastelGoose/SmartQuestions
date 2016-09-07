@@ -30,9 +30,10 @@ var allQuestions = {
 	]
 };
 
- var testSTring= {"uid":1,"questions":[{"question":"what is the x kdjf","category":"recursion","difficulty":10},{"question":"y times kdjf","category":"logic","difficulty":1}]}
+var testSTring= {"uid":1,"questions":[{"questionText":"what is the x kdjf","category":"recursion","difficulty":10},{"questionText":"y times kdjf","category":"logic","difficulty":1}]}
 
 var teacher = {
+	//this is called when the teach submits new questions. Note it can handle one question or multiple questions with each POST
 	submitQuestions: function(req, res) {
 		console.log('req body', req.body)
 		var submission = req.body;
@@ -42,8 +43,8 @@ var teacher = {
 
 			var resultQuestions = [];
 			submission.questions.forEach(function(question) {
-
-				db.Question.findOrCreate({where: {question: question.question, difficulty: question.difficulty}})
+				console.log('my questions! should see dani', question.questionText)
+				db.Question.findOrCreate({where: {questionText: question.questionText, difficulty: question.difficulty}})
 				.spread(function(questionObj, createdQuestion) {
 					return questionObj.setTeacher(teacher);
 				})
@@ -63,6 +64,7 @@ var teacher = {
 			})
 		})
 	},
+	//this is called when the teacher wants to see all of his/her questions that are posted already
 	retrieveAllQuestions: function(req, res) {
 	console.log(req.body, req.params, req.query.uid)
 	var uid = req.query.uid || 1;
@@ -76,6 +78,7 @@ var teacher = {
 		})
 		// })
 	},
+	//this is called when the teacher wants to see a list of questions that he/she still needs to grade
 	gradeUnansweredQuestions: function(req, res) {
 		var uid = req.query.uid || 1;
 		//teacher table has questionId
@@ -128,8 +131,9 @@ var teacher = {
 			})
 		})
 	},
+	//this is called when the teacher post grades for each question
 	postGrades: function(req, res) {
-
+		res.send('post! not really but hehe', req.body)
 	}
 };
   // {

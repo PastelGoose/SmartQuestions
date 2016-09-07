@@ -19,7 +19,7 @@ var Student = db.define('Student', {
 });
 
 var Question = db.define('Question', {
-	question: Sequelize.STRING, 
+	questionText: Sequelize.STRING, 
 	difficulty: Sequelize.INTEGER,
 });
 

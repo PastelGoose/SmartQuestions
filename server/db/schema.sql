@@ -13,7 +13,7 @@ PRIMARY KEY (ID)
 
 create table Questions (
 id int NOT NULL AUTO_INCREMENT,
-question varchar(300),
+questionText varchar(300),
 difficulty int NOT NULL,
 teacherId int,
 categoryId int,
