@@ -11,6 +11,8 @@ router.post('/teacher/grading', controller.teacher.postGrades);
 router.get('/student/questions', controller.student.retrieveQuestions);
 router.post('/student/questions', controller.student.respondOne);
 
+router.get('/student/teachers', controller.student.fetchTeachers);
+router.post('/student/teachers', controller.student.selectedTeacher);
 
 router.get('/test', controller.student.test);
 

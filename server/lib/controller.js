@@ -1,41 +1,10 @@
 var db = require('../db');
 
-var teacherResponse = {
-	data: {
-		questionId: 1,
-		question: 'what\'s two plus two',
-		category: 'recursion',
-		difficulty: 10
-	}
-};
-
-var allQuestions = {
-	data: [
-		{
-			questionId: 1,
-			question: 'what\'s one times seven',
-			category: 'recursion',
-			difficulty: 10,
-			answered: false,
-			order: 1
-		},
-		{
-			questionId: 2,
-			question: 'what\'s one times seven',
-			category: 'logic',
-			difficulty: 10,
-			answered: false,
-			order: 2
-		}
-	]
-};
-
-var testSTring= {"uid":1,"questions":[{"questionText":"what is the x kdjf","category":"recursion","difficulty":10},{"questionText":"y times kdjf","category":"logic","difficulty":1}]}
+var testString= {"uid":1,"questions":[{"questionText":"what is the x kdjf","category":"recursion","difficulty":10},{"questionText":"y times kdjf","category":"logic","difficulty":1}]}
 
 var teacher = {
 	//this is called when the teach submits new questions. Note it can handle one question or multiple questions with each POST
 	submitQuestions: function(req, res) {
-		console.log('req body', req.body)
 		var submission = req.body;
 
 		db.Teacher.findOne({where: {id: submission.uid}})
@@ -43,7 +12,6 @@ var teacher = {
 
 			var resultQuestions = [];
 			submission.questions.forEach(function(question) {
-				console.log('my questions! should see dani', question.questionText)
 				db.Question.findOrCreate({where: {questionText: question.questionText, difficulty: question.difficulty}})
 				.spread(function(questionObj, createdQuestion) {
 					return questionObj.setTeacher(teacher);
@@ -55,7 +23,6 @@ var teacher = {
 					})
 				})
 				.then(function(questionSetCategory) {
-					console.log('waaah', questionSetCategory)
 					resultQuestions.push(questionSetCategory.get({plain: true}));
 					if (resultQuestions.length === submission.questions.length) {
 						res.json({data: resultQuestions});
@@ -71,17 +38,13 @@ var teacher = {
 
 		db.Question.findAll({where: {teacherId: uid}})
 		.then(function(allQuestions) {
-
-			console.log('allQuestions', allQuestions);
 			res.json({data: allQuestions});
-
 		})
-		// })
 	},
 	//this is called when the teacher wants to see a list of questions that he/she still needs to grade
 	gradeUnansweredQuestions: function(req, res) {
 		var uid = req.query.uid || 1;
-		//teacher table has questionId
+
 		db.Question.findAll({
 			where: {TeacherId: uid}
 		})
@@ -90,10 +53,11 @@ var teacher = {
 			allQuestions.forEach(function(question) {
 				ids.push(question.id);
 			})
-			console.log('ids', ids);
-			if(ids.length === 0 ) {
+
+			if (ids.length === 0 ) {
 				res.json({data: []})
 			}
+
 			db.Question.findAll({
 				where: {id: 
 					{$in: [ids]}
@@ -121,12 +85,9 @@ var teacher = {
 							result.studentId = student.id, 
 							result.answer = student.StudentQuestion.answer
 							allResults.push(result);
-							console.log('one result', result);
-							
 						})
 					}
 				})
-				console.log(allResults);
 				res.json({data: allResults});
 			})
 		})
@@ -136,42 +97,9 @@ var teacher = {
 		res.send('post! not really but hehe', req.body)
 	}
 };
-  // {
-  //   "id": 2,
-  //   "question": "y times kdjf",
-  //   "difficulty": 1,
-  //   "TeacherId": 1,
-  //   "CategoryId": 2,
-  //   "Students": [
-  //     {
-  //       "id": 2,
-  //       "firstname": "damien",
-  //       "lastname": "mccool",
-  //       "username": "mrteacher",
-  //       "password": "hackreactor",
-  //       "TeacherId": 1,
-  //       "StudentQuestion": {
-  //         "answer": "x is the multiple"
-  //       }
-  //     }
-  //   ],
-  //   "Category": {
-  //     "id": 2,
-  //     "name": "logic"
-  //   }
-  // },
-// User.findAll({
-//   include: [
-//     {
-//       model: Team, 
-//       include: [
-//         Folder
-//       ]  
-//     }
-//   ]
-// });
 
 var student = {
+	//this is a testing endpoint. use this for testing new queries
 	test: function(req, res) {
 		var uid = req.query.uid || 2;
 		db.Student.findById(uid, {
@@ -185,39 +113,21 @@ var student = {
 		  }]
 		})
 		.then(function(student) {
-			console.log('joint found!', student);
 			res.send(student);
 		})
 	},
-
+	//this is called when the student respond to one question. It logs the response in DB
 	respondOne: function(req, res) {
 		var uid = req.query.uid || 2;
 		var response = req.body;
+
 		db.StudentQuestion.findOne({where: {StudentId: response.uid, QuestionId: response.questionId}})
 		.then(function(foundQuestion) {
 			foundQuestion.updateAttributes({isAnswered: 1, answer: response.answer});
-			console.log('found!', foundQuestion);
 			res.send(foundQuestion);
 		})
-		// db.Student.findOne({where: {id: response.uid}})
-		// .then(function(student) {
-		// 	db.Question.findOne({where: {id: response.questionId}})
-		// 	.then(function(question) {
-		// 		student.addQuestion(question, {isAnswered: 1, answer: response.answer})
-		// 		.then(function(added) {
-		// 			console.log('added')
-		// 		})
-				
-		// 	})
-		// })
-		// user.addProject(project, { role: 'manager', transaction: t });
-
-		//find quesstion and student id. input response. mark as completed. 
-		// response.questionId
-		// response.answer
-		// res.sendStatus(201);
-		// Person.hasOne(Person, {as: 'Father', foreignKey: 'DadId'})
 	},
+	//this is called when the client asks for all questions for the student for the day. these are the question that are marked isQueued
 	retrieveQuestions: function(req, res) {
 		var uid = req.query.uid || 2;
 
@@ -233,10 +143,10 @@ var student = {
 		.then(function(result) {
 			console.log('result', result)
 			var result = result.get({plain: true});
-			// console.log('joint found! result:', student.get({plain: true}));
+
 			if (result.Questions.length !== 0) {
 				var questionArray = [];
-				console.log('found questions----------------->', result)
+
 				result.Questions.forEach(function(question) {
 					db.Category.findById(question.CategoryId)
 					.then(function(category) {
@@ -247,7 +157,6 @@ var student = {
 							order: question.StudentQuestion.orderInQueue,
 							difficulty: question.difficulty,
 							category: category.name
-							//order, difficulty, categories
 						}
 						questionArray.push(currQuestion);
 						if(questionArray.length === result.Questions.length) {
@@ -257,32 +166,35 @@ var student = {
 					})
 				})
 			} else {
-				console.log('did not find questions')
+				// console.log('did not find questions')
 				res.json({data: []});
 			}
 		})
 	},
+	//this is called after the student signsup and asks to see a list of teachers/classes to enroll
+	fetchTeachers: function(req, res) {
+		var uid = req.query.uid || 2;
 
+		db.Teacher.findAll()
+		.then(function(teachers) {
+			var result = [];
+			teachers.forEach(function(teacher) {
+				var currTeacher = {};
+				currTeacher.name = teacher.firstname + ' ' + teacher.lastname;
+				currTeacher.id = teacher.id;
+				result.push(currTeacher);
+			})
+			console.log('teachers!',result);
+			if (result.length === teachers.length) {
+				res.json({data: result});
+			}
+		})
+	},
+	//this is called when the student selects a teacher/class to enroll in
+	selectedTeacher: function(req, res) {
+
+	}
 }; 
-// You should be able to load everything in one go using nested includes:
-
-// User.findAll({
-//   include: [
-//     {
-//       model: Team, 
-//       include: [
-//         Folder
-//       ]  
-//     }
-//   ]
-// });
-// Post.findAll({
-//     include: [{
-//         model: PostLike,
-//         where: { author_id: 123 }
-//     }]
-// })
-
 
 module.exports.teacher = teacher;
 module.exports.student = student;
