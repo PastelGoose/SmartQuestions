@@ -30,35 +30,7 @@ var allQuestions = {
 	]
 };
 
-var dani = {
- uid: 1,
- questions : [
- { question: 'what is the x kdjf',
- category: 'recursion',
- difficulty: 10
- },
- { question: 'y times kdjf',
- category: 'logic',
- difficulty: 1
- }
- ]
- }
-
  var testSTring= {"uid":1,"questions":[{"question":"what is the x kdjf","category":"recursion","difficulty":10},{"question":"y times kdjf","category":"logic","difficulty":1}]}
-
-var teachersumit = {
-uid: 1,
-questions: [
-{ question: 'what is the x kdjfd',
-category: 'recursion',
-difficulty: 10
-},
-{ question: 'y times kdjfd',
-category: 'logic',
-difficulty: 1
-}
-]
-}
 
 var teacher = {
 	submitQuestions: function(req, res) {
@@ -96,11 +68,7 @@ var teacher = {
 	},
 	retrieveAllQuestions: function(req, res) {
 	console.log(req.body, req.params, req.query.uid)
-	var uid = req.query.uid;
-
-	// db.Student.findById(uid)
-	// .then(function(student) {
-	// 	console.log('student', student);
+	var uid = req.query.uid || 1;
 
 		db.Question.findAll({where: {teacherId: uid}})
 		.then(function(allQuestions) {
@@ -108,24 +76,106 @@ var teacher = {
 			console.log('allQuestions', allQuestions);
 			res.json({data: allQuestions});
 
-			// allQuestions.forEach(function(eachQuestion) {
-			// 	student.addQuestion(eachQuestion, {isViewed: 1})
-			// })
 		})
 		// })
+	},
+	gradeUnansweredQuestions: function(req, res) {
+		var uid = req.query.uid || 1;
+		//teacher table has questionId
+		db.Question.findAll({
+			where: {TeacherId: uid}
+		})
+		.then(function(allQuestions) {
+			var ids = [];
+			allQuestions.forEach(function(question) {
+				ids.push(question.id);
+			})
+			console.log('ids', ids);
+			db.Question.findAll({
+				where: {id: 
+					{$in: [ids]}
+				}, 
+				include: [{
+					model: db.Student, 
+					through: {
+						attributes: ['answer', 'question'],
+		    			where: {isAnswered: true, isGraded: false}
+					}, 
+				}, db.Category]
+			})
+			.then(function(questionsResult) {
+				var allResults = [];
+				questionsResult.forEach(function(questionResult) {
+					if(questionResult.Students && questionResult.Students.length !== 0 && questionResult.Category) {
+						console.log('questionresult', questionResult)
+						var result = {
+							question: questionsResult.question,
+							difficulty: questionResult.difficulty,
+							category: questionResult.Category.name,
+							questionId: questionResult.id,
+						}
+						questionResult.Students.forEach(function(student) {
+							result.studentId = student.id, 
+							result.answer = student.StudentQuestion.answer
+							allResults.push(result);
+							console.log('one result', result);
+							
+						})
+					}
+				})
+				console.log(allResults);
+				res.json({data: allResults});
+			})
+		})
+	},
+	postGrades: function(req, res) {
+		
 	}
 };
-
+  // {
+  //   "id": 2,
+  //   "question": "y times kdjf",
+  //   "difficulty": 1,
+  //   "TeacherId": 1,
+  //   "CategoryId": 2,
+  //   "Students": [
+  //     {
+  //       "id": 2,
+  //       "firstname": "damien",
+  //       "lastname": "mccool",
+  //       "username": "mrteacher",
+  //       "password": "hackreactor",
+  //       "TeacherId": 1,
+  //       "StudentQuestion": {
+  //         "answer": "x is the multiple"
+  //       }
+  //     }
+  //   ],
+  //   "Category": {
+  //     "id": 2,
+  //     "name": "logic"
+  //   }
+  // },
+// User.findAll({
+//   include: [
+//     {
+//       model: Team, 
+//       include: [
+//         Folder
+//       ]  
+//     }
+//   ]
+// });
 
 var student = {
 	test: function(req, res) {
 		var uid = req.query.uid || 2;
-
 		db.Student.findById(uid, {
 		  include: [{
 		    model: db.Question,
+		    include: [db.Category],
 		    through: {
-      		attributes: ['TeacherId', 'QuestionId'],
+      		attributes: ['TeacherId', 'QuestionId', 'CategoryName', 'CategoryId'],
 		      where: {isQueued: true}
 		    }
 		  }]
@@ -136,23 +186,12 @@ var student = {
 		})
 	},
 
-	// [ { dataValues:
- //     { isViewed: true,
- //       isAnswered: true,
- //       answer: 'x is the multiple',
- //       confidenceScore: null,
- //       isQueued: false,
- //       orderInQueue: null,
- //       QuestionId: 2,
- //       StudentId: 2 },
- //    _previousDataValues:
-
 	respondOne: function(req, res) {
 		var uid = req.query.uid || 2;
 		var response = req.body;
 		db.StudentQuestion.findOne({where: {StudentId: response.uid, QuestionId: response.questionId}})
 		.then(function(foundQuestion) {
-			foundQuestion.updateAttributes({isViewed: 1, answer: response.answer});
+			foundQuestion.updateAttributes({isAnswered: 1, answer: response.answer});
 			console.log('found!', foundQuestion);
 			res.send(foundQuestion);
 		})
@@ -215,119 +254,12 @@ var student = {
 				})
 			} else {
 				console.log('did not find questions')
-				res.send(null);
+				res.json({data: []});
 			}
 		})
 	},
 
 }; 
-
-// {
-//   "id": 2,
-//   "firstname": "damien",
-//   "lastname": "mccool",
-//   "username": "mrteacher",
-//   "password": "hackreactor",
-//   "TeacherId": 1,
-//   "Questions": [
-//     {
-//       "id": 1,
-//       "question": "what is the x kdjf",
-//       "difficulty": 10,
-//       "TeacherId": 1,
-//       "CategoryId": 1,
-//       "StudentQuestion": {
-//         "QuestionId": 1,
-//         "confidenceScore": 3,
-//         "isAnswered": false,
-//         "orderInQueue": null
-//       }
-//     },
-//     {
-//       "id": 2,
-//       "question": "y times kdjf",
-//       "difficulty": 1,
-//       "TeacherId": 1,
-//       "CategoryId": 2,
-//       "StudentQuestion": {
-//         "QuestionId": 2,
-//         "confidenceScore": 3,
-//         "isAnswered": false,
-//         "orderInQueue": null
-//       }
-//     },
-//     {
-//       "id": 3,
-//       "question": "why do cats cross the street",
-//       "difficulty": 10,
-//       "TeacherId": 1,
-//       "CategoryId": 1,
-//       "StudentQuestion": {
-//         "QuestionId": 3,
-//         "confidenceScore": 3,
-//         "isAnswered": false,
-//         "orderInQueue": null
-//       }
-//     }
-//   ]
-// }
-//         data: [
-//                 {
-//                         questionId: 1,
-//                         question: 'what\'s one times seven',
-//                         categories: 'recursion',
-//                         difficulty: 10,
-//                         answered: false,
-//                         order: 1
-
-// {
-//   "id": 2,
-//   "firstname": "damien",
-//   "lastname": "mccool",
-//   "username": "mrteacher",
-//   "password": "hackreactor",
-//   "TeacherId": 1,
-//   "Questions": [
-//     {
-//       "id": 1,
-//       "question": "what is the x kdjf",
-//       "difficulty": 10,
-//       "TeacherId": 1,
-//       "CategoryId": 1,
-//       "StudentQuestion": {
-//         "QuestionId": 1,
-//         "confidenceScore": 3,
-//         "isAnswered": false
-//       }
-//     },
-//     {
-//       "id": 2,
-//       "question": "y times kdjf",
-//       "difficulty": 1,
-//       "TeacherId": 1,
-//       "CategoryId": 2,
-//       "StudentQuestion": {
-//         "QuestionId": 2,
-//         "confidenceScore": 3,
-//         "isAnswered": false
-//       }
-//     },
-//     {
-//       "id": 3,
-//       "question": "why do cats cross the street",
-//       "difficulty": 10,
-//       "TeacherId": 1,
-//       "CategoryId": 1,
-//       "StudentQuestion": {
-//         "QuestionId": 3,
-//         "confidenceScore": 3,
-//         "isAnswered": false
-//       }
-//     }
-//   ]
-// }
-
-
 // You should be able to load everything in one go using nested includes:
 
 // User.findAll({
