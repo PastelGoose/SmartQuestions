@@ -15,6 +15,8 @@ var teacher = {
 			submission.questions.forEach(function(question) {
 				db.Question.findOrCreate({where: {questionText: question.questionText, difficulty: question.difficulty}})
 				.spread(function(questionObj, createdQuestion) {
+					console.log('my question id!!', questionObj.id)
+					utils.addQuestionToExistingStudent(submission.uid, questionObj.id);
 					return questionObj.setTeacher(teacher);
 				})
 				.then(function(questionSetTeacher) {					

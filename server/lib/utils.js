@@ -99,6 +99,14 @@ module.exports = {
 			
 		})
 	},
+	addQuestionToExistingStudent: function(teacherId, questionId) {
+		db.Student.findAll({where: {teacherId: teacherId}})
+		.then(function(students) {
+			students.forEach(function(student) {
+				student.addQuestion(questionId);
+			})
+		})
+	}
 
 }
 //exclude: ['baz']
