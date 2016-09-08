@@ -1,0 +1,20 @@
+Steps to setup db
+
+1. change root password for sequelize in index.js in db folder
+
+2. go to db folder in Terminal. run mysql -u root -p<insert your password> < schema.sql
+it will create the database and tables 
+
+3. in same folder, run mysql -u root -phi < script.sql
+It will insert some teachers, students, questions, and queue some questions in db
+
+
+Test API: 
+4. do a post request to /api/teacher/questions with data below: 
+{"uid":1,"questions":[{"question":"what is the x kdjf","category":"recursion","difficulty":10},{"question":"y times kdjf","category":"logic","difficulty":1}]}
+Now your db should have some questions linked to categories
+
+5. now try to do get request with /api/teacher/questions and /api/student/questions
+
+6. try to POST to /api/student/questions with 
+{""uid"":2,""questionId"":2,""answer"":""x is the multiple""}

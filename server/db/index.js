@@ -19,7 +19,7 @@ var Student = db.define('Student', {
 });
 
 var Question = db.define('Question', {
-	question: Sequelize.STRING, 
+	questionText: Sequelize.STRING, 
 	difficulty: Sequelize.INTEGER,
 });
 
@@ -30,9 +30,13 @@ var Category = db.define('Category', {
 var StudentQuestion = db.define('StudentQuestion', {
 	isViewed: Sequelize.BOOLEAN,
 	isAnswered: Sequelize.BOOLEAN,
+	answerDate: Sequelize.DATE,
+	answer: Sequelize.STRING,
 	confidenceScore: Sequelize.INTEGER,
 	isQueued: Sequelize.BOOLEAN,
-	orderInQueue: Sequelize.INTEGER
+	orderInQueue: Sequelize.INTEGER,
+	isGraded: Sequelize.BOOLEAN,
+	grade: Sequelize.INTEGER
 });
 
 var StudentCategory = db.define('StudentCategory', {
@@ -50,8 +54,14 @@ var StudentCategory = db.define('StudentCategory', {
 Question.belongsTo(Teacher);
 Teacher.hasMany(Question);
 
+Student.belongsTo(Teacher);
+Teacher.hasMany(Student);
+
 Question.belongsTo(Category);
 Category.hasMany(Question);
+
+// Question.belongsToMany(Student, {as: '', through: 'QueuedQuestion'})
+// Student.belongsToMany(Question, {as: '', through: 'QueuedQuestion'})
 
 Question.belongsToMany(Student, {through: 'StudentQuestion'})
 Student.belongsToMany(Question, {through: 'StudentQuestion'})
