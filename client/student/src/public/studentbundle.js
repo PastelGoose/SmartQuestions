@@ -65,6 +65,10 @@
 	
 	var _TeacherSelect2 = _interopRequireDefault(_TeacherSelect);
 	
+	var _StudentReport = __webpack_require__(/*! ./StudentReport.jsx */ 176);
+	
+	var _StudentReport2 = _interopRequireDefault(_StudentReport);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -95,6 +99,8 @@
 	        ),
 	        _react2.default.createElement('hr', null),
 	        _react2.default.createElement(_TeacherSelect2.default, null),
+	        _react2.default.createElement('hr', null),
+	        _react2.default.createElement(_StudentReport2.default, null),
 	        _react2.default.createElement('hr', null),
 	        _react2.default.createElement(_Questions2.default, null)
 	      );
@@ -22464,6 +22470,286 @@
 	}(_react2.default.Component);
 	
 	exports.default = TeacherSelect;
+
+/***/ },
+/* 176 */
+/*!***********************************!*\
+  !*** ./src/app/StudentReport.jsx ***!
+  \***********************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	var _react = __webpack_require__(/*! react */ 1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _QuestionsHistory = __webpack_require__(/*! ./QuestionsHistory.jsx */ 177);
+	
+	var _QuestionsHistory2 = _interopRequireDefault(_QuestionsHistory);
+	
+	var _StudentCompetency = __webpack_require__(/*! ./StudentCompetency.jsx */ 178);
+	
+	var _StudentCompetency2 = _interopRequireDefault(_StudentCompetency);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var StudentReport = function (_React$Component) {
+	  _inherits(StudentReport, _React$Component);
+	
+	  function StudentReport(props) {
+	    _classCallCheck(this, StudentReport);
+	
+	    var _this = _possibleConstructorReturn(this, (StudentReport.__proto__ || Object.getPrototypeOf(StudentReport)).call(this, props));
+	
+	    _this.state = {
+	      studentId: null,
+	      name: null,
+	      questionsAnswered: [],
+	      competency: []
+	    };
+	    return _this;
+	  }
+	
+	  _createClass(StudentReport, [{
+	    key: 'getReport',
+	    value: function getReport() {
+	      //Sample shape of GET response for student report
+	      var sampleGetResponse = {
+	        'data': {
+	          'studentId': 2,
+	          'name': 'damien mccool',
+	          'questionsAnswered': [{
+	            'questionId': 3,
+	            'questionText': 'why do cats cross the street',
+	            'difficulty': 10,
+	            'categoryName': 'recursion',
+	            'answer': 'x is the multiple',
+	            'grade': 1,
+	            'answerDate': 123
+	          }, {
+	            'questionId': 1,
+	            'questionText': 'what is the x kdjf',
+	            'difficulty': 10,
+	            'categoryName': 'recursion',
+	            'answer': 'x is the multiple',
+	            'grade': 1,
+	            'answerDate': 456
+	          }, {
+	            'questionId': 2,
+	            'questionText': 'y times kdjf',
+	            'difficulty': 1,
+	            'categoryName': 'logic',
+	            'answer': 'x is the multiple',
+	            'grade': 1,
+	            'answerDate': 789
+	          }],
+	          'competency': [{
+	            'categoryId': 1,
+	            'categoryName': 'recursion',
+	            'competencyScore': 4,
+	            'isImproving': true
+	          }, {
+	            'categoryId': 2,
+	            'categoryName': 'logic',
+	            'competencyScore': 1,
+	            'isImproving': false
+	          }]
+	        }
+	      };
+	
+	      this.setState({
+	        studentId: sampleGetResponse.data.studentId,
+	        name: sampleGetResponse.data.name,
+	        questionsAnswered: sampleGetResponse.data.questionsAnswered,
+	        competency: sampleGetResponse.data.competency
+	      });
+	
+	      console.log('report state: ', this.state);
+	    }
+	
+	    // Get the report immediately on component load
+	
+	  }, {
+	    key: 'componentDidMount',
+	    value: function componentDidMount() {
+	      this.getReport();
+	    }
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	
+	      return _react2.default.createElement(
+	        'div',
+	        null,
+	        _react2.default.createElement(
+	          'h2',
+	          null,
+	          'This is the Student Report component'
+	        ),
+	        _react2.default.createElement(
+	          'p',
+	          null,
+	          'studentId: ',
+	          this.state.studentId
+	        ),
+	        _react2.default.createElement(
+	          'p',
+	          null,
+	          'name: ',
+	          this.state.name
+	        ),
+	        _react2.default.createElement(_StudentCompetency2.default, { competency: this.state.competency }),
+	        _react2.default.createElement(_QuestionsHistory2.default, { questions: this.state.questionsAnswered })
+	      );
+	    }
+	  }]);
+	
+	  return StudentReport;
+	}(_react2.default.Component);
+	
+	exports.default = StudentReport;
+
+/***/ },
+/* 177 */
+/*!**************************************!*\
+  !*** ./src/app/QuestionsHistory.jsx ***!
+  \**************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _react = __webpack_require__(/*! react */ 1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var QuestionsHistory = function QuestionsHistory(props) {
+	  // props.questions has this shape:
+	  // [
+	  //   {
+	  //     'questionId': 3,
+	  //     'questionText': 'why do cats cross the street',
+	  //     'difficulty': 10,
+	  //     'categoryName': 'recursion',
+	  //     'answer': 'x is the multiple',
+	  //     'grade': 1,
+	  //     'answerDate': 123
+	  //   },
+	  //   {
+	  //     'questionId': 1,
+	  //     'questionText': 'what is the x kdjf',
+	  //     'difficulty': 10,
+	  //     'categoryName': 'recursion',
+	  //     'answer': 'x is the multiple',
+	  //     'grade': 1,
+	  //     'answerDate': 456
+	  //   },
+	  //   {
+	  //     'questionId': 2,
+	  //     'questionText': 'y times kdjf',
+	  //     'difficulty': 1,
+	  //     'categoryName': 'logic',
+	  //     'answer': 'x is the multiple',
+	  //     'grade': 1,
+	  //     'answerDate': 789
+	  //   }
+	  // ]
+	  return _react2.default.createElement(
+	    'div',
+	    null,
+	    _react2.default.createElement(
+	      'h3',
+	      null,
+	      'Inside QuestionsHistory Component'
+	    ),
+	    _react2.default.createElement(
+	      'ul',
+	      null,
+	      _react2.default.createElement(
+	        'li',
+	        null,
+	        'test question'
+	      )
+	    )
+	  );
+	};
+	
+	exports.default = QuestionsHistory;
+
+/***/ },
+/* 178 */
+/*!***************************************!*\
+  !*** ./src/app/StudentCompetency.jsx ***!
+  \***************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _react = __webpack_require__(/*! react */ 1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var StudentCompetency = function StudentCompetency(props) {
+	  // props.competency has this shape:
+	  // [
+	  //   {
+	  //     'categoryId': 1,
+	  //     'categoryName': 'recursion',
+	  //     'competencyScore': 4,
+	  //     'isImproving': true
+	  //   },
+	  //   {
+	  //     'categoryId': 2,
+	  //     'categoryName': 'logic',
+	  //     'competencyScore': 1,
+	  //     'isImproving': false
+	  //   }
+	  // ]
+	  return _react2.default.createElement(
+	    'div',
+	    null,
+	    _react2.default.createElement(
+	      'h3',
+	      null,
+	      'Inside Student Competency Component'
+	    ),
+	    _react2.default.createElement(
+	      'ul',
+	      null,
+	      _react2.default.createElement(
+	        'li',
+	        null,
+	        'Test Competency'
+	      )
+	    )
+	  );
+	};
+	
+	exports.default = StudentCompetency;
 
 /***/ }
 /******/ ]);
