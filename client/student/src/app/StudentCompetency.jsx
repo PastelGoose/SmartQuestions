@@ -19,9 +19,15 @@ const StudentCompetency = (props) => {
   return (
     <div>
     <h3>Inside Student Competency Component</h3>
-      <ul>
-        <li>Test Competency</li>
-      </ul>
+        {props.competency.map(function(category) {
+          return (
+            <ul key={category.categoryId}>
+              <li>Category: {category.categoryName}</li>
+              <li>Competency Score: {category.competencyScore}</li>
+              <li>Improving: {category.isImproving.toString()}</li>
+            </ul>
+          );
+        })}
     </div>
   );
 

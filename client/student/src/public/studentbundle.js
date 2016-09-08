@@ -22680,15 +22680,7 @@
 	      null,
 	      'Inside QuestionsHistory Component'
 	    ),
-	    _react2.default.createElement(
-	      'ul',
-	      null,
-	      _react2.default.createElement(
-	        'li',
-	        null,
-	        'test question'
-	      )
-	    )
+	    console.log(props.questions)
 	  );
 	};
 	
@@ -22737,15 +22729,30 @@
 	      null,
 	      'Inside Student Competency Component'
 	    ),
-	    _react2.default.createElement(
-	      'ul',
-	      null,
-	      _react2.default.createElement(
-	        'li',
-	        null,
-	        'Test Competency'
-	      )
-	    )
+	    props.competency.map(function (category) {
+	      return _react2.default.createElement(
+	        'ul',
+	        { key: category.categoryId },
+	        _react2.default.createElement(
+	          'li',
+	          null,
+	          'Category: ',
+	          category.categoryName
+	        ),
+	        _react2.default.createElement(
+	          'li',
+	          null,
+	          'Competency Score: ',
+	          category.competencyScore
+	        ),
+	        _react2.default.createElement(
+	          'li',
+	          null,
+	          'Improving: ',
+	          category.isImproving.toString()
+	        )
+	      );
+	    })
 	  );
 	};
 	

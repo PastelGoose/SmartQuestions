@@ -34,9 +34,7 @@ const QuestionsHistory = (props) => {
   return (
     <div>
     <h3>Inside QuestionsHistory Component</h3>
-      <ul>
-        <li>test question</li>
-      </ul>
+      {console.log(props.questions)}
     </div>
   );
 
