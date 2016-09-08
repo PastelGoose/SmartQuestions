@@ -34,7 +34,18 @@ const QuestionsHistory = (props) => {
   return (
     <div>
     <h3>Inside QuestionsHistory Component</h3>
-      {console.log(props.questions)}
+      {props.questions.map(function(question) {
+        return (
+          <ul key={question.questionId}>
+            <li>Question: {question.questionText}</li>
+            <li>Answered On: {question.answerDate}</li>
+            <li>Category: {question.categoryName}</li>
+            <li>Difficulty: {question.difficulty}</li>
+            <li>Your response: {question.answer}</li>
+            <li>Grade: {question.grade}</li>
+          </ul>
+        );
+      })}
     </div>
   );
 
