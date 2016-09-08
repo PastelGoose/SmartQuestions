@@ -2,10 +2,13 @@ import React from 'react';
 import { Link } from 'react-router';
 
 var Questions = () => (
-  <div className="col-6 questions-container">
+  <div>
     <div className="question-list-container">
+    Questions
     </div>
-</div>
+    <Link to="questions/add">Add a Question</Link><br/>
+    <Link to="questions/grade">Grade Questions</Link>
+  </div>
 );
 
 export default Questions;

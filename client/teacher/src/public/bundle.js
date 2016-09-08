@@ -61,27 +61,35 @@
 	
 	var _app2 = _interopRequireDefault(_app);
 	
+	var _students = __webpack_require__(/*! ./components/students.jsx */ 239);
+	
+	var _students2 = _interopRequireDefault(_students);
+	
 	var _questions = __webpack_require__(/*! ./components/questions.jsx */ 236);
 	
 	var _questions2 = _interopRequireDefault(_questions);
 	
-	var _students = __webpack_require__(/*! ./components/students.jsx */ 237);
-	
-	var _students2 = _interopRequireDefault(_students);
-	
-	var _add = __webpack_require__(/*! ./components/add.jsx */ 238);
+	var _add = __webpack_require__(/*! ./components/add.jsx */ 237);
 	
 	var _add2 = _interopRequireDefault(_add);
+	
+	var _grade = __webpack_require__(/*! ./components/grade.jsx */ 238);
+	
+	var _grade2 = _interopRequireDefault(_grade);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	(0, _reactDom.render)(_react2.default.createElement(
 	  _reactRouter.Router,
 	  { history: _reactRouter.hashHistory },
-	  _react2.default.createElement(_reactRouter.Route, { path: '/', component: _app2.default }),
-	  _react2.default.createElement(_reactRouter.Route, { path: '/questions', component: _questions2.default }),
-	  _react2.default.createElement(_reactRouter.Route, { path: '/students', component: _students2.default }),
-	  _react2.default.createElement(_reactRouter.Route, { path: '/questions/add', component: _add2.default })
+	  _react2.default.createElement(
+	    _reactRouter.Route,
+	    { path: '/', component: _app2.default },
+	    _react2.default.createElement(_reactRouter.Route, { path: '/students', component: _students2.default }),
+	    _react2.default.createElement(_reactRouter.Route, { path: '/questions', component: _questions2.default })
+	  ),
+	  _react2.default.createElement(_reactRouter.Route, { path: '/questions/add', component: _add2.default }),
+	  _react2.default.createElement(_reactRouter.Route, { path: '/questions/grade', component: _grade2.default })
 	), document.getElementById('app'));
 
 /***/ },
@@ -27841,16 +27849,34 @@
 	        null,
 	        'Smart Questions'
 	      )
-	    )
+	    ),
+	    _react2.default.createElement(
+	      'ul',
+	      { className: 'nav' },
+	      _react2.default.createElement(
+	        'li',
+	        null,
+	        _react2.default.createElement(
+	          _reactRouter.Link,
+	          { to: '/questions' },
+	          'Questions'
+	        )
+	      ),
+	      _react2.default.createElement(
+	        'li',
+	        null,
+	        _react2.default.createElement(
+	          _reactRouter.Link,
+	          { to: '/students' },
+	          'Students'
+	        )
+	      )
+	    ),
+	    props.children
 	  );
 	};
 	
 	exports.default = App;
-	
-	// <ul className="nav">
-	//   <li><Link to="/questions">Questions</Link></li>
-	//   <li><Link to="/students">Students</Link></li>
-	// </ul>
 
 /***/ },
 /* 236 */
@@ -27876,8 +27902,23 @@
 	var Questions = function Questions() {
 	  return _react2.default.createElement(
 	    'div',
-	    { className: 'col-6 questions-container' },
-	    _react2.default.createElement('div', { className: 'question-list-container' })
+	    null,
+	    _react2.default.createElement(
+	      'div',
+	      { className: 'question-list-container' },
+	      'Questions'
+	    ),
+	    _react2.default.createElement(
+	      _reactRouter.Link,
+	      { to: 'questions/add' },
+	      'Add a Question'
+	    ),
+	    _react2.default.createElement('br', null),
+	    _react2.default.createElement(
+	      _reactRouter.Link,
+	      { to: 'questions/grade' },
+	      'Grade Questions'
+	    )
 	  );
 	};
 	
@@ -27885,39 +27926,6 @@
 
 /***/ },
 /* 237 */
-/*!*************************************!*\
-  !*** ./src/components/students.jsx ***!
-  \*************************************/
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	
-	var _react = __webpack_require__(/*! react */ 1);
-	
-	var _react2 = _interopRequireDefault(_react);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	var Students = function Students() {
-	  return _react2.default.createElement(
-	    "div",
-	    { className: "col-6 student-list-container" },
-	    _react2.default.createElement(
-	      "ul",
-	      { className: "student-list" },
-	      _react2.default.createElement("li", null)
-	    )
-	  );
-	};
-	
-	exports.default = Students;
-
-/***/ },
-/* 238 */
 /*!********************************!*\
   !*** ./src/components/add.jsx ***!
   \********************************/
@@ -27934,6 +27942,8 @@
 	var _react = __webpack_require__(/*! react */ 1);
 	
 	var _react2 = _interopRequireDefault(_react);
+	
+	var _reactRouter = __webpack_require__(/*! react-router */ 172);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -27952,10 +27962,6 @@
 	    var _this = _possibleConstructorReturn(this, (Add.__proto__ || Object.getPrototypeOf(Add)).call(this));
 	
 	    _this.state = { category: '', difficulty: 0, questionText: '' };
-	    // this.handleCategories = () => this.handleCategories();
-	    // this.handleDifficulty = () => this.handleDifficulty();
-	    // this.handleQuestionText = () => this.handleQuestionText();
-	    // this.handleSubmit = () => this.handleSubmit();
 	    return _this;
 	  }
 	
@@ -27992,8 +27998,10 @@
 	        }]
 	      };
 	
+	      var rootUrl = 'http://192.168.1.65:4568';
+	
 	      $.ajax({
-	        url: "http://192.168.1.65:4568/api/teacher/question",
+	        url: rootUrl + '/api/teacher/question',
 	        dataType: 'json',
 	        type: 'POST',
 	        data: dataObject,
@@ -28001,7 +28009,7 @@
 	          console.log('POST successful');
 	        },
 	        error: function error(xhs, status, err) {
-	          console.log('error POSTing,', err);
+	          console.log('error POSTing question,', err);
 	        }
 	      });
 	    }
@@ -28019,11 +28027,29 @@
 	            value: this.state.category,
 	            onChange: this.handleCategories.bind(this) }),
 	          _react2.default.createElement('br', null),
-	          _react2.default.createElement('input', { type: 'number', value: this.state.difficulty, placeholder: 'Difficulty', onChange: this.handleDifficulty.bind(this) }),
+	          _react2.default.createElement('input', { type: 'number',
+	            value: this.state.difficulty,
+	            placeholder: 'Difficulty',
+	            onChange: this.handleDifficulty.bind(this) }),
 	          _react2.default.createElement('br', null),
-	          _react2.default.createElement('input', { className: 'question-text-input', type: 'text', value: this.state.questionText, placeholder: 'Question Text', onChange: this.handleQuestionText.bind(this) }),
+	          _react2.default.createElement('input', { className: 'question-text-input',
+	            type: 'text', value: this.state.questionText,
+	            placeholder: 'Question Text',
+	            onChange: this.handleQuestionText.bind(this) }),
 	          _react2.default.createElement('br', null),
-	          _react2.default.createElement('input', { type: 'submit', value: 'Submit' })
+	          _react2.default.createElement('input', { type: 'submit',
+	            value: 'Submit' })
+	        ),
+	        _react2.default.createElement(
+	          _reactRouter.Link,
+	          { to: '/questions' },
+	          'Back to Questions'
+	        ),
+	        ' ',
+	        _react2.default.createElement(
+	          _reactRouter.Link,
+	          { to: '/' },
+	          'Back to Home'
 	        )
 	      );
 	    }
@@ -28035,6 +28061,226 @@
 	;
 	
 	exports.default = Add;
+
+/***/ },
+/* 238 */
+/*!**********************************!*\
+  !*** ./src/components/grade.jsx ***!
+  \**********************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	var _react = __webpack_require__(/*! react */ 1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _reactRouter = __webpack_require__(/*! react-router */ 172);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var Grade = function (_React$Component) {
+	  _inherits(Grade, _React$Component);
+	
+	  function Grade() {
+	    _classCallCheck(this, Grade);
+	
+	    var _this = _possibleConstructorReturn(this, (Grade.__proto__ || Object.getPrototypeOf(Grade)).call(this));
+	
+	    _this.state = { questions: [], currentIndex: 0, grade: 'peanut' };
+	    _this.getToGrade();
+	    return _this;
+	  }
+	
+	  _createClass(Grade, [{
+	    key: 'getToGrade',
+	    value: function getToGrade() {
+	      var rootUrl = 'http://192.168.1.65:4568';
+	      $.ajax({
+	        url: rootUrl + '/api/teacher/grading',
+	        type: 'GET',
+	        headers: { uid: 1 },
+	        success: function success(response) {
+	          this.setState({ questions: response.data });
+	        },
+	        error: function error(xhs, status, err) {
+	          console.log('error GETting questions to grade, ', err);
+	        }
+	      });
+	    }
+	  }, {
+	    key: 'handleSelect',
+	    value: function handleSelect(event) {
+	      this.setState({ grade: event.target.value });
+	    }
+	  }, {
+	    key: 'handleSubmit',
+	    value: function handleSubmit(event) {
+	      event.preventDefault();
+	      if (isNaN(this.grade)) {
+	        return;
+	      }
+	
+	      var dataObject = {};
+	    }
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	      var toGrade = this.state.questions[this.state.currentIndex];
+	      return _react2.default.createElement(
+	        'div',
+	        { className: 'toGrade-container' },
+	        _react2.default.createElement(
+	          'ul',
+	          null,
+	          _react2.default.createElement(
+	            'li',
+	            null,
+	            'Difficulty: ',
+	            toGrade.difficulty
+	          ),
+	          _react2.default.createElement(
+	            'li',
+	            null,
+	            'Category: ',
+	            toGrade.category
+	          ),
+	          _react2.default.createElement(
+	            'li',
+	            null,
+	            _react2.default.createElement(
+	              'h3',
+	              null,
+	              'Question:'
+	            ),
+	            _react2.default.createElement('br', null),
+	            ' ',
+	            toGrade.questionText
+	          ),
+	          _react2.default.createElement(
+	            'li',
+	            null,
+	            _react2.default.createElement(
+	              'h3',
+	              null,
+	              'Answer:'
+	            ),
+	            _react2.default.createElement('br', null),
+	            ' ',
+	            toGrade.answer
+	          )
+	        ),
+	        _react2.default.createElement(
+	          'form',
+	          { onSubmit: this.handleSubmit.bind(this) },
+	          _react2.default.createElement(
+	            'input',
+	            { type: 'radio',
+	              value: '4',
+	              checked: this.state.grade === 4,
+	              onChange: this.handleSelect.bind(this) },
+	            ' Complete'
+	          ),
+	          _react2.default.createElement(
+	            'input',
+	            { type: 'radio',
+	              value: '3',
+	              checked: this.state.grade === 3,
+	              onChange: this.handleSelect.bind(this) },
+	            ' Mostly Compelte'
+	          ),
+	          _react2.default.createElement(
+	            'input',
+	            { type: 'radio',
+	              value: '2',
+	              checked: this.state.grade === 2,
+	              onChange: this.handleSelect.bind(this) },
+	            ' Significant Progress'
+	          ),
+	          _react2.default.createElement(
+	            'input',
+	            { type: 'radio',
+	              value: '1',
+	              checked: this.state.grade === 1,
+	              onChange: this.handleSelect.bind(this) },
+	            ' Attempted'
+	          ),
+	          _react2.default.createElement(
+	            'input',
+	            { type: 'radio',
+	              value: '0',
+	              checked: this.state.grade === 0,
+	              onChange: this.handleSelect.bind(this) },
+	            ' Words with Beth'
+	          ),
+	          _react2.default.createElement('input', { type: 'submit', value: 'Submit' })
+	        ),
+	        _react2.default.createElement(
+	          _reactRouter.Link,
+	          { to: '/questions' },
+	          'Back to Questions'
+	        ),
+	        ' ',
+	        _react2.default.createElement(
+	          _reactRouter.Link,
+	          { to: '/' },
+	          'Back to Home'
+	        )
+	      );
+	    }
+	  }]);
+	
+	  return Grade;
+	}(_react2.default.Component);
+	
+	;
+	
+	exports.default = Grade;
+
+/***/ },
+/* 239 */
+/*!*************************************!*\
+  !*** ./src/components/students.jsx ***!
+  \*************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _react = __webpack_require__(/*! react */ 1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var Students = function Students() {
+	  return _react2.default.createElement(
+	    "div",
+	    { className: "col-6 student-list-container" },
+	    _react2.default.createElement(
+	      "ul",
+	      { className: "student-list" },
+	      _react2.default.createElement("li", null)
+	    )
+	  );
+	};
+	
+	exports.default = Students;
 
 /***/ }
 /******/ ]);

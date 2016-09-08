@@ -1,10 +1,11 @@
 import React from 'react';
+import { Link } from 'react-router';
 
 class Add extends React.Component {
 
   constructor() {
     super();
-    this.state= {category: '', difficulty: 0, questionText: ''};
+    this.state = {category: '', difficulty: 0, questionText: ''};
   }
 
   handleCategories(event) {
@@ -39,7 +40,7 @@ class Add extends React.Component {
       ]
     }
 
-    var rootUrl = window.location.origin || 'http://192.168.1.65:4568';
+    var rootUrl = 'http://192.168.1.65:4568';
 
     $.ajax({
       url: rootUrl + '/api/teacher/question',
@@ -50,7 +51,7 @@ class Add extends React.Component {
         console.log('POST successful');
       },
       error: function(xhs, status, err) {
-        console.log('error POSTing,', err);
+        console.log('error POSTing question,', err);
       }
     });
   };
@@ -74,6 +75,7 @@ class Add extends React.Component {
           <input type="submit" 
             value="Submit"/>
         </form>
+        <Link to="/questions">Back to Questions</Link> <Link to="/">Back to Home</Link>
       </div>
     );
   }
