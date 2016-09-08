@@ -20,6 +20,7 @@ class Questions extends React.Component {
     //   success: function(results) {
     //     console.log('success');
     //     console.log(results);
+    //     // Should sort the result set by order before inserting into setState.
     //     this.setState(results);
 
     //   },
@@ -114,7 +115,6 @@ class Questions extends React.Component {
     var problemsComplete = 0;
     var totalProblems = this.state.data.length;
     
-
     return (
       <div>
         <h2>Questions List Component</h2>

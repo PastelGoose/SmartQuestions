@@ -61,6 +61,10 @@
 	
 	var _Questions2 = _interopRequireDefault(_Questions);
 	
+	var _TeacherSelect = __webpack_require__(/*! ./TeacherSelect.jsx */ 175);
+	
+	var _TeacherSelect2 = _interopRequireDefault(_TeacherSelect);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -89,6 +93,9 @@
 	          null,
 	          'This is the student view!'
 	        ),
+	        _react2.default.createElement('hr', null),
+	        _react2.default.createElement(_TeacherSelect2.default, null),
+	        _react2.default.createElement('hr', null),
 	        _react2.default.createElement(_Questions2.default, null)
 	      );
 	    }
@@ -22039,6 +22046,7 @@
 	      //   success: function(results) {
 	      //     console.log('success');
 	      //     console.log(results);
+	      //     // Should sort the result set by order before inserting into setState.
 	      //     this.setState(results);
 	
 	      //   },
@@ -22284,6 +22292,178 @@
 	};
 	
 	exports.default = Question;
+
+/***/ },
+/* 174 */,
+/* 175 */
+/*!***********************************!*\
+  !*** ./src/app/TeacherSelect.jsx ***!
+  \***********************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	var _react = __webpack_require__(/*! react */ 1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var TeacherSelect = function (_React$Component) {
+	  _inherits(TeacherSelect, _React$Component);
+	
+	  function TeacherSelect(props) {
+	    _classCallCheck(this, TeacherSelect);
+	
+	    var _this = _possibleConstructorReturn(this, (TeacherSelect.__proto__ || Object.getPrototypeOf(TeacherSelect)).call(this, props));
+	
+	    _this.state = {
+	      teacherList: [],
+	      currentTeacher: 'YOU HAVE NO TEACHER YET =('
+	    };
+	    return _this;
+	  }
+	
+	  _createClass(TeacherSelect, [{
+	    key: 'getTeachersList',
+	    value: function getTeachersList() {
+	      // sample GET response
+	      // "{
+	      //   ""data"": [
+	      //     {
+	      //       ""name"": ""stephen notwong"",
+	      //       ""id"": 1
+	      //     },
+	      //     {
+	      //       ""name"": ""damien mccool"",
+	      //       ""id"": 2
+	      //     }
+	      //   ]
+	      // }"
+	
+	      // Perform an ajax call to GET list of teachers
+	      //var endpoint = 'http://192.168.1.65:4568/api/student/teachers';
+	      // $.ajax({
+	      //   method: 'GET',
+	      //   url: endpoint,
+	      //   data: {uid: 2},
+	      //   success: function(results) {
+	      //     console.log('success');
+	      //     console.log(results);
+	      //     this.setState(results);
+	
+	      //   },
+	      //   error: function(err) {
+	      //     console.log('error');
+	      //     console.log(err);
+	      //   }
+	      // });
+	
+	      // Dummy Data
+	      var data = [{
+	        name: 'stephen notwong',
+	        id: 1
+	      }, {
+	        name: 'damien mccool',
+	        id: 2
+	      }];
+	
+	      this.setState({ teacherList: data });
+	    }
+	  }, {
+	    key: 'componentDidMount',
+	    value: function componentDidMount() {
+	      this.getTeachersList();
+	    }
+	  }, {
+	    key: 'setTeacher',
+	    value: function setTeacher() {
+	      var teacherId = document.getElementById('selected-teacher').value;
+	      console.log('setTeacher invoked.  teacherId is: ', teacherId);
+	      // //sample post data:  {"studentId":1,"teacherId":2}
+	      // Perform an ajax call to POST teacher.
+	      //var endpoint = 'http://192.168.1.65:4568/api/student/teachers';
+	      // $.ajax({
+	      //   method: 'POST',
+	      //   url: endpoint,
+	      //   // student and teacher uid should be sent?
+	      //   data: {studentId: 2, teacherId: teacherId},
+	      //   success: function(results) {
+	      //     console.log('success');
+	      //     console.log(results);
+	      //     this.setState(results);
+	
+	      //   },
+	      //   error: function(err) {
+	      //     console.log('error');
+	      //     console.log(err);
+	      //   }
+	      // });
+	    }
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	
+	      return _react2.default.createElement(
+	        'div',
+	        null,
+	        _react2.default.createElement(
+	          'h2',
+	          null,
+	          'This is the Settings component'
+	        ),
+	        _react2.default.createElement(
+	          'h3',
+	          null,
+	          'Your current teacher is: ',
+	          this.state.currentTeacher
+	        ),
+	        _react2.default.createElement(
+	          'h3',
+	          null,
+	          'Teachers:',
+	          _react2.default.createElement(
+	            'select',
+	            { id: 'selected-teacher', defaultValue: 'default' },
+	            _react2.default.createElement(
+	              'option',
+	              { value: 'default' },
+	              'Select New Teacher'
+	            ),
+	            this.state.teacherList.map(function (teacher) {
+	              return _react2.default.createElement(
+	                'option',
+	                { key: teacher.id, value: teacher.id },
+	                teacher.name
+	              );
+	            })
+	          ),
+	          _react2.default.createElement(
+	            'button',
+	            { onClick: this.setTeacher },
+	            'Set Teacher'
+	          )
+	        )
+	      );
+	    }
+	  }]);
+	
+	  return TeacherSelect;
+	}(_react2.default.Component);
+	
+	exports.default = TeacherSelect;
 
 /***/ }
 /******/ ]);
