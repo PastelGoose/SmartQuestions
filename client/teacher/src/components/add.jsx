@@ -40,7 +40,7 @@ class Add extends React.Component {
       ]
     }
 
-    var rootUrl = 'http://192.168.1.65:4568';
+    var rootUrl = 'http://10.0.0.226:4568';
 
     $.ajax({
       url: rootUrl + '/api/teacher/question',

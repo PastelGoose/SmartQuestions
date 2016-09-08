@@ -61,19 +61,19 @@
 	
 	var _app2 = _interopRequireDefault(_app);
 	
-	var _students = __webpack_require__(/*! ./components/students.jsx */ 239);
+	var _students = __webpack_require__(/*! ./components/students.jsx */ 236);
 	
 	var _students2 = _interopRequireDefault(_students);
 	
-	var _questions = __webpack_require__(/*! ./components/questions.jsx */ 236);
+	var _questions = __webpack_require__(/*! ./components/questions.jsx */ 237);
 	
 	var _questions2 = _interopRequireDefault(_questions);
 	
-	var _add = __webpack_require__(/*! ./components/add.jsx */ 237);
+	var _add = __webpack_require__(/*! ./components/add.jsx */ 238);
 	
 	var _add2 = _interopRequireDefault(_add);
 	
-	var _grade = __webpack_require__(/*! ./components/grade.jsx */ 238);
+	var _grade = __webpack_require__(/*! ./components/grade.jsx */ 239);
 	
 	var _grade2 = _interopRequireDefault(_grade);
 	
@@ -27880,6 +27880,39 @@
 
 /***/ },
 /* 236 */
+/*!*************************************!*\
+  !*** ./src/components/students.jsx ***!
+  \*************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _react = __webpack_require__(/*! react */ 1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var Students = function Students() {
+	  return _react2.default.createElement(
+	    "div",
+	    { className: "col-6 student-list-container" },
+	    _react2.default.createElement(
+	      "ul",
+	      { className: "student-list" },
+	      _react2.default.createElement("li", null)
+	    )
+	  );
+	};
+	
+	exports.default = Students;
+
+/***/ },
+/* 237 */
 /*!**************************************!*\
   !*** ./src/components/questions.jsx ***!
   \**************************************/
@@ -27925,7 +27958,7 @@
 	exports.default = Questions;
 
 /***/ },
-/* 237 */
+/* 238 */
 /*!********************************!*\
   !*** ./src/components/add.jsx ***!
   \********************************/
@@ -27998,7 +28031,7 @@
 	        }]
 	      };
 	
-	      var rootUrl = 'http://192.168.1.65:4568';
+	      var rootUrl = 'http://10.0.0.226:4568';
 	
 	      $.ajax({
 	        url: rootUrl + '/api/teacher/question',
@@ -28063,7 +28096,7 @@
 	exports.default = Add;
 
 /***/ },
-/* 238 */
+/* 239 */
 /*!**********************************!*\
   !*** ./src/components/grade.jsx ***!
   \**********************************/
@@ -28099,26 +28132,31 @@
 	
 	    var _this = _possibleConstructorReturn(this, (Grade.__proto__ || Object.getPrototypeOf(Grade)).call(this));
 	
-	    _this.state = { questions: [], currentIndex: 0, grade: 'peanut' };
-	    _this.getToGrade();
+	    _this.state = { questions: undefined, currentIndex: 0, grade: undefined };
 	    return _this;
 	  }
 	
 	  _createClass(Grade, [{
 	    key: 'getToGrade',
 	    value: function getToGrade() {
-	      var rootUrl = 'http://192.168.1.65:4568';
+	      var rootUrl = 'http://10.0.0.226:4568';
 	      $.ajax({
 	        url: rootUrl + '/api/teacher/grading',
 	        type: 'GET',
-	        headers: { uid: 1 },
-	        success: function success(response) {
+	        options: { uid: 1 },
+	        success: function (response) {
+	
 	          this.setState({ questions: response.data });
-	        },
+	        }.bind(this),
 	        error: function error(xhs, status, err) {
 	          console.log('error GETting questions to grade, ', err);
 	        }
 	      });
+	    }
+	  }, {
+	    key: 'componentDidMount',
+	    value: function componentDidMount() {
+	      this.getToGrade();
 	    }
 	  }, {
 	    key: 'handleSelect',
@@ -28129,116 +28167,142 @@
 	    key: 'handleSubmit',
 	    value: function handleSubmit(event) {
 	      event.preventDefault();
-	      if (isNaN(this.grade)) {
+	      if (!this.state.grade) {
 	        return;
 	      }
 	
-	      var dataObject = {};
+	      var graded = this.state.questions[this.state.currentIndex];
+	
+	      var dataObject = {
+	        teacherId: 1,
+	        studentId: graded.studentId,
+	        questionId: graded.questionId,
+	        grade: this.state.grade * 1
+	      };
+	      console.log(dataObject);
+	
+	      var rootUrl = 'http://10.0.0.226:4568';
+	
+	      $.ajax({
+	        url: rootUrl + '/api/teacher/grading',
+	        dataType: 'json',
+	        type: 'POST',
+	        data: dataObject,
+	        success: function (response) {
+	          console.log('POST successful');
+	          this.setState({ currentIndex: this.state.currentIndex + 1 });
+	        }.bind(this),
+	        error: function error(xhs, status, err) {
+	          console.log('error posting grade, ', err);
+	        }
+	      });
 	    }
 	  }, {
 	    key: 'render',
 	    value: function render() {
-	      var toGrade = this.state.questions[this.state.currentIndex];
-	      return _react2.default.createElement(
-	        'div',
-	        { className: 'toGrade-container' },
-	        _react2.default.createElement(
-	          'ul',
+	      if (this.state.questions === undefined) {
+	        return _react2.default.createElement(
+	          'p',
 	          null,
+	          'Loading...'
+	        );
+	      }
+	
+	      var toGrade = this.state.questions[this.state.currentIndex];
+	      if (!toGrade) {
+	        return _react2.default.createElement(
+	          'p',
+	          null,
+	          'No questions to grade.'
+	        );
+	      } else {
+	        return _react2.default.createElement(
+	          'div',
+	          { className: 'toGrade-container' },
 	          _react2.default.createElement(
-	            'li',
-	            null,
-	            'Difficulty: ',
-	            toGrade.difficulty
-	          ),
-	          _react2.default.createElement(
-	            'li',
-	            null,
-	            'Category: ',
-	            toGrade.category
-	          ),
-	          _react2.default.createElement(
-	            'li',
-	            null,
-	            _react2.default.createElement(
-	              'h3',
-	              null,
-	              'Question:'
-	            ),
-	            _react2.default.createElement('br', null),
-	            ' ',
-	            toGrade.questionText
-	          ),
-	          _react2.default.createElement(
-	            'li',
+	            'ul',
 	            null,
 	            _react2.default.createElement(
-	              'h3',
+	              'li',
 	              null,
-	              'Answer:'
+	              'Difficulty: ',
+	              toGrade.difficulty
 	            ),
-	            _react2.default.createElement('br', null),
-	            ' ',
-	            toGrade.answer
-	          )
-	        ),
-	        _react2.default.createElement(
-	          'form',
-	          { onSubmit: this.handleSubmit.bind(this) },
+	            _react2.default.createElement(
+	              'li',
+	              null,
+	              'Category: ',
+	              toGrade.category
+	            ),
+	            _react2.default.createElement(
+	              'li',
+	              null,
+	              _react2.default.createElement(
+	                'h3',
+	                null,
+	                'Question:'
+	              ),
+	              _react2.default.createElement('br', null),
+	              ' ',
+	              toGrade.questionText
+	            ),
+	            _react2.default.createElement(
+	              'li',
+	              null,
+	              _react2.default.createElement(
+	                'h3',
+	                null,
+	                'Answer:'
+	              ),
+	              _react2.default.createElement('br', null),
+	              ' ',
+	              toGrade.answer
+	            )
+	          ),
 	          _react2.default.createElement(
-	            'input',
-	            { type: 'radio',
+	            'form',
+	            { onSubmit: this.handleSubmit.bind(this) },
+	            _react2.default.createElement('input', { type: 'radio',
 	              value: '4',
-	              checked: this.state.grade === 4,
-	              onChange: this.handleSelect.bind(this) },
-	            ' Complete'
-	          ),
-	          _react2.default.createElement(
-	            'input',
-	            { type: 'radio',
+	              checked: this.state.grade === '4',
+	              onChange: this.handleSelect.bind(this) }),
+	            'Complete',
+	            _react2.default.createElement('input', { type: 'radio',
 	              value: '3',
-	              checked: this.state.grade === 3,
-	              onChange: this.handleSelect.bind(this) },
-	            ' Mostly Compelte'
-	          ),
-	          _react2.default.createElement(
-	            'input',
-	            { type: 'radio',
+	              checked: this.state.grade === '3',
+	              onChange: this.handleSelect.bind(this) }),
+	            'Mostly Compelte',
+	            _react2.default.createElement('input', { type: 'radio',
 	              value: '2',
-	              checked: this.state.grade === 2,
-	              onChange: this.handleSelect.bind(this) },
-	            ' Significant Progress'
-	          ),
-	          _react2.default.createElement(
-	            'input',
-	            { type: 'radio',
+	              checked: this.state.grade === '2',
+	              onChange: this.handleSelect.bind(this) }),
+	            'Significant Progress',
+	            _react2.default.createElement('input', { type: 'radio',
 	              value: '1',
-	              checked: this.state.grade === 1,
-	              onChange: this.handleSelect.bind(this) },
-	            ' Attempted'
+	              checked: this.state.grade === '1',
+	              onChange: this.handleSelect.bind(this) }),
+	            'Attempted',
+	            _react2.default.createElement('input', { type: 'radio',
+	              value: '0',
+	              checked: this.state.grade === '0',
+	              onChange: this.handleSelect.bind(this) }),
+	            'Words with Beth',
+	            _react2.default.createElement('input', { type: 'submit', value: 'Submit' })
 	          ),
 	          _react2.default.createElement(
-	            'input',
-	            { type: 'radio',
-	              value: '0',
-	              checked: this.state.grade === 0,
-	              onChange: this.handleSelect.bind(this) },
-	            ' Words with Beth'
+	            _reactRouter.Link,
+	            { to: '/questions' },
+	            'Back to Questions'
 	          ),
-	          _react2.default.createElement('input', { type: 'submit', value: 'Submit' })
-	        ),
-	        _react2.default.createElement(
-	          _reactRouter.Link,
-	          { to: '/questions' },
-	          'Back to Questions'
-	        ),
-	        ' ',
-	        _react2.default.createElement(
-	          _reactRouter.Link,
-	          { to: '/' },
-	          'Back to Home'
-	        )
-	      );
+	          _react2.default.createElement('br', null),
+	          ' ',
+	          _react2.default.createElement(
+	            _reactRouter.Link,
+	            { to: '/' },
+	            'Back to Home'
+	          )
+	        );
+	      }
 	    }
 	  }]);
 	
@@ -28248,39 +28312,6 @@
 	;
 	
 	exports.default = Grade;
-
-/***/ },
-/* 239 */
-/*!*************************************!*\
-  !*** ./src/components/students.jsx ***!
-  \*************************************/
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	
-	var _react = __webpack_require__(/*! react */ 1);
-	
-	var _react2 = _interopRequireDefault(_react);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	var Students = function Students() {
-	  return _react2.default.createElement(
-	    "div",
-	    { className: "col-6 student-list-container" },
-	    _react2.default.createElement(
-	      "ul",
-	      { className: "student-list" },
-	      _react2.default.createElement("li", null)
-	    )
-	  );
-	};
-	
-	exports.default = Students;
 
 /***/ }
 /******/ ]);
