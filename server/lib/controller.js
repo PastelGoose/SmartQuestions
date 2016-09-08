@@ -130,8 +130,9 @@ var teacher = {
 				}, 
 				include: [{
 					model: db.Question, 
+					// required: true,
 					through: {
-						attributes: ['answer', 'question', 'grade'],
+						attributes: ['answer', 'question', 'grade', 'answerDate'],
 		    			where: {isAnswered: true, isGraded: true}
 					}, 
 					include: [db.Category]
@@ -166,7 +167,8 @@ var teacher = {
 								categoryId: question.categoryId,
 								categoryName: question.Category.name,
 								answer: question.StudentQuestion.answer,
-								grade: question.StudentQuestion.grade
+								grade: question.StudentQuestion.grade,
+								answerDate: question.StudentQuestion.answerDate
 							};
 							studentReport.questionsAnswered.push(currQuestion);
 						})
