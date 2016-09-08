@@ -22680,7 +22680,48 @@
 	      null,
 	      'Inside QuestionsHistory Component'
 	    ),
-	    console.log(props.questions)
+	    props.questions.map(function (question) {
+	      return _react2.default.createElement(
+	        'ul',
+	        { key: question.questionId },
+	        _react2.default.createElement(
+	          'li',
+	          null,
+	          'Question: ',
+	          question.questionText
+	        ),
+	        _react2.default.createElement(
+	          'li',
+	          null,
+	          'Answered On: ',
+	          question.answerDate
+	        ),
+	        _react2.default.createElement(
+	          'li',
+	          null,
+	          'Category: ',
+	          question.categoryName
+	        ),
+	        _react2.default.createElement(
+	          'li',
+	          null,
+	          'Difficulty: ',
+	          question.difficulty
+	        ),
+	        _react2.default.createElement(
+	          'li',
+	          null,
+	          'Your response: ',
+	          question.answer
+	        ),
+	        _react2.default.createElement(
+	          'li',
+	          null,
+	          'Grade: ',
+	          question.grade
+	        )
+	      );
+	    })
 	  );
 	};
 	
