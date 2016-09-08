@@ -33,7 +33,6 @@ var teacher = {
 	},
 	//this is called when the teacher wants to see all of his/her questions that are posted already
 	retrieveAllQuestions: function(req, res) {
-	console.log(req.body, req.params, req.query.uid)
 	var uid = req.query.uid || 1;
 
 		db.Question.findAll({where: {teacherId: uid}})
@@ -105,6 +104,95 @@ var teacher = {
 			foundQuestion.updateAttributes({isGraded: 1, grade: grade});
 			res.sendStatus(201);
 		})
+	},
+
+	getReport: function(req, res) {
+		var uid = req.query.uid || 1;
+		//get all student ids
+		//get studentquestions that are answered and graded
+		db.Student.findAll({
+			where: {TeacherId: uid}
+		})
+		.then(function(allStudents) {
+			var ids = [];
+			allStudents.forEach(function(student) {
+				ids.push(student.id);
+			})
+
+			if (ids.length === 0 ) {
+				console.log('id length is 0')
+				return res.json({data: []})
+			}
+
+			db.Student.findAll({
+				where: {id: 
+					{$in: [ids]}
+				}, 
+				include: [{
+					model: db.Question, 
+					through: {
+						attributes: ['answer', 'question', 'grade'],
+		    			where: {isAnswered: true, isGraded: true}
+					}, 
+					include: [db.Category]
+				},
+				{
+					model: db.Category,
+					through: {
+						attributes: ['competencyScore', 'isImproving', 'createdAt']
+					}
+				}]
+			})
+			.then(function(results) {
+				var allResults = [];
+				console.log('results found!', results)
+				// res.json(results)
+
+				results.forEach(function(studentResult) {
+					// if(studentResult.Questions && studentResult.Questions.length !== 0 && studentResult.Categories) {
+						console.log('questionresult', studentResult)
+						var oneStudentReport = {
+							studentId: studentResult.id,
+							name: studentResult.firstname + ' ' + studentResult.lastname,
+							questionsAnswered: [],
+							competency: []
+						}
+
+						studentResult.Questions.forEach(function(question) {
+							var currQuestion = {
+								questionId: question.id, 
+								questionText: question.questionText,
+								difficulty: question.difficulty,
+								categoryId: question.categoryId,
+								categoryName: question.Category.name,
+								answer: question.StudentQuestion.answer,
+								grade: question.StudentQuestion.grade
+							};
+							oneStudentReport.questionsAnswered.push(currQuestion);
+						})
+
+						studentResult.Categories.forEach(function(category) {
+							var currCategory = {
+								categoryId: category.id,
+								categoryName: category.name,
+								competencyScore: category.StudentCategory.competencyScore,
+								isImproving: category.StudentCategory.isImproving
+							}
+							oneStudentReport.competency.push(currCategory);
+						})
+
+						console.log('after scrubbing', oneStudentReport);
+						allResults.push(oneStudentReport);
+						console.log('final report', allResults);
+
+						if (allResults.length === results.length) {
+							res.json({data:allResults});
+						}
+					// }
+				})
+				// res.json({data: allResults});
+			})
+		})
 	}
 };
 
@@ -132,12 +220,13 @@ var student = {
 	respondOne: function(req, res) {
 		var uid = req.query.uid || 2;
 		var response = req.body;
-
+		console.log('i am in responseone')
 		db.StudentQuestion.findOne({where: {StudentId: response.uid, QuestionId: response.questionId}})
 		.then(function(foundQuestion) {
-			foundQuestion.updateAttributes({isAnswered: 1, answer: response.answer});
+			foundQuestion.updateAttributes({isAnswered: 1, answer: response.answer, answerDate: new Date()});
 			res.send(foundQuestion);
 		})
+
 	},
 	//this is called when the client asks for all questions for the student for the day. these are the question that are marked isQueued
 	retrieveQuestions: function(req, res) {
@@ -215,6 +304,11 @@ var student = {
 		db.Student.findById(studentId)
 		.then(function(student) {
 			student.setTeacher(teacherId);
+			//grab questions from teacher 
+			//populate db with all question from the teacher. 
+// get questions and put them through a function
+	// the resulting questionIDs  get marked as queued
+
 			res.sendStatus(201);
 		})
 	}

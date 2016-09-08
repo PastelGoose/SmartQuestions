@@ -12,7 +12,8 @@ app.use(function(req, res, next) {
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 
-// app.use(express.static(__dirname + '/public'));
+// app.use(express.static(__dirname + '/client/student/public'));
+// app.use(express.static(__dirname + '/client'));
 app.use('/api', router);
 app.set('port', process.env.PORT || 4568);
 app.listen(app.get('port'));

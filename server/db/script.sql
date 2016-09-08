@@ -15,3 +15,7 @@ insert into studentquestions (studentId, questionId, isViewed, isAnswered, isQue
 insert into studentquestions (studentId, questionId, isViewed, isAnswered, isQueued) values (2,1,0,0,1);
 insert into studentquestions (studentId, questionId, isViewed, isAnswered, isQueued) values (2,2,0,0,1);
 
+insert into studentcategories (studentId, categoryId, createdAt, competencyScore, isImproving) values (2,2,now(), 1,0);
+insert into studentcategories (studentId, categoryId, createdAt, competencyScore, isImproving) values (2,1,now(), 4,1);
+
+
