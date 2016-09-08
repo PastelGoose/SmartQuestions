@@ -82,8 +82,6 @@ class StudentReport extends React.Component {
     this.getReport();
   }
 
-
-
   render() {
 
     return (
@@ -99,10 +97,6 @@ class StudentReport extends React.Component {
     );
   }
 
-
-
-
 }
 
 export default StudentReport;
-
