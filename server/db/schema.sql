@@ -57,7 +57,7 @@ id int NOT NULL AUTO_INCREMENT,
 studentId varchar(30) NOT NULL,
 categoryId varchar(30) NOT NULL,
 createdAt datetime NOT NULL DEFAULT NOW(),
-competencyScore int DEFAULT 3,
+competencyScore int DEFAULT 0,
 isImproving boolean,
 PRIMARY KEY (ID)
 );

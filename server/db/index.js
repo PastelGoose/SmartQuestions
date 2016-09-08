@@ -38,14 +38,6 @@ var StudentQuestion = db.define('StudentQuestion', {
 	isGraded: Sequelize.BOOLEAN,
 	grade: Sequelize.INTEGER
 });
-    // { id: 4,
-    //    firstname: 'damien',
-    //    lastname: 'mccool',
-    //    username: 'mrteacher',
-    //    password: 'hackreactor',
-    //    TeacherId: 1,
-    //    Questions: [] },
-
 
 var StudentCategory = db.define('StudentCategory', {
 	competencyScore: Sequelize.INTEGER,

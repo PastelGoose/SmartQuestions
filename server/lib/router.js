@@ -5,7 +5,7 @@ var controller = require('./controller');
 router.get('/teacher/questions', controller.teacher.retrieveAllQuestions);
 router.post('/teacher/questions', controller.teacher.submitQuestions);
 
-router.get('/teacher/grading', controller.teacher.gradeUnansweredQuestions);
+router.get('/teacher/grading', controller.teacher.getUngradedQuestions);
 router.post('/teacher/grading', controller.teacher.postGrades);
 
 router.get('/teacher/report', controller.teacher.getReport);

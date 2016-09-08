@@ -1,4 +1,5 @@
 var db = require('../db');
+var utils = require('./utils');
 
 var testString= {"uid":1,"questions":[{"questionText":"what is the x kdjf","category":"recursion","difficulty":10},{"questionText":"y times kdjf","category":"logic","difficulty":1}]}
 
@@ -41,7 +42,7 @@ var teacher = {
 		})
 	},
 	//this is called when the teacher wants to see a list of questions that he/she still needs to grade
-	gradeUnansweredQuestions: function(req, res) {
+	getUngradedQuestions: function(req, res) {
 		var uid = req.query.uid || 1;
 
 		db.Question.findAll({
@@ -200,20 +201,7 @@ var teacher = {
 var student = {
 	//this is a testing endpoint. use this for testing new queries
 	test: function(req, res) {
-		var uid = req.query.uid || 2;
-		db.Student.findById(uid, {
-		  include: [{
-		    model: db.Question,
-		    include: [db.Category],
-		    through: {
-      		attributes: ['TeacherId', 'QuestionId', 'CategoryName', 'CategoryId'],
-		      where: {isQueued: true}
-		    }
-		  }]
-		})
-		.then(function(student) {
-			res.send(student);
-		})
+		utils.getInitialQuestions(req.query.uid || 2, res);
 	},
 	//this is called when the student respond to one question. It logs the response in DB
 	respondOne: function(req, res) {
@@ -309,6 +297,7 @@ var student = {
 	// the resulting questionIDs  get marked as queued
 
 			res.sendStatus(201);
+			utils.addQuestionsToStudent(teacherId, studentId);
 		})
 	}, 
 	//this is called when the student asks for a report for him/herself
@@ -359,7 +348,8 @@ var student = {
 					categoryId: category.id,
 					categoryName: category.name,
 					competencyScore: category.StudentCategory.competencyScore,
-					isImproving: category.StudentCategory.isImproving
+					isImproving: category.StudentCategory.isImproving,
+
 				}
 				studentReport.competency.push(currCategory);
 			})
