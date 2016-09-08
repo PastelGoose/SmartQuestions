@@ -105,11 +105,10 @@ var teacher = {
 			res.sendStatus(201);
 		})
 	},
-
+	//this is called when the teacher asks for a report card of his/her class
 	getReport: function(req, res) {
 		var uid = req.query.uid || 1;
-		//get all student ids
-		//get studentquestions that are answered and graded
+
 		db.Student.findAll({
 			where: {TeacherId: uid}
 		})
@@ -151,7 +150,7 @@ var teacher = {
 				results.forEach(function(studentResult) {
 					// if(studentResult.Questions && studentResult.Questions.length !== 0 && studentResult.Categories) {
 						console.log('questionresult', studentResult)
-						var oneStudentReport = {
+						var studentReport = {
 							studentId: studentResult.id,
 							name: studentResult.firstname + ' ' + studentResult.lastname,
 							questionsAnswered: [],
@@ -168,7 +167,7 @@ var teacher = {
 								answer: question.StudentQuestion.answer,
 								grade: question.StudentQuestion.grade
 							};
-							oneStudentReport.questionsAnswered.push(currQuestion);
+							studentReport.questionsAnswered.push(currQuestion);
 						})
 
 						studentResult.Categories.forEach(function(category) {
@@ -178,11 +177,11 @@ var teacher = {
 								competencyScore: category.StudentCategory.competencyScore,
 								isImproving: category.StudentCategory.isImproving
 							}
-							oneStudentReport.competency.push(currCategory);
+							studentReport.competency.push(currCategory);
 						})
 
-						console.log('after scrubbing', oneStudentReport);
-						allResults.push(oneStudentReport);
+						console.log('after scrubbing', studentReport);
+						allResults.push(studentReport);
 						console.log('final report', allResults);
 
 						if (allResults.length === results.length) {
@@ -310,6 +309,62 @@ var student = {
 	// the resulting questionIDs  get marked as queued
 
 			res.sendStatus(201);
+		})
+	}, 
+	//this is called when the student asks for a report for him/herself
+	getReport: function(req, res) {
+		var uid = req.query.uid || 2;
+
+		db.Student.findById(uid, {
+			include: [{
+				model: db.Question, 
+				through: {
+					attributes: ['answer', 'question', 'grade'],
+	    			where: {isAnswered: true, isGraded: true}
+				}, 
+				include: [db.Category]
+			},
+			{
+				model: db.Category,
+				through: {
+					attributes: ['competencyScore', 'isImproving', 'createdAt']
+				}
+			}]
+		})
+		.then(function(studentResult) {
+			console.log('results found!', studentResult)
+
+			var studentReport = {
+				studentId: studentResult.id,
+				name: studentResult.firstname + ' ' + studentResult.lastname,
+				questionsAnswered: [],
+				competency: []
+			}
+
+			studentResult.Questions.forEach(function(question) {
+				var currQuestion = {
+					questionId: question.id, 
+					questionText: question.questionText,
+					difficulty: question.difficulty,
+					categoryId: question.categoryId,
+					categoryName: question.Category.name,
+					answer: question.StudentQuestion.answer,
+					grade: question.StudentQuestion.grade
+				};
+				studentReport.questionsAnswered.push(currQuestion);
+			})
+
+			studentResult.Categories.forEach(function(category) {
+				var currCategory = {
+					categoryId: category.id,
+					categoryName: category.name,
+					competencyScore: category.StudentCategory.competencyScore,
+					isImproving: category.StudentCategory.isImproving
+				}
+				studentReport.competency.push(currCategory);
+			})
+
+			res.json({data: studentReport});
 		})
 	}
 }; 
