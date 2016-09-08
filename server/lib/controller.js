@@ -55,7 +55,8 @@ var teacher = {
 			})
 
 			if (ids.length === 0 ) {
-				res.json({data: []})
+				console.log('id length is 0')
+				return res.json({data: []})
 			}
 
 			db.Question.findAll({
@@ -76,7 +77,7 @@ var teacher = {
 					if(questionResult.Students && questionResult.Students.length !== 0 && questionResult.Category) {
 						console.log('questionresult', questionResult)
 						var result = {
-							questionText: questionResult.question,
+							questionText: questionResult.questionText,
 							difficulty: questionResult.difficulty,
 							category: questionResult.Category.name,
 							questionId: questionResult.id,
@@ -94,9 +95,20 @@ var teacher = {
 	},
 	//this is called when the teacher post grades for each question
 	postGrades: function(req, res) {
-		res.send('post! not really but hehe', req.body)
+		var teacherId = req.body.teacherId;
+		var studentId = req.body.studentId;
+		var grade = req.body.grade;
+		var questionId = req.body.questionId;
+
+		db.StudentQuestion.findOne({where: {StudentId: studentId, QuestionId: questionId}})
+		.then(function(foundQuestion) {
+			foundQuestion.updateAttributes({isGraded: 1, grade: grade});
+			res.sendStatus(201);
+		})
 	}
 };
+
+
 
 var student = {
 	//this is a testing endpoint. use this for testing new queries
@@ -138,9 +150,14 @@ var student = {
       			attributes: ['TeacherId', 'QuestionId', 'confidenceScore', 'isAnswered', 'orderInQueue', 'difficulty', 'CategoryId'],
 		    	where: {isQueued: true}
 		    }
-		  }]
+		  }, db.Teacher]
 		})
 		.then(function(result) {
+			if (result.TeacherId === null) {
+			// console.log('result!!',result)
+				return res.send('No teacher found');
+				// console.log('after return')
+			}
 			console.log('result', result)
 			var result = result.get({plain: true});
 
@@ -192,7 +209,14 @@ var student = {
 	},
 	//this is called when the student selects a teacher/class to enroll in
 	selectedTeacher: function(req, res) {
+		var studentId = req.body.studentId;
+		var teacherId = req.body.teacherId;
 
+		db.Student.findById(studentId)
+		.then(function(student) {
+			student.setTeacher(teacherId);
+			res.sendStatus(201);
+		})
 	}
 }; 
 
