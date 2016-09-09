@@ -61,10 +61,6 @@
 	
 	var _Questions2 = _interopRequireDefault(_Questions);
 	
-	var _TeacherSelect = __webpack_require__(/*! ./TeacherSelect.jsx */ 175);
-	
-	var _TeacherSelect2 = _interopRequireDefault(_TeacherSelect);
-	
 	var _StudentReport = __webpack_require__(/*! ./StudentReport.jsx */ 176);
 	
 	var _StudentReport2 = _interopRequireDefault(_StudentReport);
@@ -97,8 +93,6 @@
 	          null,
 	          'This is the student view!'
 	        ),
-	        _react2.default.createElement('hr', null),
-	        _react2.default.createElement(_TeacherSelect2.default, null),
 	        _react2.default.createElement('hr', null),
 	        _react2.default.createElement(_StudentReport2.default, null),
 	        _react2.default.createElement('hr', null),
@@ -22019,6 +22013,10 @@
 	
 	var _Question2 = _interopRequireDefault(_Question);
 	
+	var _TeacherSelect = __webpack_require__(/*! ./TeacherSelect.jsx */ 175);
+	
+	var _TeacherSelect2 = _interopRequireDefault(_TeacherSelect);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -22035,26 +22033,44 @@
 	
 	    var _this = _possibleConstructorReturn(this, (Questions.__proto__ || Object.getPrototypeOf(Questions)).call(this, props));
 	
-	    _this.state = { data: [] };
+	    _this.state = {
+	      teacherFound: false,
+	      data: []
+	    };
 	    return _this;
 	  }
 	
 	  _createClass(Questions, [{
+	    key: 'setTeacherFoundToTrue',
+	    value: function setTeacherFoundToTrue() {
+	      this.setState({ teacherFound: true });
+	      // Now that the teacher has been selected, get the list of daily questions
+	      this.getQuestions();
+	    }
+	  }, {
 	    key: 'getQuestions',
 	    value: function getQuestions() {
 	      //console.log('getQuestions triggered');
-	      var context = this;
 	      var endpoint = 'http://127.0.0.1:4568/api/student/questions';
 	      $.ajax({
 	        method: 'GET',
 	        url: endpoint,
 	        data: { uid: 2 },
-	        success: function success(results) {
+	        success: function (results) {
 	          console.log('success');
 	          console.log(results);
 	          // Should sort the result set by order before inserting into setState.
-	          context.setState(results);
-	        },
+	
+	          // If results is 'No teacher found', do not display questions.  The user needs to set a teacher first
+	          if (results !== 'No teacher found') {
+	            this.setState({
+	              teacherFound: true,
+	              data: results.data.sort(function (a, b) {
+	                return a.order - b.order;
+	              })
+	            });
+	          }
+	        }.bind(this),
 	        error: function error(err) {
 	          console.log('error');
 	          console.log(err);
@@ -22148,59 +22164,71 @@
 	      var problemsComplete = 0;
 	      var totalProblems = this.state.data.length;
 	
-	      return _react2.default.createElement(
-	        'div',
-	        null,
-	        _react2.default.createElement(
-	          'h2',
+	      if (!this.state.teacherFound) {
+	        return _react2.default.createElement(
+	          'div',
 	          null,
-	          'Questions List Component'
-	        ),
-	        _react2.default.createElement(
-	          'button',
-	          { onClick: this.getQuestions.bind(this) },
-	          'Get All Questions'
-	        ),
-	        // Order the data and find the first unanswered question
-	        this.state.data.sort(function (a, b) {
-	          return a.order - b.order;
-	        }).map(function (question) {
-	          // Keep track of how many questions we've answered so far
-	          if (question.answered === true) {
-	            problemsComplete++;
-	          }
-	          // If the current problem has not yet been answered, show it to the student.
-	          // If the first unanswered question has already been found in this map loop,
-	          //   do not display another.
-	          if (question.answered === false && problemFound === false) {
-	            problemFound = true;
-	            return _react2.default.createElement(
-	              'div',
-	              { key: problemsComplete },
-	              _react2.default.createElement(_Question2.default, {
-	                question: question,
-	                questionIdx: problemsComplete,
-	                totalProblems: totalProblems,
-	                postResponse: this.postResponse.bind(this)
-	              })
-	            );
-	            // If we make it here and this is true, that means the user answered all questions.
-	          } else if (problemsComplete === totalProblems) {
-	            return _react2.default.createElement(
-	              'div',
-	              { key: question.order },
-	              _react2.default.createElement(
-	                'h3',
-	                null,
-	                'You\'ve completed all the problems for the day!'
-	              )
-	            );
-	            // If we make it here, it means we are still looking for the first unanswered question
-	          } else {
-	            return;
-	          }
-	        }.bind(this))
-	      );
+	          _react2.default.createElement(
+	            'h2',
+	            null,
+	            'Questions List Component'
+	          ),
+	          _react2.default.createElement(
+	            'h2',
+	            null,
+	            'You must select a teacher before you are able to view questions.'
+	          ),
+	          _react2.default.createElement(_TeacherSelect2.default, { setTeacherFoundToTrue: this.setTeacherFoundToTrue.bind(this) })
+	        );
+	      } else {
+	        return _react2.default.createElement(
+	          'div',
+	          null,
+	          _react2.default.createElement(
+	            'h2',
+	            null,
+	            'Questions List Component'
+	          ),
+	
+	          // Find the first unanswered question
+	          this.state.data.map(function (question) {
+	            // Keep track of how many questions we've answered so far
+	            if (question.answered === true) {
+	              problemsComplete++;
+	            }
+	            // If the current problem has not yet been answered, show it to the student.
+	            // If the first unanswered question has already been found in this map loop,
+	            //   do not display another.
+	            if (question.answered === false && problemFound === false) {
+	              problemFound = true;
+	              return _react2.default.createElement(
+	                'div',
+	                { key: problemsComplete },
+	                _react2.default.createElement(_Question2.default, {
+	                  question: question,
+	                  questionIdx: problemsComplete,
+	                  totalProblems: totalProblems,
+	                  postResponse: this.postResponse.bind(this)
+	                })
+	              );
+	              // If we make it here and this is true, that means the user answered all questions.
+	            } else if (problemsComplete === totalProblems) {
+	              return _react2.default.createElement(
+	                'div',
+	                { key: question.order },
+	                _react2.default.createElement(
+	                  'h3',
+	                  null,
+	                  'You\'ve completed all the problems for the day!'
+	                )
+	              );
+	              // If we make it here, it means we are still looking for the first unanswered question
+	            } else {
+	              return;
+	            }
+	          }.bind(this))
+	        );
+	      }
 	    }
 	  }]);
 	
@@ -22340,8 +22368,7 @@
 	    var _this = _possibleConstructorReturn(this, (TeacherSelect.__proto__ || Object.getPrototypeOf(TeacherSelect)).call(this, props));
 	
 	    _this.state = {
-	      teacherList: [],
-	      currentTeacher: 'YOU HAVE NO TEACHER YET =('
+	      teacherList: []
 	    };
 	    return _this;
 	  }
@@ -22364,33 +22391,35 @@
 	      // }"
 	
 	      // Perform an ajax call to GET list of teachers
-	      //var endpoint = 'http://192.168.1.65:4568/api/student/teachers';
-	      // $.ajax({
-	      //   method: 'GET',
-	      //   url: endpoint,
-	      //   data: {uid: 2},
-	      //   success: function(results) {
-	      //     console.log('success');
-	      //     console.log(results);
-	      //     this.setState(results);
-	
-	      //   },
-	      //   error: function(err) {
-	      //     console.log('error');
-	      //     console.log(err);
-	      //   }
-	      // });
+	      var endpoint = 'http://127.0.0.1:4568/api/student/teachers';
+	      $.ajax({
+	        method: 'GET',
+	        url: endpoint,
+	        data: { uid: 2 },
+	        success: function (results) {
+	          console.log('successfully got list of teachers');
+	          console.log(results);
+	          this.setState({ teacherList: results.data });
+	        }.bind(this),
+	        error: function error(err) {
+	          console.log('error');
+	          console.log(err);
+	        }
+	      });
 	
 	      // Dummy Data
-	      var data = [{
-	        name: 'stephen notwong',
-	        id: 1
-	      }, {
-	        name: 'damien mccool',
-	        id: 2
-	      }];
+	      // var data = [
+	      //   {
+	      //     name: 'stephen notwong',
+	      //     id: 1
+	      //   },
+	      //   {
+	      //     name: 'damien mccool',
+	      //     id: 2
+	      //   }
+	      // ];
 	
-	      this.setState({ teacherList: data });
+	      // this.setState({teacherList: data});
 	    }
 	  }, {
 	    key: 'componentDidMount',
@@ -22401,26 +22430,29 @@
 	    key: 'setTeacher',
 	    value: function setTeacher() {
 	      var teacherId = document.getElementById('selected-teacher').value;
+	      if (teacherId === 'default') {
+	        return;
+	      }
 	      console.log('setTeacher invoked.  teacherId is: ', teacherId);
 	      // //sample post data:  {"studentId":1,"teacherId":2}
 	      // Perform an ajax call to POST teacher.
-	      //var endpoint = 'http://192.168.1.65:4568/api/student/teachers';
-	      // $.ajax({
-	      //   method: 'POST',
-	      //   url: endpoint,
-	      //   // student and teacher uid should be sent?
-	      //   data: {studentId: 2, teacherId: teacherId},
-	      //   success: function(results) {
-	      //     console.log('success');
-	      //     console.log(results);
-	      //     this.setState(results);
-	
-	      //   },
-	      //   error: function(err) {
-	      //     console.log('error');
-	      //     console.log(err);
-	      //   }
-	      // });
+	      var endpoint = 'http://127.0.0.1:4568/api/student/teachers';
+	      $.ajax({
+	        method: 'POST',
+	        url: endpoint,
+	        // student and teacher uid should be sent?
+	        data: { studentId: 2, teacherId: teacherId },
+	        success: function (results) {
+	          console.log('success');
+	          console.log(results);
+	          console.log('props in TeacherSelect is', this.props);
+	          this.props.setTeacherFoundToTrue();
+	        }.bind(this),
+	        error: function error(err) {
+	          console.log('error');
+	          console.log(err);
+	        }
+	      });
 	    }
 	  }, {
 	    key: 'render',
@@ -22432,13 +22464,7 @@
 	        _react2.default.createElement(
 	          'h2',
 	          null,
-	          'This is the Settings component'
-	        ),
-	        _react2.default.createElement(
-	          'h3',
-	          null,
-	          'Your current teacher is: ',
-	          this.state.currentTeacher
+	          'Please select your teacher.'
 	        ),
 	        _react2.default.createElement(
 	          'h3',
@@ -22462,7 +22488,7 @@
 	          ),
 	          _react2.default.createElement(
 	            'button',
-	            { onClick: this.setTeacher },
+	            { onClick: this.setTeacher.bind(this) },
 	            'Set Teacher'
 	          )
 	        )

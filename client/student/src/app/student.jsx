@@ -3,7 +3,6 @@
 import React from 'react';
 import {render} from 'react-dom';
 import Questions from './Questions.jsx';
-import TeacherSelect from './TeacherSelect.jsx';
 import StudentReport from './StudentReport.jsx';
 
 class StudentApp extends React.Component {
@@ -11,8 +10,6 @@ class StudentApp extends React.Component {
     return (
       <div>
         <h1>This is the student view!</h1>
-        <hr />
-        <TeacherSelect />
         <hr />
         <StudentReport />
         <hr />

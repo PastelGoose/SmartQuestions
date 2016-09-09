@@ -1,17 +1,26 @@
 
 import React from 'react';
 import Question from './Question.jsx';
+import TeacherSelect from './TeacherSelect.jsx';
 
 class Questions extends React.Component {
 
   constructor(props) {
     super(props);
-    this.state = {data: []};
+    this.state = {
+      teacherFound: false, 
+      data: []
+    };
+  }
+
+  setTeacherFoundToTrue() {
+    this.setState({teacherFound: true});
+    // Now that the teacher has been selected, get the list of daily questions
+    this.getQuestions();
   }
 
   getQuestions() {
     //console.log('getQuestions triggered');
-    var context = this;
     var endpoint = 'http://127.0.0.1:4568/api/student/questions';
     $.ajax({
       method: 'GET',
@@ -21,9 +30,16 @@ class Questions extends React.Component {
         console.log('success');
         console.log(results);
         // Should sort the result set by order before inserting into setState.
-        context.setState(results);
 
-      },
+        // If results is 'No teacher found', do not display questions.  The user needs to set a teacher first
+        if (results !== 'No teacher found') {
+          this.setState({
+            teacherFound: true, 
+            data: results.data.sort(function(a, b) { return a.order - b.order; })
+          });
+        }
+
+      }.bind(this),
       error: function(err) {
         console.log('error');
         console.log(err);
@@ -115,46 +131,59 @@ class Questions extends React.Component {
     var problemsComplete = 0;
     var totalProblems = this.state.data.length;
     
-    return (
-      <div>
-        <h2>Questions List Component</h2>
-        <button onClick={this.getQuestions.bind(this)}>Get All Questions</button>
-        { // Order the data and find the first unanswered question
-          this.state.data.sort(function(a, b) { return a.order - b.order; }).map(function(question) {
-            // Keep track of how many questions we've answered so far
-            if (question.answered === true) {
-              problemsComplete++;
-            }
-            // If the current problem has not yet been answered, show it to the student.
-            // If the first unanswered question has already been found in this map loop,
-            //   do not display another.
-            if ((question.answered === false) && (problemFound === false)) {
-              problemFound = true;
-              return (
-                <div key={problemsComplete}>
-                  <Question 
-                    question={question}
-                    questionIdx={problemsComplete} 
-                    totalProblems={totalProblems}
-                    postResponse={this.postResponse.bind(this)}
-                  />
-                </div>
-              );
-              // If we make it here and this is true, that means the user answered all questions.
-            } else if (problemsComplete === totalProblems) {
-              return (
-                <div key={question.order}>
-                  <h3>You've completed all the problems for the day!</h3>
-                </div>
-              );
-              // If we make it here, it means we are still looking for the first unanswered question
-            } else {
-              return;
-            }
-          }.bind(this))
-        }
-      </div>
-    );
+    if (!this.state.teacherFound) {
+      return (
+        <div>
+          <h2>Questions List Component</h2>
+          <h2>You must select a teacher before you are able to view questions.</h2>
+          <TeacherSelect setTeacherFoundToTrue={this.setTeacherFoundToTrue.bind(this)}/>
+        </div>
+      );
+    } else {
+      return (
+        <div>
+          <h2>Questions List Component</h2>
+          { 
+            // Find the first unanswered question
+            this.state.data.map(function(question) {
+              // Keep track of how many questions we've answered so far
+              if (question.answered === true) {
+                problemsComplete++;
+              }
+              // If the current problem has not yet been answered, show it to the student.
+              // If the first unanswered question has already been found in this map loop,
+              //   do not display another.
+              if ((question.answered === false) && (problemFound === false)) {
+                problemFound = true;
+                return (
+                  <div key={problemsComplete}>
+                    <Question 
+                      question={question}
+                      questionIdx={problemsComplete} 
+                      totalProblems={totalProblems}
+                      postResponse={this.postResponse.bind(this)}
+                    />
+                  </div>
+                );
+                // If we make it here and this is true, that means the user answered all questions.
+              } else if (problemsComplete === totalProblems) {
+                return (
+                  <div key={question.order}>
+                    <h3>You've completed all the problems for the day!</h3>
+                  </div>
+                );
+                // If we make it here, it means we are still looking for the first unanswered question
+              } else {
+                return;
+              }
+            }.bind(this))
+          }
+        </div>
+      );
+      
+    }
+
+
   }
 
 }

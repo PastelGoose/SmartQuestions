@@ -6,7 +6,6 @@ class TeacherSelect extends React.Component {
     super(props);
     this.state = {
       teacherList: [],
-      currentTeacher: 'YOU HAVE NO TEACHER YET =('
     };
   }
 
@@ -26,36 +25,36 @@ class TeacherSelect extends React.Component {
     // }"
 
     // Perform an ajax call to GET list of teachers
-    //var endpoint = 'http://192.168.1.65:4568/api/student/teachers';
-    // $.ajax({
-    //   method: 'GET',
-    //   url: endpoint,
-    //   data: {uid: 2},
-    //   success: function(results) {
-    //     console.log('success');
-    //     console.log(results);
-    //     this.setState(results);
+    var endpoint = 'http://127.0.0.1:4568/api/student/teachers';
+    $.ajax({
+      method: 'GET',
+      url: endpoint,
+      data: {uid: 2},
+      success: function(results) {
+        console.log('successfully got list of teachers');
+        console.log(results);
+        this.setState({teacherList: results.data});
 
-    //   },
-    //   error: function(err) {
-    //     console.log('error');
-    //     console.log(err);
-    //   }
-    // });
+      }.bind(this),
+      error: function(err) {
+        console.log('error');
+        console.log(err);
+      }
+    });
 
     // Dummy Data
-    var data = [
-      {
-        name: 'stephen notwong',
-        id: 1
-      },
-      {
-        name: 'damien mccool',
-        id: 2
-      }
-    ];
+    // var data = [
+    //   {
+    //     name: 'stephen notwong',
+    //     id: 1
+    //   },
+    //   {
+    //     name: 'damien mccool',
+    //     id: 2
+    //   }
+    // ];
 
-    this.setState({teacherList: data});
+    // this.setState({teacherList: data});
   }
 
   componentDidMount() {
@@ -64,26 +63,29 @@ class TeacherSelect extends React.Component {
 
   setTeacher() {
     var teacherId = document.getElementById('selected-teacher').value;
+    if (teacherId === 'default') {
+      return;
+    }
     console.log('setTeacher invoked.  teacherId is: ', teacherId);
     // //sample post data:  {"studentId":1,"teacherId":2}
     // Perform an ajax call to POST teacher.
-    //var endpoint = 'http://192.168.1.65:4568/api/student/teachers';
-    // $.ajax({
-    //   method: 'POST',
-    //   url: endpoint,
-    //   // student and teacher uid should be sent?
-    //   data: {studentId: 2, teacherId: teacherId},
-    //   success: function(results) {
-    //     console.log('success');
-    //     console.log(results);
-    //     this.setState(results);
-
-    //   },
-    //   error: function(err) {
-    //     console.log('error');
-    //     console.log(err);
-    //   }
-    // });
+    var endpoint = 'http://127.0.0.1:4568/api/student/teachers';
+    $.ajax({
+      method: 'POST',
+      url: endpoint,
+      // student and teacher uid should be sent?
+      data: {studentId: 2, teacherId: teacherId},
+      success: function(results) {
+        console.log('success');
+        console.log(results);
+        console.log('props in TeacherSelect is', this.props);
+        this.props.setTeacherFoundToTrue();
+      }.bind(this),
+      error: function(err) {
+        console.log('error');
+        console.log(err);
+      }
+    });
 
   }
 
@@ -91,8 +93,7 @@ class TeacherSelect extends React.Component {
 
     return (
       <div>
-        <h2>This is the Settings component</h2>
-        <h3>Your current teacher is: {this.state.currentTeacher}</h3>
+        <h2>Please select your teacher.</h2>
         <h3>Teachers: 
           <select id="selected-teacher" defaultValue="default">
             <option value="default">Select New Teacher</option>
@@ -102,7 +103,7 @@ class TeacherSelect extends React.Component {
               })
             }
           </select>
-          <button onClick={this.setTeacher}>Set Teacher</button>
+          <button onClick={this.setTeacher.bind(this)}>Set Teacher</button>
         </h3>
       </div>
 
