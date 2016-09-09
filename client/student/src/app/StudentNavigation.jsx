@@ -7,8 +7,8 @@ const StudentNavigation = (props) => {
       <h1>Smart Questions - Student</h1>
       <h3>Navigation</h3>
       <ul>
-        <li onClick={() => props.setCurrentPage('Questions')}>Daily Questions</li>
-        <li onClick={() => props.setCurrentPage('StudentReport')}>My Progress Report</li>
+        <li><a onClick={() => props.setCurrentPage('Questions')}>Daily Questions</a></li>
+        <li><a onClick={() => props.setCurrentPage('StudentReport')}>My Progress Report</a></li>
       </ul>
     </div>
   );

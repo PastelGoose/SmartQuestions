@@ -22919,17 +22919,25 @@
 	      null,
 	      _react2.default.createElement(
 	        'li',
-	        { onClick: function onClick() {
-	            return props.setCurrentPage('Questions');
-	          } },
-	        'Daily Questions'
+	        null,
+	        _react2.default.createElement(
+	          'a',
+	          { onClick: function onClick() {
+	              return props.setCurrentPage('Questions');
+	            } },
+	          'Daily Questions'
+	        )
 	      ),
 	      _react2.default.createElement(
 	        'li',
-	        { onClick: function onClick() {
-	            return props.setCurrentPage('StudentReport');
-	          } },
-	        'My Progress Report'
+	        null,
+	        _react2.default.createElement(
+	          'a',
+	          { onClick: function onClick() {
+	              return props.setCurrentPage('StudentReport');
+	            } },
+	          'My Progress Report'
+	        )
 	      )
 	    )
 	  );
