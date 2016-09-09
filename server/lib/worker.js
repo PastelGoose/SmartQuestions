@@ -25,7 +25,6 @@ var worker = function() {
 		        through: {
 		        	attributes: ['grade', 'QuestionId', 'gradedDate', 'StudentId'],
 		        	where: {workerReviewed: false, isGraded: true}
-
 		        },
 		        attributes: ['CategoryId']
 		    }

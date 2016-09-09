@@ -60,6 +60,47 @@ module.exports = {
 			})
 		})
 	},
+	calculateCompetency: function(studentObj, tuningCoefficient){
+		var newCompetency = {
+			studentId: studentObj.studentId,
+			oldCompetencies: studentObj.competency,
+			newCompetencies: {}
+		};
+		console.log('=================', studentObj)
+		//check each category
+		_.each(studentObj.categories, function(val, key) {
+			var totalPoints = 0;
+			//check each question of each category to see how many points the student gets
+			console.log(val, key);
+			var currCompetencyScore = studentObj.competency[key];
+			_.each(val, function(tuple) {
+				var grade = tuple[0];
+				var difficulty = tuple[1];
+
+				if (grade >= 3 && difficulty >= currCompetencyScore) {
+					var point = (grade - 3) * (difficulty - currCompetencyScore) / tuningCoefficient;
+				} else if (grade < 3 && difficulty < currCompetencyScore) {
+					var point = -1 / tuningCoefficient;
+				} else {
+					var point = 0;
+				}
+
+				totalPoints += point;
+				//math.max( 0, (grade -3) * math.max(1, (level - your level) )/ tune + current competency
+				//1-3 * 7-6// 0 if level is higher and score is lower than 3
+				//1-3 1-6 -5 -2 // -1 if level is lower and score is lower than 3
+
+			})
+			console.log('waah', totalPoints, currCompetencyScore)
+			if (totalPoints) {
+				newCompetency.newCompetencies[key] = totalPoints + currCompetencyScore;
+			} else {
+				newCompetency.newCompetencies[key] = 'no change';
+			}
+		})
+
+		return newCompetency;
+	},
 	// this is the smart search function that looks for the lowest competencies of the student and find unanswered questions in these categories that have difficulty level around the student's level. this function expands search range three times if it doesn't find enough questions. 
 	findQuestions: function(studentId, categoryLimit, minQuestionCount, upperRange, lowerRange,res, callback) {
 		var search = function(categoryLimit, minQuestionCount, upperRange, lowerRange, searchCycles) {
