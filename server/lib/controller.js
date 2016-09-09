@@ -1,5 +1,6 @@
 var db = require('../db');
 var utils = require('./utils');
+var _ = require('underscore');
 
 var testString= {"uid":1,"questions":[{"questionText":"what is the x kdjf","category":"recursion","difficulty":10},{"questionText":"y times kdjf","category":"logic","difficulty":1}]}
 
@@ -22,6 +23,7 @@ var teacher = {
 				.then(function(questionSetTeacher) {					
 					return db.Category.findOrCreate({where: {name: question.category}})
 					.spread(function(category, createdCategory) {
+						utils.addCategoryToExistingStudent(submission.uid, category.id, createdCategory);
 						return questionSetTeacher.setCategory(category);
 					})
 				})
@@ -101,11 +103,11 @@ var teacher = {
 		var studentId = req.body.studentId;
 		var grade = req.body.grade;
 		var questionId = req.body.questionId;
-
+		console.log('request body in postGrades', req.body)
 		db.StudentQuestion.findOne({where: {StudentId: studentId, QuestionId: questionId}})
 		.then(function(foundQuestion) {
 			foundQuestion.updateAttributes({isGraded: 1, grade: grade});
-			res.sendStatus(201);
+			res.send(foundQuestion);
 		})
 	},
 	//this is called when the teacher asks for a report card of his/her class
@@ -205,7 +207,69 @@ var teacher = {
 var student = {
 	//this is a testing endpoint. use this for testing new queries
 	test: function(req, res) {
-		utils.getInitialQuestions(req.query.uid || 2, res);
+		// utils.test(req.query.uid || 2, res);
+		// db.Student.findAll()
+		// .then(function(students) {
+		// 	students.forEach(function(student) {
+		// 		student.setCompetency(1, {competencyScore: 1, isImproving:1, createdAt: new Date()});
+		// 	})
+		// })
+
+// down vote
+// accepted
+// You can do either:
+
+// user.addInterest(interest)
+// To add a new interest, without changing the current ones, or you can do:
+
+// user.setInterests([interest])
+
+		// db.Student.findById(2)
+		// .then(function(student) {
+		// 	console.log('inside student')
+		// 	student.addCompetency(4, {competencyScore: 0, isImproving:1, updatedAt: new Date()});
+		// })
+		studentId = req.query.uid || 2;
+
+		utils.findQuestions(studentId, 2, 1, 5, 2, res,function(result) {
+			console.log('myresult', result)
+			// if(result.questionsCount < 1) {
+			// 	utils.findQuestions(studentId, 6, 1, 4,0, function(result) {
+			// 		res.send(result);
+			// 	})
+			// // } else if (result.questionsCount < 10) {
+			// // 	res.send(result.questions);
+			// } else {
+				if(!result) {
+					res.send({data: []})
+				}
+				var orderCounter = 0;
+				var response = [];
+				var sortedResult = _.sortBy(result.questions, 'length')
+				// res.send(dani)
+				for (var i = 0; i < Math.min(sortedResult[sortedResult.length - 1].length, 5); i++){
+					if(orderCounter > 10) { break; }
+					sortedResult.forEach(function(question){
+						if (question[i]) {
+							console.log('inside', question[i])
+							var currQuestion = {
+								questionId: question[i].id,
+								difficulty: question[i].difficulty,
+								questionText: question[i].questionText,
+								categoryId: question[i].CategoryId,
+								order: ++orderCounter,
+								categoryName: question[i].Category.name
+							}
+						console.log('wah================', currQuestion)
+						response.push(currQuestion);
+						}
+					})
+					
+				}
+				console.log('finals')
+				res.send({data: response});
+			// }
+		})
 	},
 	//this is called when the student respond to one question. It logs the response in DB
 	respondOne: function(req, res) {
@@ -227,7 +291,7 @@ var student = {
 		  include: [{
 		    model: db.Question,
 		    through: {
-      			attributes: ['TeacherId', 'QuestionId', 'confidenceScore', 'isAnswered', 'orderInQueue', 'difficulty', 'CategoryId'],
+      			attributes: ['QuestionId', 'confidenceScore', 'isAnswered', 'orderInQueue', 'difficulty', 'CategoryId'],
 		    	where: {isQueued: true}
 		    }
 		  }, db.Teacher]
@@ -249,7 +313,7 @@ var student = {
 					.then(function(category) {
 						var currQuestion = {
 							questionId: question.id,
-							question: question.question,
+							questionText: question.questionText,
 							answered: question.StudentQuestion.isAnswered,
 							order: question.StudentQuestion.orderInQueue,
 							difficulty: question.difficulty,
@@ -300,8 +364,8 @@ var student = {
 // get questions and put them through a function
 	// the resulting questionIDs  get marked as queued
 
-			res.sendStatus(201);
-			utils.addQuestionsToStudent(teacherId, studentId);
+			res.send(student);
+			utils.addQuestionsCategoriesToStudent(teacherId, studentId);
 		})
 	}, 
 	//this is called when the student asks for a report for him/herself
@@ -320,7 +384,7 @@ var student = {
 			{
 				model: db.Category,
 				through: {
-					attributes: ['competencyScore', 'isImproving', 'createdAt']
+					attributes: ['competencyScore', 'isImproving', 'createdAt', 'answerDate']
 				}
 			}]
 		})
@@ -342,7 +406,8 @@ var student = {
 					categoryId: question.categoryId,
 					categoryName: question.Category.name,
 					answer: question.StudentQuestion.answer,
-					grade: question.StudentQuestion.grade
+					grade: question.StudentQuestion.grade,
+					answerDate: question.StudentQuestion.answerDate
 				};
 				studentReport.questionsAnswered.push(currQuestion);
 			})
