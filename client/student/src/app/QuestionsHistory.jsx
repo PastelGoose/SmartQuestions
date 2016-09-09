@@ -38,7 +38,7 @@ const QuestionsHistory = (props) => {
         return (
           <ul key={question.questionId}>
             <li>Question: {question.questionText}</li>
-            <li>Answered On: {question.answerDate}</li>
+            <li>Answered On: {new Date(question.answerDate).toLocaleString('en-us')}</li>
             <li>Category: {question.categoryName}</li>
             <li>Difficulty: {question.difficulty}</li>
             <li>Your response: {question.answer}</li>
