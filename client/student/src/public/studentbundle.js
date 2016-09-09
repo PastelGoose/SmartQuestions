@@ -61,6 +61,10 @@
 	
 	var _Questions2 = _interopRequireDefault(_Questions);
 	
+	var _StudentReport = __webpack_require__(/*! ./StudentReport.jsx */ 176);
+	
+	var _StudentReport2 = _interopRequireDefault(_StudentReport);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -89,6 +93,9 @@
 	          null,
 	          'This is the student view!'
 	        ),
+	        _react2.default.createElement('hr', null),
+	        _react2.default.createElement(_StudentReport2.default, null),
+	        _react2.default.createElement('hr', null),
 	        _react2.default.createElement(_Questions2.default, null)
 	      );
 	    }
@@ -22006,6 +22013,10 @@
 	
 	var _Question2 = _interopRequireDefault(_Question);
 	
+	var _TeacherSelect = __webpack_require__(/*! ./TeacherSelect.jsx */ 175);
+	
+	var _TeacherSelect2 = _interopRequireDefault(_TeacherSelect);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -22022,57 +22033,79 @@
 	
 	    var _this = _possibleConstructorReturn(this, (Questions.__proto__ || Object.getPrototypeOf(Questions)).call(this, props));
 	
-	    _this.state = { data: [] };
+	    _this.state = {
+	      teacherFound: false,
+	      data: []
+	    };
 	    return _this;
 	  }
 	
 	  _createClass(Questions, [{
+	    key: 'setTeacherFoundToTrue',
+	    value: function setTeacherFoundToTrue() {
+	      this.setState({ teacherFound: true });
+	      // Now that the teacher has been selected, get the list of daily questions
+	      this.getQuestions();
+	    }
+	  }, {
 	    key: 'getQuestions',
 	    value: function getQuestions() {
 	      //console.log('getQuestions triggered');
+	      var endpoint = 'http://127.0.0.1:4568/api/student/questions';
+	      $.ajax({
+	        method: 'GET',
+	        url: endpoint,
+	        data: { uid: 2 },
+	        success: function (results) {
+	          console.log('success');
+	          console.log(results);
+	          // Should sort the result set by order before inserting into setState.
 	
-	      //var endpoint = 'http://192.168.1.65:4568/api/student/questions';
-	      // $.ajax({
-	      //   method: 'GET',
-	      //   url: endpoint,
-	      //   data: {uid: 2},
-	      //   success: function(results) {
-	      //     console.log('success');
-	      //     console.log(results);
-	      //     this.setState(results);
-	
-	      //   },
-	      //   error: function(err) {
-	      //     console.log('error');
-	      //     console.log(err);
-	      //   }
-	      // });
+	          // If results is 'No teacher found', do not display questions.  The user needs to set a teacher first
+	          if (results !== 'No teacher found') {
+	            this.setState({
+	              teacherFound: true,
+	              data: results.data.sort(function (a, b) {
+	                return a.order - b.order;
+	              })
+	            });
+	          }
+	        }.bind(this),
+	        error: function error(err) {
+	          console.log('error');
+	          console.log(err);
+	        }
+	      });
 	
 	      // Dummy data without ajax
-	      this.setState({
-	        data: [{
-	          questionId: 2,
-	          question: 'what\'s one times seven',
-	          categories: 'recursion',
-	          difficulty: 2,
-	          answered: false,
-	          order: 2
-	        }, {
-	          questionId: 1,
-	          question: 'what\'s five times five',
-	          categories: 'logic',
-	          difficulty: 5,
-	          answered: false,
-	          order: 1
-	        }, {
-	          questionId: 3,
-	          question: 'what\'s eleven times twelve',
-	          categories: 'times-tables',
-	          difficulty: 8,
-	          answered: false,
-	          order: 3
-	        }]
-	      });
+	      // this.setState({
+	      //   data: [
+	      //     {
+	      //       questionId: 2,
+	      //       question: 'what\'s one times seven',
+	      //       categories: 'recursion',
+	      //       difficulty: 2,
+	      //       answered: false,
+	      //       order: 2
+	      //     },
+	      //     {
+	      //       questionId: 1,
+	      //       question: 'what\'s five times five',
+	      //       categories: 'logic',
+	      //       difficulty: 5,
+	      //       answered: false,
+	      //       order: 1
+	      //     },
+	      //     {
+	      //       questionId: 3,
+	      //       question: 'what\'s eleven times twelve',
+	      //       categories: 'times-tables',
+	      //       difficulty: 8,
+	      //       answered: false,
+	      //       order: 3
+	      //     }
+	      //   ]
+	      // });
 	    }
 	  }, {
 	    key: 'componentDidMount',
@@ -22083,21 +22116,21 @@
 	    key: 'postResponse',
 	    value: function postResponse(uid, qid, ans) {
 	
-	      //var endpoint = 'http://192.168.1.65:4568/api/student/questions';
+	      var endpoint = 'http://127.0.0.1:4568/api/student/questions';
 	
-	      // $.ajax({
-	      //   method: 'POST',
-	      //   url: endpoint,
-	      //   data: {uid: uid, questionId: qid, answer: ans},
-	      //   success: function(results) {
-	      //     console.log('success');
-	      //     console.log(results);
-	      //   },
-	      //   error: function(err) {
-	      //     console.log('error');
-	      //     console.log(err);
-	      //   }
-	      // });
+	      $.ajax({
+	        method: 'POST',
+	        url: endpoint,
+	        data: { uid: uid, questionId: qid, answer: ans },
+	        success: function success(results) {
+	          console.log('success');
+	          console.log(results);
+	        },
+	        error: function error(err) {
+	          console.log('error');
+	          console.log(err);
+	        }
+	      });
 	
 	      // Note: Client post data should be in this form
 	      // "{
@@ -22105,10 +22138,10 @@
 	      //  questionid: 2,
 	      //  answer: “x is the multiple..”
 	      //  }"
-	      console.log('Question submitted!');
-	      console.log('uid: ', uid);
-	      console.log('qid: ', qid);
-	      console.log('ans: ', ans);
+	      // console.log('Question submitted!');
+	      // console.log('uid: ', uid);
+	      // console.log('qid: ', qid);
+	      // console.log('ans: ', ans);
 	
 	      // After successful post, update the question on the state (answered: true)
 	      // Slice used here so we don't modify the state directly without setState.
@@ -22131,58 +22164,71 @@
 	      var problemsComplete = 0;
 	      var totalProblems = this.state.data.length;
 	
-	      return _react2.default.createElement(
-	        'div',
-	        null,
-	        _react2.default.createElement(
-	          'h2',
+	      if (!this.state.teacherFound) {
+	        return _react2.default.createElement(
+	          'div',
 	          null,
-	          'Questions List Component'
-	        ),
-	        _react2.default.createElement(
-	          'button',
-	          { onClick: this.getQuestions.bind(this) },
-	          'Get All Questions'
-	        ),
-	        // Order the data and find the first unanswered question
-	        this.state.data.sort(function (a, b) {
-	          return a.order - b.order;
-	        }).map(function (question) {
-	          // Keep track of how many questions we've answered so far
-	          if (question.answered === true) {
-	            problemsComplete++;
-	          }
-	          // If the current problem has not yet been answered, show it to the student.
-	          // If the first unanswered question has already been found in this map loop,
-	          //   do not display another.
-	          if (question.answered === false && problemFound === false) {
-	            problemFound = true;
-	            return _react2.default.createElement(
-	              'div',
-	              { key: question.order },
-	              _react2.default.createElement(_Question2.default, {
-	                question: question,
-	                totalProblems: totalProblems,
-	                postResponse: this.postResponse.bind(this)
-	              })
-	            );
-	            // If we make it here and this is true, that means the user answered all questions.
-	          } else if (problemsComplete === totalProblems) {
-	            return _react2.default.createElement(
-	              'div',
-	              { key: question.order },
-	              _react2.default.createElement(
-	                'h3',
-	                null,
-	                'You\'ve completed all the problems for the day!'
-	              )
-	            );
-	            // If we make it here, it means we are still looking for the first unanswered question
-	          } else {
-	            return;
-	          }
-	        }.bind(this))
-	      );
+	          _react2.default.createElement(
+	            'h2',
+	            null,
+	            'Questions List Component'
+	          ),
+	          _react2.default.createElement(
+	            'h2',
+	            null,
+	            'You must select a teacher before you are able to view questions.'
+	          ),
+	          _react2.default.createElement(_TeacherSelect2.default, { setTeacherFoundToTrue: this.setTeacherFoundToTrue.bind(this) })
+	        );
+	      } else {
+	        return _react2.default.createElement(
+	          'div',
+	          null,
+	          _react2.default.createElement(
+	            'h2',
+	            null,
+	            'Questions List Component'
+	          ),
+	
+	          // Find the first unanswered question
+	          this.state.data.map(function (question) {
+	            // Keep track of how many questions we've answered so far
+	            if (question.answered === true) {
+	              problemsComplete++;
+	            }
+	            // If the current problem has not yet been answered, show it to the student.
+	            // If the first unanswered question has already been found in this map loop,
+	            //   do not display another.
+	            if (question.answered === false && problemFound === false) {
+	              problemFound = true;
+	              return _react2.default.createElement(
+	                'div',
+	                { key: problemsComplete },
+	                _react2.default.createElement(_Question2.default, {
+	                  question: question,
+	                  questionIdx: problemsComplete,
+	                  totalProblems: totalProblems,
+	                  postResponse: this.postResponse.bind(this)
+	                })
+	              );
+	              // If we make it here and this is true, that means the user answered all questions.
+	            } else if (problemsComplete === totalProblems) {
+	              return _react2.default.createElement(
+	                'div',
+	                { key: question.order },
+	                _react2.default.createElement(
+	                  'h3',
+	                  null,
+	                  'You\'ve completed all the problems for the day!'
+	                )
+	              );
+	              // If we make it here, it means we are still looking for the first unanswered question
+	            } else {
+	              return;
+	            }
+	          }.bind(this))
+	        );
+	      }
 	    }
 	  }]);
 	
@@ -22228,7 +22274,7 @@
 	      'h2',
 	      null,
 	      'Question ',
-	      props.question.order,
+	      props.questionIdx + 1,
 	      ' of ',
 	      props.totalProblems
 	    ),
@@ -22284,6 +22330,526 @@
 	};
 	
 	exports.default = Question;
+
+/***/ },
+/* 174 */,
+/* 175 */
+/*!***********************************!*\
+  !*** ./src/app/TeacherSelect.jsx ***!
+  \***********************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	var _react = __webpack_require__(/*! react */ 1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var TeacherSelect = function (_React$Component) {
+	  _inherits(TeacherSelect, _React$Component);
+	
+	  function TeacherSelect(props) {
+	    _classCallCheck(this, TeacherSelect);
+	
+	    var _this = _possibleConstructorReturn(this, (TeacherSelect.__proto__ || Object.getPrototypeOf(TeacherSelect)).call(this, props));
+	
+	    _this.state = {
+	      teacherList: []
+	    };
+	    return _this;
+	  }
+	
+	  _createClass(TeacherSelect, [{
+	    key: 'getTeachersList',
+	    value: function getTeachersList() {
+	      // sample GET response
+	      // "{
+	      //   ""data"": [
+	      //     {
+	      //       ""name"": ""stephen notwong"",
+	      //       ""id"": 1
+	      //     },
+	      //     {
+	      //       ""name"": ""damien mccool"",
+	      //       ""id"": 2
+	      //     }
+	      //   ]
+	      // }"
+	
+	      // Perform an ajax call to GET list of teachers
+	      var endpoint = 'http://127.0.0.1:4568/api/student/teachers';
+	      $.ajax({
+	        method: 'GET',
+	        url: endpoint,
+	        data: { uid: 2 },
+	        success: function (results) {
+	          console.log('successfully got list of teachers');
+	          console.log(results);
+	          this.setState({ teacherList: results.data });
+	        }.bind(this),
+	        error: function error(err) {
+	          console.log('error');
+	          console.log(err);
+	        }
+	      });
+	
+	      // Dummy Data
+	      // var data = [
+	      //   {
+	      //     name: 'stephen notwong',
+	      //     id: 1
+	      //   },
+	      //   {
+	      //     name: 'damien mccool',
+	      //     id: 2
+	      //   }
+	      // ];
+	
+	      // this.setState({teacherList: data});
+	    }
+	  }, {
+	    key: 'componentDidMount',
+	    value: function componentDidMount() {
+	      this.getTeachersList();
+	    }
+	  }, {
+	    key: 'setTeacher',
+	    value: function setTeacher() {
+	      var teacherId = document.getElementById('selected-teacher').value;
+	      if (teacherId === 'default') {
+	        return;
+	      }
+	      console.log('setTeacher invoked.  teacherId is: ', teacherId);
+	      // //sample post data:  {"studentId":1,"teacherId":2}
+	      // Perform an ajax call to POST teacher.
+	      var endpoint = 'http://127.0.0.1:4568/api/student/teachers';
+	      $.ajax({
+	        method: 'POST',
+	        url: endpoint,
+	        // student and teacher uid should be sent?
+	        data: { studentId: 2, teacherId: teacherId },
+	        success: function (results) {
+	          console.log('success');
+	          console.log(results);
+	          console.log('props in TeacherSelect is', this.props);
+	          this.props.setTeacherFoundToTrue();
+	        }.bind(this),
+	        error: function error(err) {
+	          console.log('error');
+	          console.log(err);
+	        }
+	      });
+	    }
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	
+	      return _react2.default.createElement(
+	        'div',
+	        null,
+	        _react2.default.createElement(
+	          'h2',
+	          null,
+	          'Please select your teacher.'
+	        ),
+	        _react2.default.createElement(
+	          'h3',
+	          null,
+	          'Teachers:',
+	          _react2.default.createElement(
+	            'select',
+	            { id: 'selected-teacher', defaultValue: 'default' },
+	            _react2.default.createElement(
+	              'option',
+	              { value: 'default' },
+	              'Select New Teacher'
+	            ),
+	            this.state.teacherList.map(function (teacher) {
+	              return _react2.default.createElement(
+	                'option',
+	                { key: teacher.id, value: teacher.id },
+	                teacher.name
+	              );
+	            })
+	          ),
+	          _react2.default.createElement(
+	            'button',
+	            { onClick: this.setTeacher.bind(this) },
+	            'Set Teacher'
+	          )
+	        )
+	      );
+	    }
+	  }]);
+	
+	  return TeacherSelect;
+	}(_react2.default.Component);
+	
+	exports.default = TeacherSelect;
+
+/***/ },
+/* 176 */
+/*!***********************************!*\
+  !*** ./src/app/StudentReport.jsx ***!
+  \***********************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	var _react = __webpack_require__(/*! react */ 1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _QuestionsHistory = __webpack_require__(/*! ./QuestionsHistory.jsx */ 177);
+	
+	var _QuestionsHistory2 = _interopRequireDefault(_QuestionsHistory);
+	
+	var _StudentCompetency = __webpack_require__(/*! ./StudentCompetency.jsx */ 178);
+	
+	var _StudentCompetency2 = _interopRequireDefault(_StudentCompetency);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var StudentReport = function (_React$Component) {
+	  _inherits(StudentReport, _React$Component);
+	
+	  function StudentReport() {
+	    _classCallCheck(this, StudentReport);
+	
+	    var _this = _possibleConstructorReturn(this, (StudentReport.__proto__ || Object.getPrototypeOf(StudentReport)).call(this));
+	
+	    _this.state = {
+	      studentId: null,
+	      name: null,
+	      questionsAnswered: [],
+	      competency: []
+	    };
+	    return _this;
+	  }
+	
+	  _createClass(StudentReport, [{
+	    key: 'getReport',
+	    value: function getReport() {
+	      //Sample shape of GET response for student report
+	      // var results = {
+	      //   'data': {
+	      //     'studentId': 2,
+	      //     'name': 'damien mccool',
+	      //     'questionsAnswered': [
+	      //       {
+	      //         'questionId': 3,
+	      //         'questionText': 'why do cats cross the street',
+	      //         'difficulty': 10,
+	      //         'categoryName': 'recursion',
+	      //         'answer': 'x is the multiple',
+	      //         'grade': 1,
+	      //         'answerDate': 123
+	      //       },
+	      //       {
+	      //         'questionId': 1,
+	      //         'questionText': 'what is the x kdjf',
+	      //         'difficulty': 10,
+	      //         'categoryName': 'recursion',
+	      //         'answer': 'x is the multiple',
+	      //         'grade': 1,
+	      //         'answerDate': 456
+	      //       },
+	      //       {
+	      //         'questionId': 2,
+	      //         'questionText': 'y times kdjf',
+	      //         'difficulty': 1,
+	      //         'categoryName': 'logic',
+	      //         'answer': 'x is the multiple',
+	      //         'grade': 1,
+	      //         'answerDate': 789
+	      //       }
+	      //     ],
+	      //     'competency': [
+	      //       {
+	      //         'categoryId': 1,
+	      //         'categoryName': 'recursion',
+	      //         'competencyScore': 4,
+	      //         'isImproving': true
+	      //       },
+	      //       {
+	      //         'categoryId': 2,
+	      //         'categoryName': 'logic',
+	      //         'competencyScore': 1,
+	      //         'isImproving': false
+	      //       }
+	      //     ]
+	      //   }
+	      // };
+	
+	      var endpoint = 'http://127.0.0.1:4568/api/student/report';
+	      $.ajax({
+	        method: 'GET',
+	        url: endpoint,
+	        data: { uid: 2 },
+	        success: function (results) {
+	          console.log('success');
+	          console.log(results);
+	
+	          this.setState({
+	            studentId: results.data.studentId,
+	            name: results.data.name,
+	            questionsAnswered: results.data.questionsAnswered,
+	            competency: results.data.competency
+	          });
+	        }.bind(this),
+	        error: function error(err) {
+	          console.log('error');
+	          console.log(err);
+	        }
+	      });
+	
+	      console.log('report state: ', this.state);
+	    }
+	
+	    // Get the report immediately on component load
+	
+	  }, {
+	    key: 'componentDidMount',
+	    value: function componentDidMount() {
+	      this.getReport();
+	    }
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	
+	      return _react2.default.createElement(
+	        'div',
+	        null,
+	        _react2.default.createElement(
+	          'h2',
+	          null,
+	          'This is the Student Report component'
+	        ),
+	        _react2.default.createElement(
+	          'p',
+	          null,
+	          'studentId: ',
+	          this.state.studentId
+	        ),
+	        _react2.default.createElement(
+	          'p',
+	          null,
+	          'name: ',
+	          this.state.name
+	        ),
+	        _react2.default.createElement(_StudentCompetency2.default, { competency: this.state.competency }),
+	        _react2.default.createElement(_QuestionsHistory2.default, { questions: this.state.questionsAnswered })
+	      );
+	    }
+	  }]);
+	
+	  return StudentReport;
+	}(_react2.default.Component);
+	
+	exports.default = StudentReport;
+
+/***/ },
+/* 177 */
+/*!**************************************!*\
+  !*** ./src/app/QuestionsHistory.jsx ***!
+  \**************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _react = __webpack_require__(/*! react */ 1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var QuestionsHistory = function QuestionsHistory(props) {
+	  // props.questions has this shape:
+	  // [
+	  //   {
+	  //     'questionId': 3,
+	  //     'questionText': 'why do cats cross the street',
+	  //     'difficulty': 10,
+	  //     'categoryName': 'recursion',
+	  //     'answer': 'x is the multiple',
+	  //     'grade': 1,
+	  //     'answerDate': 123
+	  //   },
+	  //   {
+	  //     'questionId': 1,
+	  //     'questionText': 'what is the x kdjf',
+	  //     'difficulty': 10,
+	  //     'categoryName': 'recursion',
+	  //     'answer': 'x is the multiple',
+	  //     'grade': 1,
+	  //     'answerDate': 456
+	  //   },
+	  //   {
+	  //     'questionId': 2,
+	  //     'questionText': 'y times kdjf',
+	  //     'difficulty': 1,
+	  //     'categoryName': 'logic',
+	  //     'answer': 'x is the multiple',
+	  //     'grade': 1,
+	  //     'answerDate': 789
+	  //   }
+	  // ]
+	  return _react2.default.createElement(
+	    'div',
+	    null,
+	    _react2.default.createElement(
+	      'h3',
+	      null,
+	      'Inside QuestionsHistory Component'
+	    ),
+	    props.questions.map(function (question) {
+	      return _react2.default.createElement(
+	        'ul',
+	        { key: question.questionId },
+	        _react2.default.createElement(
+	          'li',
+	          null,
+	          'Question: ',
+	          question.questionText
+	        ),
+	        _react2.default.createElement(
+	          'li',
+	          null,
+	          'Answered On: ',
+	          new Date(question.answerDate).toLocaleString('en-us')
+	        ),
+	        _react2.default.createElement(
+	          'li',
+	          null,
+	          'Category: ',
+	          question.categoryName
+	        ),
+	        _react2.default.createElement(
+	          'li',
+	          null,
+	          'Difficulty: ',
+	          question.difficulty
+	        ),
+	        _react2.default.createElement(
+	          'li',
+	          null,
+	          'Your response: ',
+	          question.answer
+	        ),
+	        _react2.default.createElement(
+	          'li',
+	          null,
+	          'Grade: ',
+	          question.grade
+	        )
+	      );
+	    })
+	  );
+	};
+	
+	exports.default = QuestionsHistory;
+
+/***/ },
+/* 178 */
+/*!***************************************!*\
+  !*** ./src/app/StudentCompetency.jsx ***!
+  \***************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _react = __webpack_require__(/*! react */ 1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var StudentCompetency = function StudentCompetency(props) {
+	  // props.competency has this shape:
+	  // [
+	  //   {
+	  //     'categoryId': 1,
+	  //     'categoryName': 'recursion',
+	  //     'competencyScore': 4,
+	  //     'isImproving': true
+	  //   },
+	  //   {
+	  //     'categoryId': 2,
+	  //     'categoryName': 'logic',
+	  //     'competencyScore': 1,
+	  //     'isImproving': false
+	  //   }
+	  // ]
+	  return _react2.default.createElement(
+	    'div',
+	    null,
+	    _react2.default.createElement(
+	      'h3',
+	      null,
+	      'Inside Student Competency Component'
+	    ),
+	    props.competency.map(function (category) {
+	      return _react2.default.createElement(
+	        'ul',
+	        { key: category.categoryId },
+	        _react2.default.createElement(
+	          'li',
+	          null,
+	          'Category: ',
+	          category.categoryName
+	        ),
+	        _react2.default.createElement(
+	          'li',
+	          null,
+	          'Competency Score: ',
+	          category.competencyScore
+	        ),
+	        _react2.default.createElement(
+	          'li',
+	          null,
+	          'Improving: ',
+	          category.isImproving.toString()
+	        )
+	      );
+	    })
+	  );
+	};
+	
+	exports.default = StudentCompetency;
 
 /***/ }
 /******/ ]);
