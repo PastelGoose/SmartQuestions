@@ -205,70 +205,32 @@ var teacher = {
 
 
 var student = {
-	//this is a testing endpoint. use this for testing new queries
 	test: function(req, res) {
-		// utils.test(req.query.uid || 2, res);
-		// db.Student.findAll()
-		// .then(function(students) {
-		// 	students.forEach(function(student) {
-		// 		student.setCompetency(1, {competencyScore: 1, isImproving:1, createdAt: new Date()});
-		// 	})
-		// })
+		db.Student.findAll({
+			// where: {
+			// 	workerReviewed: false
+			// }, 
+			attributes: [['id', 'studentId']],
+			include: [
+			    {
+			        model: db.Question,
+			        required: true,
+			        through: {
+			        	attributes: ['grade', 'QuestionId', 'gradedDate', 'StudentId', 'workerReviewed', 'isGraded'],
+			        	where: {workerReviewed: false, isGraded: true}
 
-// down vote
-// accepted
-// You can do either:
-
-// user.addInterest(interest)
-// To add a new interest, without changing the current ones, or you can do:
-
-// user.setInterests([interest])
-
-		// db.Student.findById(2)
-		// .then(function(student) {
-		// 	console.log('inside student')
-		// 	student.addCompetency(4, {competencyScore: 0, isImproving:1, updatedAt: new Date()});
-		// })
-		studentId = req.query.uid || 2;
-
-		utils.findQuestions(studentId, 2, 1, 5, 2, res,function(result) {
-			console.log('myresult', result)
-			// if(result.questionsCount < 1) {
-			// 	utils.findQuestions(studentId, 6, 1, 4,0, function(result) {
-			// 		res.send(result);
-			// 	})
-			// // } else if (result.questionsCount < 10) {
-			// // 	res.send(result.questions);
-			// } else {
-				if(!result) {
-					res.send({data: []})
-				}
-				var orderCounter = 0;
-				var response = [];
-				var sortedResult = _.sortBy(result.questions, 'length')
-				// res.send(dani)
-				for (var i = 0; i < Math.min(sortedResult[sortedResult.length - 1].length, 5); i++){
-					if(orderCounter > 10) { break; }
-					sortedResult.forEach(function(question){
-						if (question[i]) {
-							console.log('inside', question[i])
-							var currQuestion = {
-								questionId: question[i].id,
-								difficulty: question[i].difficulty,
-								questionText: question[i].questionText,
-								categoryId: question[i].CategoryId,
-								order: ++orderCounter,
-								answered: false,
-								category: question[i].Category.name
-							}
-						console.log('wah================', currQuestion)
-						response.push(currQuestion);
-						}
-					})
-				}
-				console.log('finals')
-				res.send({data: response});
-			// }
+			        },
+			        attributes: ['CategoryId'],
+			        group: ['CategoryId']
+			    }
+			],
+			// group: ['studentId']
+		})
+		.then(function(result) {
+			// result.updateAttributes({workerReviewed: true})
+			//by student by categoryid
+			console.log('results!!!', result)
+			res.send(result)
 		})
 	},
 	retrieveSmartQuestions: function(req, res) {

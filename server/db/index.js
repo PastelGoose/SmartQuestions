@@ -33,6 +33,7 @@ var StudentQuestion = db.define('StudentQuestion', {
 	answerDate: Sequelize.DATE,
 	gradedDate: Sequelize.DATE,
 	answer: Sequelize.STRING,
+	workerReviewed: Sequelize.BOOLEAN,
 	confidenceScore: Sequelize.INTEGER,
 	isQueued: Sequelize.BOOLEAN,
 	orderInQueue: Sequelize.INTEGER,

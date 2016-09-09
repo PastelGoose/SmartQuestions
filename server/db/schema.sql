@@ -40,6 +40,7 @@ create table StudentQuestions (
 id int NOT NULL AUTO_INCREMENT,
 answerDate datetime,
 gradedDate datetime,
+workerReviewed boolean DEFAULT 0,
 studentId int,
 questionId int,
 orderInQueue int,
