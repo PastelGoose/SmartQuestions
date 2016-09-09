@@ -11,54 +11,54 @@ class Questions extends React.Component {
 
   getQuestions() {
     //console.log('getQuestions triggered');
+    var context = this;
+    var endpoint = 'http://127.0.0.1:4568/api/student/questions';
+    $.ajax({
+      method: 'GET',
+      url: endpoint,
+      data: {uid: 2},
+      success: function(results) {
+        console.log('success');
+        console.log(results);
+        // Should sort the result set by order before inserting into setState.
+        context.setState(results);
 
-    //var endpoint = 'http://192.168.1.65:4568/api/student/questions';
-    // $.ajax({
-    //   method: 'GET',
-    //   url: endpoint,
-    //   data: {uid: 2},
-    //   success: function(results) {
-    //     console.log('success');
-    //     console.log(results);
-    //     // Should sort the result set by order before inserting into setState.
-    //     this.setState(results);
-
-    //   },
-    //   error: function(err) {
-    //     console.log('error');
-    //     console.log(err);
-    //   }
-    // });
+      },
+      error: function(err) {
+        console.log('error');
+        console.log(err);
+      }
+    });
 
     // Dummy data without ajax
-    this.setState({
-      data: [
-        {
-          questionId: 2,
-          question: 'what\'s one times seven',
-          categories: 'recursion',
-          difficulty: 2,
-          answered: false,
-          order: 2
-        },
-        {
-          questionId: 1,
-          question: 'what\'s five times five',
-          categories: 'logic',
-          difficulty: 5,
-          answered: false,
-          order: 1
-        },
-        {
-          questionId: 3,
-          question: 'what\'s eleven times twelve',
-          categories: 'times-tables',
-          difficulty: 8,
-          answered: false,
-          order: 3
-        }
-      ]
-    });
+    // this.setState({
+    //   data: [
+    //     {
+    //       questionId: 2,
+    //       question: 'what\'s one times seven',
+    //       categories: 'recursion',
+    //       difficulty: 2,
+    //       answered: false,
+    //       order: 2
+    //     },
+    //     {
+    //       questionId: 1,
+    //       question: 'what\'s five times five',
+    //       categories: 'logic',
+    //       difficulty: 5,
+    //       answered: false,
+    //       order: 1
+    //     },
+    //     {
+    //       questionId: 3,
+    //       question: 'what\'s eleven times twelve',
+    //       categories: 'times-tables',
+    //       difficulty: 8,
+    //       answered: false,
+    //       order: 3
+    //     }
+    //   ]
+    // });
   }
 
   componentDidMount() {
@@ -67,21 +67,21 @@ class Questions extends React.Component {
 
   postResponse(uid, qid, ans) {
     
-    //var endpoint = 'http://192.168.1.65:4568/api/student/questions';
+    var endpoint = 'http://127.0.0.1:4568/api/student/questions';
     
-    // $.ajax({
-    //   method: 'POST',
-    //   url: endpoint,
-    //   data: {uid: uid, questionId: qid, answer: ans},
-    //   success: function(results) {
-    //     console.log('success');
-    //     console.log(results);
-    //   },
-    //   error: function(err) {
-    //     console.log('error');
-    //     console.log(err);
-    //   }
-    // });
+    $.ajax({
+      method: 'POST',
+      url: endpoint,
+      data: {uid: uid, questionId: qid, answer: ans},
+      success: function(results) {
+        console.log('success');
+        console.log(results);
+      },
+      error: function(err) {
+        console.log('error');
+        console.log(err);
+      }
+    });
 
     // Note: Client post data should be in this form
     // "{
@@ -89,10 +89,10 @@ class Questions extends React.Component {
     //  questionid: 2,
     //  answer: “x is the multiple..”
     //  }"
-    console.log('Question submitted!');
-    console.log('uid: ', uid);
-    console.log('qid: ', qid);
-    console.log('ans: ', ans);
+    // console.log('Question submitted!');
+    // console.log('uid: ', uid);
+    // console.log('qid: ', qid);
+    // console.log('ans: ', ans);
     
     // After successful post, update the question on the state (answered: true)
     // Slice used here so we don't modify the state directly without setState.
@@ -131,9 +131,10 @@ class Questions extends React.Component {
             if ((question.answered === false) && (problemFound === false)) {
               problemFound = true;
               return (
-                <div key={question.order}>
+                <div key={problemsComplete}>
                   <Question 
-                    question={question} 
+                    question={question}
+                    questionIdx={problemsComplete} 
                     totalProblems={totalProblems}
                     postResponse={this.postResponse.bind(this)}
                   />

@@ -14,7 +14,7 @@ const Question = (props) => {
 
   return (
     <div>
-      <h2>Question {props.question.order} of {props.totalProblems}</h2>
+      <h2>Question {props.questionIdx + 1} of {props.totalProblems}</h2>
       <ul>
         <li>Question: {props.question.question}</li>
         <li>QuestionId: {props.question.questionId}</li>
