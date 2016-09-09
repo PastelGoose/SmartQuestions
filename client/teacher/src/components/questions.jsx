@@ -1,13 +1,15 @@
 import React from 'react';
 import { Link } from 'react-router';
+import NavLink from './NavLink.jsx'
 
-var Questions = () => (
+var Questions = (props) => (
   <div>
-    <div className="question-list-container">
-    Questions
-    </div>
-    <Link to="questions/add">Add a Question</Link><br/>
-    <Link to="questions/grade">Grade Questions</Link>
+      <ul>
+        <li><NavLink to="questions/view">View Questions</NavLink></li>
+        <li><NavLink to="questions/add">Add a Question</NavLink></li>
+        <li><NavLink to="questions/grade">Grade Questions</NavLink></li>
+      </ul>
+      {props.children}
   </div>
 );
 

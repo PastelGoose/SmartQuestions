@@ -5,7 +5,7 @@ class Add extends React.Component {
 
   constructor() {
     super();
-    this.state = {category: '', difficulty: 0, questionText: ''};
+    this.state = {category: '', difficulty: '', questionText: '', submitted: 0};
   }
 
   handleCategories(event) {
@@ -19,8 +19,6 @@ class Add extends React.Component {
   handleQuestionText(event) {
     this.setState({ questionText: event.target.value });
   }
-
-
 
   handleSubmit(event) {
     event.preventDefault();
@@ -40,16 +38,22 @@ class Add extends React.Component {
       ]
     }
 
-    var rootUrl = 'http://10.0.0.226:4568';
+    var rootUrl = window.location.origin;
 
     $.ajax({
-      url: rootUrl + '/api/teacher/question',
+      url: rootUrl + '/api/teacher/questions',
       dataType: 'json',
       type: 'POST',
       data: dataObject,
       success: function(response) {
         console.log('POST successful');
-      },
+        this.setState({
+          category: '',
+          difficulty: '',
+          questionText: '',
+          submitted: this.state.submitted + 1
+        });
+      }.bind(this),
       error: function(xhs, status, err) {
         console.log('error POSTing question,', err);
       }
@@ -57,6 +61,14 @@ class Add extends React.Component {
   };
 
   render() {
+
+    var submitStatement = (<p></p>)
+
+    if (this.state.submitted !== 0) {
+      submitStatement = (<p>{this.state.submitted} questions submitted.</p>)
+    };
+
+
     return (
       <div className="add-form-container">
         <form onSubmit={ this.handleSubmit.bind(this) }>
@@ -75,7 +87,7 @@ class Add extends React.Component {
           <input type="submit" 
             value="Submit"/>
         </form>
-        <Link to="/questions">Back to Questions</Link> <Link to="/">Back to Home</Link>
+        {submitStatement}
       </div>
     );
   }

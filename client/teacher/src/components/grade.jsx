@@ -9,7 +9,7 @@ class Grade extends React.Component {
   }
 
   getToGrade() {
-    var rootUrl ='http://10.0.0.226:4568';
+    var rootUrl = window.location.origin;
     $.ajax({
       url: rootUrl + '/api/teacher/grading',
       type: 'GET',
@@ -29,6 +29,8 @@ class Grade extends React.Component {
   }
 
   handleSelect(event) {
+    console.log('in handleSelect');
+    console.log(event.target.value);
     this.setState({grade: event.target.value})
   }
 
@@ -68,9 +70,7 @@ class Grade extends React.Component {
 
   render() {
     if (this.state.questions === undefined) {
-      return (
-        <p>Loading...</p>
-        )
+      return (<p>Loading...</p>)
     }
 
     var toGrade = this.state.questions[this.state.currentIndex];

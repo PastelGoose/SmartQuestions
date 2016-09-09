@@ -57,25 +57,33 @@
 	
 	var _reactRouter = __webpack_require__(/*! react-router */ 172);
 	
-	var _app = __webpack_require__(/*! ./components/app.jsx */ 235);
+	var _App = __webpack_require__(/*! ./components/App.jsx */ 235);
 	
-	var _app2 = _interopRequireDefault(_app);
+	var _App2 = _interopRequireDefault(_App);
 	
-	var _students = __webpack_require__(/*! ./components/students.jsx */ 236);
+	var _StudentsList = __webpack_require__(/*! ./components/StudentsList.jsx */ 237);
 	
-	var _students2 = _interopRequireDefault(_students);
+	var _StudentsList2 = _interopRequireDefault(_StudentsList);
 	
-	var _questions = __webpack_require__(/*! ./components/questions.jsx */ 237);
+	var _StudentReport = __webpack_require__(/*! ./components/StudentReport.jsx */ 239);
 	
-	var _questions2 = _interopRequireDefault(_questions);
+	var _StudentReport2 = _interopRequireDefault(_StudentReport);
 	
-	var _add = __webpack_require__(/*! ./components/add.jsx */ 238);
+	var _Questions = __webpack_require__(/*! ./components/Questions.jsx */ 240);
 	
-	var _add2 = _interopRequireDefault(_add);
+	var _Questions2 = _interopRequireDefault(_Questions);
 	
-	var _grade = __webpack_require__(/*! ./components/grade.jsx */ 239);
+	var _QuestionsList = __webpack_require__(/*! ./components/QuestionsList.jsx */ 241);
 	
-	var _grade2 = _interopRequireDefault(_grade);
+	var _QuestionsList2 = _interopRequireDefault(_QuestionsList);
+	
+	var _Add = __webpack_require__(/*! ./components/Add.jsx */ 243);
+	
+	var _Add2 = _interopRequireDefault(_Add);
+	
+	var _Grade = __webpack_require__(/*! ./components/Grade.jsx */ 244);
+	
+	var _Grade2 = _interopRequireDefault(_Grade);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -84,12 +92,20 @@
 	  { history: _reactRouter.hashHistory },
 	  _react2.default.createElement(
 	    _reactRouter.Route,
-	    { path: '/', component: _app2.default },
-	    _react2.default.createElement(_reactRouter.Route, { path: '/students', component: _students2.default }),
-	    _react2.default.createElement(_reactRouter.Route, { path: '/questions', component: _questions2.default })
-	  ),
-	  _react2.default.createElement(_reactRouter.Route, { path: '/questions/add', component: _add2.default }),
-	  _react2.default.createElement(_reactRouter.Route, { path: '/questions/grade', component: _grade2.default })
+	    { path: '/', component: _App2.default },
+	    _react2.default.createElement(
+	      _reactRouter.Route,
+	      { path: '/students', component: _StudentsList2.default },
+	      _react2.default.createElement(_reactRouter.Route, { path: '/students/:studentId', component: _StudentReport2.default })
+	    ),
+	    _react2.default.createElement(
+	      _reactRouter.Route,
+	      { path: '/questions', component: _Questions2.default },
+	      _react2.default.createElement(_reactRouter.Route, { path: '/questions/view', component: _QuestionsList2.default }),
+	      _react2.default.createElement(_reactRouter.Route, { path: '/questions/add', component: _Add2.default }),
+	      _react2.default.createElement(_reactRouter.Route, { path: '/questions/grade', component: _Grade2.default })
+	    )
+	  )
 	), document.getElementById('app'));
 
 /***/ },
@@ -27819,7 +27835,7 @@
 /***/ },
 /* 235 */
 /*!********************************!*\
-  !*** ./src/components/app.jsx ***!
+  !*** ./src/components/App.jsx ***!
   \********************************/
 /***/ function(module, exports, __webpack_require__) {
 
@@ -27833,7 +27849,9 @@
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _reactRouter = __webpack_require__(/*! react-router */ 172);
+	var _NavLink = __webpack_require__(/*! ./NavLink.jsx */ 236);
+	
+	var _NavLink2 = _interopRequireDefault(_NavLink);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -27857,7 +27875,7 @@
 	        'li',
 	        null,
 	        _react2.default.createElement(
-	          _reactRouter.Link,
+	          _NavLink2.default,
 	          { to: '/questions' },
 	          'Questions'
 	        )
@@ -27866,7 +27884,7 @@
 	        'li',
 	        null,
 	        _react2.default.createElement(
-	          _reactRouter.Link,
+	          _NavLink2.default,
 	          { to: '/students' },
 	          'Students'
 	        )
@@ -27880,41 +27898,241 @@
 
 /***/ },
 /* 236 */
-/*!*************************************!*\
-  !*** ./src/components/students.jsx ***!
-  \*************************************/
+/*!************************************!*\
+  !*** ./src/components/NavLink.jsx ***!
+  \************************************/
 /***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+	
+	var _react = __webpack_require__(/*! react */ 1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _reactRouter = __webpack_require__(/*! react-router */ 172);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var NavLink = function NavLink(props) {
+	  return _react2.default.createElement(_reactRouter.Link, _extends({}, props, { activeClassName: 'active' }));
+	};
+	
+	exports.default = NavLink;
+
+/***/ },
+/* 237 */
+/*!*****************************************!*\
+  !*** ./src/components/StudentsList.jsx ***!
+  \*****************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	var _react = __webpack_require__(/*! react */ 1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _StudentItem = __webpack_require__(/*! ./StudentItem.jsx */ 238);
+	
+	var _StudentItem2 = _interopRequireDefault(_StudentItem);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var StudentsList = function (_React$Component) {
+	  _inherits(StudentsList, _React$Component);
+	
+	  function StudentsList() {
+	    _classCallCheck(this, StudentsList);
+	
+	    var _this = _possibleConstructorReturn(this, (StudentsList.__proto__ || Object.getPrototypeOf(StudentsList)).call(this));
+	
+	    _this.state = { students: undefined };
+	    return _this;
+	  }
+	
+	  _createClass(StudentsList, [{
+	    key: 'getStudents',
+	    value: function getStudents() {
+	
+	      var rootUrl = window.location.origin;
+	
+	      $.ajax({
+	        url: rootUrl + '/api/teacher/students',
+	        type: 'GET',
+	        options: { uid: 1 },
+	        success: function (response) {
+	          this.setState({ questions: response.data });
+	          console.log('Questions GETted');
+	        }.bind(this),
+	        error: function error(xhs, status, err) {
+	          console.log('error GETting questions to view ', err);
+	        }
+	      });
+	    }
+	  }, {
+	    key: 'componentDidMount',
+	    value: function componentDidMount() {
+	      this.getStudents();
+	    }
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	
+	      var questions = this.state.questions;
+	
+	      if (questions === undefined) {
+	        return _react2.default.createElement(
+	          'p',
+	          null,
+	          'Loading...'
+	        );
+	      }
+	
+	      if (questions.length === 0) {
+	        return _react2.default.createElement(
+	          'p',
+	          null,
+	          'No questions in the database.'
+	        );
+	      } else {
+	
+	        var studentNodes = students.map(function (student) {
+	          return _react2.default.createElement(_StudentItem2.default, { data: student });
+	        });
+	
+	        return _react2.default.createElement(
+	          'div',
+	          { className: 'student-list' },
+	          _react2.default.createElement(
+	            'ul',
+	            null,
+	            ' ',
+	            studentNodes,
+	            ' '
+	          )
+	        );
+	      }
+	    }
+	  }]);
+	
+	  return StudentsList;
+	}(_react2.default.Component);
+	
+	exports.default = StudentsList;
+
+/***/ },
+/* 238 */
+/*!****************************************!*\
+  !*** ./src/components/StudentItem.jsx ***!
+  \****************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	var _react = __webpack_require__(/*! react */ 1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _reactRouter = __webpack_require__(/*! react-router */ 172);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var StudentItem = function (_React$Component) {
+	  _inherits(StudentItem, _React$Component);
+	
+	  function StudentItem(props) {
+	    _classCallCheck(this, StudentItem);
+	
+	    return _possibleConstructorReturn(this, (StudentItem.__proto__ || Object.getPrototypeOf(StudentItem)).call(this, props));
+	  }
+	
+	  _createClass(StudentItem, [{
+	    key: 'handleClick',
+	    value: function handleClick(event) {
+	      var path = '/students/' + props.data.studentId;
+	      _reactRouter.browserHistory.push(path);
+	    }
+	  }, {
+	    key: 'render',
+	    value: function render(props) {
+	      return _react2.default.createElement(
+	        'li',
+	        { onClick: this.handleClick.bind(this) },
+	        _react2.default.createElement(
+	          'ul',
+	          null,
+	          _react2.default.createElement(
+	            'li',
+	            null,
+	            'ID: ',
+	            props.data.studentId
+	          ),
+	          _react2.default.createElement(
+	            'li',
+	            null,
+	            'Name: ',
+	            props.data.studentName
+	          )
+	        )
+	      );
+	    }
+	  }]);
+	
+	  return StudentItem;
+	}(_react2.default.Component);
+	
+	exports.default = StudentItem;
+
+/***/ },
+/* 239 */
+/*!******************************************!*\
+  !*** ./src/components/StudentReport.jsx ***!
+  \******************************************/
+/***/ function(module, exports) {
 
 	"use strict";
 	
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
+	var StudentReport = function StudentReport() {};
 	
-	var _react = __webpack_require__(/*! react */ 1);
-	
-	var _react2 = _interopRequireDefault(_react);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	var Students = function Students() {
-	  return _react2.default.createElement(
-	    "div",
-	    { className: "col-6 student-list-container" },
-	    _react2.default.createElement(
-	      "ul",
-	      { className: "student-list" },
-	      _react2.default.createElement("li", null)
-	    )
-	  );
-	};
-	
-	exports.default = Students;
+	exports.default = StudentReport;
 
 /***/ },
-/* 237 */
+/* 240 */
 /*!**************************************!*\
-  !*** ./src/components/questions.jsx ***!
+  !*** ./src/components/Questions.jsx ***!
   \**************************************/
 /***/ function(module, exports, __webpack_require__) {
 
@@ -27930,37 +28148,216 @@
 	
 	var _reactRouter = __webpack_require__(/*! react-router */ 172);
 	
+	var _NavLink = __webpack_require__(/*! ./NavLink.jsx */ 236);
+	
+	var _NavLink2 = _interopRequireDefault(_NavLink);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	var Questions = function Questions() {
+	var Questions = function Questions(props) {
 	  return _react2.default.createElement(
 	    'div',
 	    null,
 	    _react2.default.createElement(
-	      'div',
-	      { className: 'question-list-container' },
-	      'Questions'
+	      'ul',
+	      null,
+	      _react2.default.createElement(
+	        'li',
+	        null,
+	        _react2.default.createElement(
+	          _NavLink2.default,
+	          { to: 'questions/view' },
+	          'View Questions'
+	        )
+	      ),
+	      _react2.default.createElement(
+	        'li',
+	        null,
+	        _react2.default.createElement(
+	          _NavLink2.default,
+	          { to: 'questions/add' },
+	          'Add a Question'
+	        )
+	      ),
+	      _react2.default.createElement(
+	        'li',
+	        null,
+	        _react2.default.createElement(
+	          _NavLink2.default,
+	          { to: 'questions/grade' },
+	          'Grade Questions'
+	        )
+	      )
 	    ),
-	    _react2.default.createElement(
-	      _reactRouter.Link,
-	      { to: 'questions/add' },
-	      'Add a Question'
-	    ),
-	    _react2.default.createElement('br', null),
-	    _react2.default.createElement(
-	      _reactRouter.Link,
-	      { to: 'questions/grade' },
-	      'Grade Questions'
-	    )
+	    props.children
 	  );
 	};
 	
 	exports.default = Questions;
 
 /***/ },
-/* 238 */
+/* 241 */
+/*!******************************************!*\
+  !*** ./src/components/QuestionsList.jsx ***!
+  \******************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	var _react = __webpack_require__(/*! react */ 1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _QuestionItem = __webpack_require__(/*! ./QuestionItem.jsx */ 242);
+	
+	var _QuestionItem2 = _interopRequireDefault(_QuestionItem);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var QuestionsList = function (_React$Component) {
+	  _inherits(QuestionsList, _React$Component);
+	
+	  function QuestionsList() {
+	    _classCallCheck(this, QuestionsList);
+	
+	    var _this = _possibleConstructorReturn(this, (QuestionsList.__proto__ || Object.getPrototypeOf(QuestionsList)).call(this));
+	
+	    _this.state = { questions: undefined };
+	    return _this;
+	  }
+	
+	  _createClass(QuestionsList, [{
+	    key: 'getQuestions',
+	    value: function getQuestions() {
+	
+	      var rootUrl = window.location.origin;
+	
+	      $.ajax({
+	        url: rootUrl + '/api/teacher/questions',
+	        type: 'GET',
+	        options: { uid: 1 },
+	        success: function (response) {
+	          this.setState({ questions: response.data });
+	          console.log('Questions GETted');
+	        }.bind(this),
+	        error: function error(xhs, status, err) {
+	          console.log('error GETting questions to view ', err);
+	        }
+	      });
+	    }
+	  }, {
+	    key: 'componentDidMount',
+	    value: function componentDidMount() {
+	      this.getQuestions();
+	    }
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	
+	      var questions = this.state.questions;
+	      console.log(questions);
+	
+	      if (questions === undefined) {
+	        return _react2.default.createElement(
+	          'p',
+	          null,
+	          'Loading...'
+	        );
+	      }
+	
+	      if (questions.length === 0) {
+	        return _react2.default.createElement(
+	          'p',
+	          null,
+	          'No questions in the database.'
+	        );
+	      } else {
+	
+	        var questionNodes = questions.map(function (question, i) {
+	          return _react2.default.createElement(_QuestionItem2.default, { data: question, key: i });
+	        });
+	
+	        return _react2.default.createElement(
+	          'div',
+	          { className: 'question-list' },
+	          _react2.default.createElement(
+	            'ul',
+	            null,
+	            ' ',
+	            questionNodes,
+	            ' '
+	          )
+	        );
+	      }
+	    }
+	  }]);
+	
+	  return QuestionsList;
+	}(_react2.default.Component);
+	
+	exports.default = QuestionsList;
+
+/***/ },
+/* 242 */
+/*!*****************************************!*\
+  !*** ./src/components/QuestionItem.jsx ***!
+  \*****************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _react = __webpack_require__(/*! react */ 1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var QuestionItem = function QuestionItem(_ref) {
+	  var data = _ref.data;
+	  return _react2.default.createElement(
+	    'li',
+	    null,
+	    _react2.default.createElement(
+	      'ul',
+	      null,
+	      _react2.default.createElement(
+	        'li',
+	        null,
+	        'ID: ',
+	        data.id
+	      ),
+	      _react2.default.createElement(
+	        'li',
+	        null,
+	        'snippet: ',
+	        data.questionText ? data.questionText.substring(0, 20) + '...' : '[Not Available]'
+	      )
+	    )
+	  );
+	};
+	
+	exports.default = QuestionItem;
+
+/***/ },
+/* 243 */
 /*!********************************!*\
-  !*** ./src/components/add.jsx ***!
+  !*** ./src/components/Add.jsx ***!
   \********************************/
 /***/ function(module, exports, __webpack_require__) {
 
@@ -27994,7 +28391,7 @@
 	
 	    var _this = _possibleConstructorReturn(this, (Add.__proto__ || Object.getPrototypeOf(Add)).call(this));
 	
-	    _this.state = { category: '', difficulty: 0, questionText: '' };
+	    _this.state = { category: '', difficulty: '', questionText: '', submitted: 0 };
 	    return _this;
 	  }
 	
@@ -28031,16 +28428,22 @@
 	        }]
 	      };
 	
-	      var rootUrl = 'http://10.0.0.226:4568';
+	      var rootUrl = window.location.origin;
 	
 	      $.ajax({
-	        url: rootUrl + '/api/teacher/question',
+	        url: rootUrl + '/api/teacher/questions',
 	        dataType: 'json',
 	        type: 'POST',
 	        data: dataObject,
-	        success: function success(response) {
+	        success: function (response) {
 	          console.log('POST successful');
-	        },
+	          this.setState({
+	            category: '',
+	            difficulty: '',
+	            questionText: '',
+	            submitted: this.state.submitted + 1
+	          });
+	        }.bind(this),
 	        error: function error(xhs, status, err) {
 	          console.log('error POSTing question,', err);
 	        }
@@ -28049,6 +28452,18 @@
 	  }, {
 	    key: 'render',
 	    value: function render() {
+	
+	      var submitStatement = _react2.default.createElement('p', null);
+	
+	      if (this.state.submitted !== 0) {
+	        submitStatement = _react2.default.createElement(
+	          'p',
+	          null,
+	          this.state.submitted,
+	          ' questions submitted.'
+	        );
+	      };
+	
 	      return _react2.default.createElement(
 	        'div',
 	        { className: 'add-form-container' },
@@ -28073,17 +28488,7 @@
 	          _react2.default.createElement('input', { type: 'submit',
 	            value: 'Submit' })
 	        ),
-	        _react2.default.createElement(
-	          _reactRouter.Link,
-	          { to: '/questions' },
-	          'Back to Questions'
-	        ),
-	        ' ',
-	        _react2.default.createElement(
-	          _reactRouter.Link,
-	          { to: '/' },
-	          'Back to Home'
-	        )
+	        submitStatement
 	      );
 	    }
 	  }]);
@@ -28096,9 +28501,9 @@
 	exports.default = Add;
 
 /***/ },
-/* 239 */
+/* 244 */
 /*!**********************************!*\
-  !*** ./src/components/grade.jsx ***!
+  !*** ./src/components/Grade.jsx ***!
   \**********************************/
 /***/ function(module, exports, __webpack_require__) {
 
@@ -28139,7 +28544,7 @@
 	  _createClass(Grade, [{
 	    key: 'getToGrade',
 	    value: function getToGrade() {
-	      var rootUrl = 'http://10.0.0.226:4568';
+	      var rootUrl = window.location.origin;
 	      $.ajax({
 	        url: rootUrl + '/api/teacher/grading',
 	        type: 'GET',
@@ -28161,6 +28566,8 @@
 	  }, {
 	    key: 'handleSelect',
 	    value: function handleSelect(event) {
+	      console.log('in handleSelect');
+	      console.log(event.target.value);
 	      this.setState({ grade: event.target.value });
 	    }
 	  }, {

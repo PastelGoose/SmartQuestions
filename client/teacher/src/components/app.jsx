@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router';
+import NavLink from './NavLink.jsx';
 
 var App = (props) => (
   <div className="grid">
@@ -7,8 +7,8 @@ var App = (props) => (
       <h1>Smart Questions</h1>
     </div>
       <ul className="nav">
-        <li><Link to="/questions">Questions</Link></li>
-        <li><Link to="/students">Students</Link></li>
+        <li><NavLink to="/questions">Questions</NavLink></li>
+        <li><NavLink to="/students">Students</NavLink></li>
       </ul>
   {props.children}
   </div>
