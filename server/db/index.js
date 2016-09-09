@@ -31,12 +31,13 @@ var StudentQuestion = db.define('StudentQuestion', {
 	isViewed: Sequelize.BOOLEAN,
 	isAnswered: Sequelize.BOOLEAN,
 	answerDate: Sequelize.DATE,
+	gradedDate: Sequelize.DATE,
 	answer: Sequelize.STRING,
 	confidenceScore: Sequelize.INTEGER,
 	isQueued: Sequelize.BOOLEAN,
 	orderInQueue: Sequelize.INTEGER,
 	isGraded: Sequelize.BOOLEAN,
-	grade: Sequelize.INTEGER
+	grade: Sequelize.INTEGER,
 });
 
 var StudentCategory = db.define('StudentCategory', {

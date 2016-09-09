@@ -106,7 +106,7 @@ var teacher = {
 		console.log('request body in postGrades', req.body)
 		db.StudentQuestion.findOne({where: {StudentId: studentId, QuestionId: questionId}})
 		.then(function(foundQuestion) {
-			foundQuestion.updateAttributes({isGraded: 1, grade: grade});
+			foundQuestion.updateAttributes({isGraded: 1, grade: grade, gradedDate: new Date()});
 			res.send(foundQuestion);
 		})
 	},
@@ -258,13 +258,56 @@ var student = {
 								questionText: question[i].questionText,
 								categoryId: question[i].CategoryId,
 								order: ++orderCounter,
-								categoryName: question[i].Category.name
+								answered: false,
+								category: question[i].Category.name
 							}
 						console.log('wah================', currQuestion)
 						response.push(currQuestion);
 						}
 					})
-					
+				}
+				console.log('finals')
+				res.send({data: response});
+			// }
+		})
+	},
+	retrieveSmartQuestions: function(req, res) {
+		studentId = req.query.uid || 2;
+
+		utils.findQuestions(studentId, 2, 1, 3, 2, res,function(result) {
+			console.log('myresult', result)
+			// if(result.questionsCount < 1) {
+			// 	utils.findQuestions(studentId, 6, 1, 4,0, function(result) {
+			// 		res.send(result);
+			// 	})
+			// // } else if (result.questionsCount < 10) {
+			// // 	res.send(result.questions);
+			// } else {
+				if(!result) {
+					res.send({data: []})
+				}
+				var orderCounter = 0;
+				var response = [];
+				var sortedResult = _.sortBy(result.questions, 'length')
+				// res.send(dani)
+				for (var i = 0; i < Math.min(sortedResult[sortedResult.length - 1].length, 5); i++){
+					if(orderCounter > 10) { break; }
+					sortedResult.forEach(function(question){
+						if (question[i]) {
+							console.log('inside', question[i])
+							var currQuestion = {
+								questionId: question[i].id,
+								difficulty: question[i].difficulty,
+								questionText: question[i].questionText,
+								categoryId: question[i].CategoryId,
+								order: ++orderCounter,
+								answered: false,
+								category: question[i].Category.name
+							}
+						console.log('wah================', currQuestion)
+						response.push(currQuestion);
+						}
+					})
 				}
 				console.log('finals')
 				res.send({data: response});
@@ -284,7 +327,7 @@ var student = {
 
 	},
 	//this is called when the client asks for all questions for the student for the day. these are the question that are marked isQueued
-	retrieveQuestions: function(req, res) {
+	retrieveQueuedQuestions: function(req, res) {
 		var uid = req.query.uid || 2;
 
 		db.Student.findById(uid, {

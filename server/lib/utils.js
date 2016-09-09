@@ -2,102 +2,7 @@ var db = require('../db');
 var _ = require('underscore');
 
 module.exports = {
-	getInitialQuestions: function(studentId, res) {
-		//find categories' latest competency
-		db.IndividualCompetencies.findAll({
-			where: {studentId: studentId}
-		})
-		.then(function(studentComps) {
-//find the weakest
-			var studentsSorted = [];
-
-			var dani = _.sortby(studentComps, 'competencyScore');
-			console.log(dani)
-
-
-			// studentComps.forEach(function(studentComp){
-			// 	if(studentsSorted.length === 0) {
-			// 		studentsSorted.push(studentComp);
-			// 	} else {
-			// 		studentsSorted[0].competencyScore>
-			// 	}
-			// 	competencyScores.push(studentComp.competencyScore);
-			// })
-			// competencyScores.sort(function(a,b) {return})
-		})
-
-		//find questions that are not answered for student in the weakest categories
-		//filter for questions with difficulty near their competency level OR check for confidence for the questions
-		//return 5 question ids with difficulty level
-		//give sorting score
-		//return questions
-		//change is isQueued fields
-
-		db.StudentCategory.findAll({
-			where: {
-				categoryId:{$in: [1,2]},
-				StudentId:7
-			},
-			order: [['createdAt', 'DESC']],
-			limit: 1
-		})
-		.then(function(result) {
-			console.log(result);
-			res.send(result);
-		})
-
-		//everyday, as student answers questions, the joint table gets new 
-		//everyay, algo go into student questions and grabs questions answered for the day
-		//algo calculate compentency for the categories affected
-		//algo adds line to category table
-		//algo updates the currentcompentency table
-
-			// db.Category.findAll({
-			// 	include: [{
-			// 		model: db.Student, 
-			// 		through: {
-			// 			attributes: ['createdAt'],
-			// 			order: [['createdAt', 'ASC']]
-			// 		}, 
-			// 	}]
-			// })
-			// .then(function(result) {
-			// 	console.log(result);
-			// 	res.send(result);
-			// })
-		// db.Student.findById(studentId)
-		// .then(function(student) {
-		// 	student.getCategories()
-		// 	.then(function(categories) {
-		// 		console.log('categories', categories);
-		// 		// res.send(categories);
-		// 		categories.forEach(function(category) {
-		// 			console.log('i am here!')
-		// 			db.StudentCategory.findOne({
-		// 				order: [[student, category, 'createdAt', 'DESC']]
-		// 			})
-		// 			// .then(function(found) {
-		// 			// 	console.log('----found', found);
-		// 			// })
-					
-		// 		})
-		// 	})
-		// })
-//'"createdAt" ASC'
-//{limit:4, order: [db.Category, 'createdAt', 'DESC'] }
-// [] [User, Company, 'name', 'DESC']
-		//{ limit: 10, order: '"updatedAt" DESC' }
-		//find weakest categories
-
-
-
-		//get newly graded qustions
-		//see which category they below to
-		//calculate new increase competency for taht category or decrease
-		//add competency
-		//if cinrease, set improving
-		//
-	}, 
+	//when the student selects a teacher, this function is called to add the appropriately categories to his/her table to keep track of progress. all students start with competency of 0
 	addQuestionsCategoriesToStudent: function(teacherId, studentId) {
 		console.log('in addQuestionsToStudent')
 		db.Student.findById(studentId)
@@ -105,6 +10,7 @@ module.exports = {
 			db.Question.findAll({where: {TeacherId: teacherId}})
 			.then(function(questions) {
 				student.addQuestions(questions);
+
 				var myCategories = {};
 				questions.forEach(function(question) {
 					myCategories[question.CategoryId] = question.CategoryId;
@@ -119,6 +25,7 @@ module.exports = {
 			
 		})
 	},
+	//when teacher adds new questions, new categories(aka competencies) are added to all of his/her students
 	addCategoryToExistingStudent: function(teacherId, categoryId, isNew) {
 		if (isNew) {
 			db.Student.findAll({
@@ -131,17 +38,20 @@ module.exports = {
 			})
 		}
 	},
-	addCategoriesToStudent: function(teacherId, studentId) {
-		console.log('in addQuestionsToStudent')
-		db.Student.findById(studentId)
-		.then(function(student) {
-			db.Question.findAll({where: {TeacherId: teacherId}})
-			.then(function(questions) {
-				student.addQuestions(questions);
-			})
+	//this function adds questions to the student. it is not used now bc it is combined with addQuestionsCategoriesToStudent
+	// addCategoriesToStudent: function(teacherId, studentId) {
+	// 	console.log('in addQuestionsToStudent')
+	// 	db.Student.findById(studentId)
+	// 	.then(function(student) {
+	// 		db.Question.findAll({where: {TeacherId: teacherId}})
+	// 		.then(function(questions) {
+	// 			student.addQuestions(questions);
+	// 		})
 			
-		})
-	},
+	// 	})
+	// },
+
+	//when the teacher submits a question, this function is called to add the question to the teacher
 	addQuestionToExistingStudent: function(teacherId, questionId) {
 		db.Student.findAll({where: {teacherId: teacherId}})
 		.then(function(students) {
@@ -150,6 +60,7 @@ module.exports = {
 			})
 		})
 	},
+	// this is the smart search function that looks for the lowest competencies of the student and find unanswered questions in these categories that have difficulty level around the student's level. this function expands search range three times if it doesn't find enough questions. 
 	findQuestions: function(studentId, categoryLimit, limitPerCategory, upperRange, lowerRange,res, callback) {
 		var search = function(categoryLimit, limitPerCategory, upperRange, lowerRange, searchCycles) {
 
@@ -189,7 +100,7 @@ module.exports = {
 							required: true,
 							through: {
 		      					attributes: ['QuestionId', 'confidenceScore', 'isAnswered', 'orderInQueue', 'difficulty', 'CategoryId'],
-				    			where: {isAnswered: false, isQueued: false},
+				    			where: {isAnswered: false},
 							}, 
 
 							include: [{
@@ -215,10 +126,10 @@ module.exports = {
 							if(questionsCount < 3 && searchCycles < 2) {
 								console.log('==============in search cycle', finalresult.questionsCount, searchCycles)
 								searchCycles++;
-								search(categoryLimit * 2, limitPerCategory * 2, upperRange * 2, lowerRange, searchCycles);
+								search(categoryLimit * 2, limitPerCategory * 2, upperRange + 1, lowerRange, searchCycles);
 							} else if (questionsCount < 3 && searchCycles < 3) {
 								searchCycles++;
-								search(categoryLimit * 2, limitPerCategory * 2, upperRange, lowerRange * 2, searchCycles);
+								search(categoryLimit * 2, limitPerCategory * 2, upperRange + 2, lowerRange * 2, searchCycles);
 							} else {
 								console.log('count', questionsCount, finalresult);
 								callback({questionsCount: questionsCount,
@@ -232,7 +143,6 @@ module.exports = {
 		};
 
 		search(categoryLimit, limitPerCategory, upperRange, lowerRange, 1);
-
 
 	}
 
