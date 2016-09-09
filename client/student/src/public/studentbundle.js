@@ -61,7 +61,7 @@
 	
 	var _Questions2 = _interopRequireDefault(_Questions);
 	
-	var _StudentReport = __webpack_require__(/*! ./StudentReport.jsx */ 176);
+	var _StudentReport = __webpack_require__(/*! ./StudentReport.jsx */ 175);
 	
 	var _StudentReport2 = _interopRequireDefault(_StudentReport);
 	
@@ -22013,7 +22013,7 @@
 	
 	var _Question2 = _interopRequireDefault(_Question);
 	
-	var _TeacherSelect = __webpack_require__(/*! ./TeacherSelect.jsx */ 175);
+	var _TeacherSelect = __webpack_require__(/*! ./TeacherSelect.jsx */ 174);
 	
 	var _TeacherSelect2 = _interopRequireDefault(_TeacherSelect);
 	
@@ -22180,6 +22180,21 @@
 	          ),
 	          _react2.default.createElement(_TeacherSelect2.default, { setTeacherFoundToTrue: this.setTeacherFoundToTrue.bind(this) })
 	        );
+	      } else if (this.state.data.length === 0) {
+	        return _react2.default.createElement(
+	          'div',
+	          null,
+	          _react2.default.createElement(
+	            'h2',
+	            null,
+	            'Questions List Component'
+	          ),
+	          _react2.default.createElement(
+	            'h3',
+	            null,
+	            'You\'ve completed all the problems for the day!'
+	          )
+	        );
 	      } else {
 	        return _react2.default.createElement(
 	          'div',
@@ -22285,7 +22300,7 @@
 	        'li',
 	        null,
 	        'Question: ',
-	        props.question.question
+	        props.question.questionText
 	      ),
 	      _react2.default.createElement(
 	        'li',
@@ -22303,7 +22318,7 @@
 	        'li',
 	        null,
 	        'Categories: ',
-	        props.question.categories
+	        props.question.category
 	      ),
 	      _react2.default.createElement(
 	        'li',
@@ -22332,8 +22347,7 @@
 	exports.default = Question;
 
 /***/ },
-/* 174 */,
-/* 175 */
+/* 174 */
 /*!***********************************!*\
   !*** ./src/app/TeacherSelect.jsx ***!
   \***********************************/
@@ -22502,7 +22516,7 @@
 	exports.default = TeacherSelect;
 
 /***/ },
-/* 176 */
+/* 175 */
 /*!***********************************!*\
   !*** ./src/app/StudentReport.jsx ***!
   \***********************************/
@@ -22520,11 +22534,11 @@
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _QuestionsHistory = __webpack_require__(/*! ./QuestionsHistory.jsx */ 177);
+	var _QuestionsHistory = __webpack_require__(/*! ./QuestionsHistory.jsx */ 176);
 	
 	var _QuestionsHistory2 = _interopRequireDefault(_QuestionsHistory);
 	
-	var _StudentCompetency = __webpack_require__(/*! ./StudentCompetency.jsx */ 178);
+	var _StudentCompetency = __webpack_require__(/*! ./StudentCompetency.jsx */ 177);
 	
 	var _StudentCompetency2 = _interopRequireDefault(_StudentCompetency);
 	
@@ -22675,7 +22689,7 @@
 	exports.default = StudentReport;
 
 /***/ },
-/* 177 */
+/* 176 */
 /*!**************************************!*\
   !*** ./src/app/QuestionsHistory.jsx ***!
   \**************************************/
@@ -22780,7 +22794,7 @@
 	exports.default = QuestionsHistory;
 
 /***/ },
-/* 178 */
+/* 177 */
 /*!***************************************!*\
   !*** ./src/app/StudentCompetency.jsx ***!
   \***************************************/

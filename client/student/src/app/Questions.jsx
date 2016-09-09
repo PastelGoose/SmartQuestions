@@ -139,6 +139,13 @@ class Questions extends React.Component {
           <TeacherSelect setTeacherFoundToTrue={this.setTeacherFoundToTrue.bind(this)}/>
         </div>
       );
+    } else if (this.state.data.length === 0) {
+      return (
+        <div>
+          <h2>Questions List Component</h2>
+          <h3>You've completed all the problems for the day!</h3>
+        </div>
+      );
     } else {
       return (
         <div>
