@@ -77,7 +77,7 @@ Student.belongsToMany(Question, {through: 'StudentQuestion'})
 Category.belongsToMany(Student, {through: 'StudentCategory'})
 Student.belongsToMany(Category, {through: 'StudentCategory'})
 
-Category.belongsToMany(Student, {as: 'Individual', through: 'IndividualCompetency'})
+Category.belongsToMany(Student, {through: 'IndividualCompetency'})
 Student.belongsToMany(Category, {as: 'Competency', through: 'IndividualCompetency'})
 
 // Person.hasOne(Person, {as: 'Father', foreignKey: 'DadId'})

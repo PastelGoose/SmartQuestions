@@ -61,8 +61,8 @@ module.exports = {
 		})
 	},
 	// this is the smart search function that looks for the lowest competencies of the student and find unanswered questions in these categories that have difficulty level around the student's level. this function expands search range three times if it doesn't find enough questions. 
-	findQuestions: function(studentId, categoryLimit, limitPerCategory, upperRange, lowerRange,res, callback) {
-		var search = function(categoryLimit, limitPerCategory, upperRange, lowerRange, searchCycles) {
+	findQuestions: function(studentId, categoryLimit, minQuestionCount, upperRange, lowerRange,res, callback) {
+		var search = function(categoryLimit, minQuestionCount, upperRange, lowerRange, searchCycles) {
 
 			db.IndividualCompetency.findAll({
 				where: {studentId: studentId},
@@ -90,7 +90,6 @@ module.exports = {
 							model: db.Question, 
 
 							where: {
-							// limit: limitPerCategory,
 								CategoryId: studentComps[i].CategoryId,
 								difficulty: {
 									$lt: studentComps[i].competencyScore + upperRange,
@@ -120,16 +119,14 @@ module.exports = {
 						} else {
 							finalresult.push([]);
 						}
-						if(finalresult.length === studentComps.length) {
-						// res.send(finalresult)
-						console.log('finalresult!!', questionsCount, searchCycles)
-							if(questionsCount < 3 && searchCycles < 2) {
+						if(finalresult.length === studentComps.length || questionsCount > 10) {
+							if(questionsCount < minQuestionCount && searchCycles < 2) {
 								console.log('==============in search cycle', finalresult.questionsCount, searchCycles)
 								searchCycles++;
-								search(categoryLimit * 2, limitPerCategory * 2, upperRange + 1, lowerRange, searchCycles);
-							} else if (questionsCount < 3 && searchCycles < 3) {
+								search(categoryLimit * 2, minQuestionCount, upperRange + 1, lowerRange, searchCycles);
+							} else if (questionsCount < minQuestionCount && searchCycles < 3) {
 								searchCycles++;
-								search(categoryLimit * 2, limitPerCategory * 2, upperRange + 2, lowerRange * 2, searchCycles);
+								search(categoryLimit * 2, minQuestionCount, upperRange + 2, lowerRange * 2, searchCycles);
 							} else {
 								console.log('count', questionsCount, finalresult);
 								callback({questionsCount: questionsCount,
@@ -142,7 +139,7 @@ module.exports = {
 			})
 		};
 
-		search(categoryLimit, limitPerCategory, upperRange, lowerRange, 1);
+		search(categoryLimit, minQuestionCount, upperRange, lowerRange, 1);
 
 	}
 
