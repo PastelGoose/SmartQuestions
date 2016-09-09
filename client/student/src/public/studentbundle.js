@@ -22539,10 +22539,10 @@
 	var StudentReport = function (_React$Component) {
 	  _inherits(StudentReport, _React$Component);
 	
-	  function StudentReport(props) {
+	  function StudentReport() {
 	    _classCallCheck(this, StudentReport);
 	
-	    var _this = _possibleConstructorReturn(this, (StudentReport.__proto__ || Object.getPrototypeOf(StudentReport)).call(this, props));
+	    var _this = _possibleConstructorReturn(this, (StudentReport.__proto__ || Object.getPrototypeOf(StudentReport)).call(this));
 	
 	    _this.state = {
 	      studentId: null,

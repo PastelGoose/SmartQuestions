@@ -4,8 +4,8 @@ import StudentCompetency from './StudentCompetency.jsx';
 
 class StudentReport extends React.Component {
 
-  constructor(props) {
-    super(props);
+  constructor() {
+    super();
     this.state = {
       studentId: null,
       name: null,
