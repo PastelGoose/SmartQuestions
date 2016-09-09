@@ -31,18 +31,25 @@ var StudentQuestion = db.define('StudentQuestion', {
 	isViewed: Sequelize.BOOLEAN,
 	isAnswered: Sequelize.BOOLEAN,
 	answerDate: Sequelize.DATE,
+	gradedDate: Sequelize.DATE,
 	answer: Sequelize.STRING,
 	confidenceScore: Sequelize.INTEGER,
 	isQueued: Sequelize.BOOLEAN,
 	orderInQueue: Sequelize.INTEGER,
 	isGraded: Sequelize.BOOLEAN,
-	grade: Sequelize.INTEGER
+	grade: Sequelize.INTEGER,
 });
 
 var StudentCategory = db.define('StudentCategory', {
 	competencyScore: Sequelize.INTEGER,
 	isImproving: Sequelize.BOOLEAN,
 	createdAt: Sequelize.DATE
+});
+
+var IndividualCompetency = db.define('IndividualCompetency', {
+	competencyScore: Sequelize.INTEGER,
+	isImproving: Sequelize.BOOLEAN,
+	updatedAt: Sequelize.DATE
 });
 
 // var DailyQuestion = db.define('DailyQuestion', {
@@ -69,6 +76,11 @@ Student.belongsToMany(Question, {through: 'StudentQuestion'})
 Category.belongsToMany(Student, {through: 'StudentCategory'})
 Student.belongsToMany(Category, {through: 'StudentCategory'})
 
+Category.belongsToMany(Student, {as: 'Individual', through: 'IndividualCompetency'})
+Student.belongsToMany(Category, {as: 'Competency', through: 'IndividualCompetency'})
+
+// Person.hasOne(Person, {as: 'Father', foreignKey: 'DadId'})
+
 
 Question.sync();
 Teacher.sync();
@@ -77,6 +89,7 @@ Category.sync();
 
 StudentQuestion.sync();
 StudentCategory.sync();
+IndividualCompetency.sync();
 
 module.exports.Question = Question;
 module.exports.Teacher = Teacher;
@@ -84,4 +97,6 @@ module.exports.Student = Student;
 module.exports.Category = Category;
 module.exports.StudentQuestion = StudentQuestion;
 module.exports.StudentCategory = StudentCategory;
+module.exports.IndividualCompetency = IndividualCompetency;
+
 
