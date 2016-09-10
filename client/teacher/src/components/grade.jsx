@@ -50,7 +50,7 @@ class Grade extends React.Component {
     }
     console.log(dataObject);
 
-    var rootUrl ='http://10.0.0.226:4568';
+    var rootUrl = window.location.origin;
     
     $.ajax({
       url: rootUrl + '/api/teacher/grading',
