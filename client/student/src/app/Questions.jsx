@@ -21,7 +21,8 @@ class Questions extends React.Component {
 
   getQuestions() {
     //console.log('getQuestions triggered');
-    var endpoint = 'http://127.0.0.1:4568/api/student/questions';
+    var rootUrl = window.location.origin;
+    var endpoint = rootUrl + '/api/student/questions';
     $.ajax({
       method: 'GET',
       url: endpoint,
@@ -82,8 +83,8 @@ class Questions extends React.Component {
   }
 
   postResponse(uid, qid, ans) {
-    
-    var endpoint = 'http://127.0.0.1:4568/api/student/questions';
+    var rootUrl = window.location.origin;
+    var endpoint = rootUrl + '/api/student/questions';
     
     $.ajax({
       method: 'POST',

@@ -25,7 +25,8 @@ class TeacherSelect extends React.Component {
     // }"
 
     // Perform an ajax call to GET list of teachers
-    var endpoint = 'http://127.0.0.1:4568/api/student/teachers';
+    var rootUrl = window.location.origin;
+    var endpoint = rootUrl + '/api/student/teachers';
     $.ajax({
       method: 'GET',
       url: endpoint,
@@ -69,7 +70,8 @@ class TeacherSelect extends React.Component {
     console.log('setTeacher invoked.  teacherId is: ', teacherId);
     // //sample post data:  {"studentId":1,"teacherId":2}
     // Perform an ajax call to POST teacher.
-    var endpoint = 'http://127.0.0.1:4568/api/student/teachers';
+    var rootUrl = window.location.origin;
+    var endpoint = rootUrl + '/api/student/teachers';
     $.ajax({
       method: 'POST',
       url: endpoint,
@@ -110,6 +112,5 @@ class TeacherSelect extends React.Component {
     );
   }
 }
-
 
 export default TeacherSelect;

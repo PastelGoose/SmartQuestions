@@ -65,8 +65,8 @@ class StudentReport extends React.Component {
     //     ]
     //   }
     // };
-
-    var endpoint = 'http://127.0.0.1:4568/api/student/report';
+    var rootUrl = window.location.origin;
+    var endpoint = rootUrl + '/api/student/report';
     $.ajax({
       method: 'GET',
       url: endpoint,

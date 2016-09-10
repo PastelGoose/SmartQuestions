@@ -22066,7 +22066,8 @@
 	    key: 'getQuestions',
 	    value: function getQuestions() {
 	      //console.log('getQuestions triggered');
-	      var endpoint = 'http://127.0.0.1:4568/api/student/questions';
+	      var rootUrl = window.location.origin;
+	      var endpoint = rootUrl + '/api/student/questions';
 	      $.ajax({
 	        method: 'GET',
 	        url: endpoint,
@@ -22130,8 +22131,8 @@
 	  }, {
 	    key: 'postResponse',
 	    value: function postResponse(uid, qid, ans) {
-	
-	      var endpoint = 'http://127.0.0.1:4568/api/student/questions';
+	      var rootUrl = window.location.origin;
+	      var endpoint = rootUrl + '/api/student/questions';
 	
 	      $.ajax({
 	        method: 'POST',
@@ -22420,7 +22421,8 @@
 	      // }"
 	
 	      // Perform an ajax call to GET list of teachers
-	      var endpoint = 'http://127.0.0.1:4568/api/student/teachers';
+	      var rootUrl = window.location.origin;
+	      var endpoint = rootUrl + '/api/student/teachers';
 	      $.ajax({
 	        method: 'GET',
 	        url: endpoint,
@@ -22465,7 +22467,8 @@
 	      console.log('setTeacher invoked.  teacherId is: ', teacherId);
 	      // //sample post data:  {"studentId":1,"teacherId":2}
 	      // Perform an ajax call to POST teacher.
-	      var endpoint = 'http://127.0.0.1:4568/api/student/teachers';
+	      var rootUrl = window.location.origin;
+	      var endpoint = rootUrl + '/api/student/teachers';
 	      $.ajax({
 	        method: 'POST',
 	        url: endpoint,
@@ -22635,8 +22638,8 @@
 	      //     ]
 	      //   }
 	      // };
-	
-	      var endpoint = 'http://127.0.0.1:4568/api/student/report';
+	      var rootUrl = window.location.origin;
+	      var endpoint = rootUrl + '/api/student/report';
 	      $.ajax({
 	        method: 'GET',
 	        url: endpoint,
