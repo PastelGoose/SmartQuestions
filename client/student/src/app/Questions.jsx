@@ -21,7 +21,8 @@ class Questions extends React.Component {
 
   getQuestions() {
     //console.log('getQuestions triggered');
-    var endpoint = 'http://127.0.0.1:4568/api/student/questions';
+    var rootUrl = window.location.origin;
+    var endpoint = rootUrl + '/api/student/questions';
     $.ajax({
       method: 'GET',
       url: endpoint,
@@ -82,8 +83,8 @@ class Questions extends React.Component {
   }
 
   postResponse(uid, qid, ans) {
-    
-    var endpoint = 'http://127.0.0.1:4568/api/student/questions';
+    var rootUrl = window.location.origin;
+    var endpoint = rootUrl + '/api/student/questions';
     
     $.ajax({
       method: 'POST',
@@ -137,6 +138,13 @@ class Questions extends React.Component {
           <h2>Questions List Component</h2>
           <h2>You must select a teacher before you are able to view questions.</h2>
           <TeacherSelect setTeacherFoundToTrue={this.setTeacherFoundToTrue.bind(this)}/>
+        </div>
+      );
+    } else if (this.state.data.length === 0) {
+      return (
+        <div>
+          <h2>Questions List Component</h2>
+          <h3>You've completed all the problems for the day!</h3>
         </div>
       );
     } else {

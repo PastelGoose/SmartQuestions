@@ -61,9 +61,13 @@
 	
 	var _Questions2 = _interopRequireDefault(_Questions);
 	
-	var _StudentReport = __webpack_require__(/*! ./StudentReport.jsx */ 176);
+	var _StudentReport = __webpack_require__(/*! ./StudentReport.jsx */ 175);
 	
 	var _StudentReport2 = _interopRequireDefault(_StudentReport);
+	
+	var _StudentNavigation = __webpack_require__(/*! ./StudentNavigation.jsx */ 178);
+	
+	var _StudentNavigation2 = _interopRequireDefault(_StudentNavigation);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -79,25 +83,36 @@
 	  function StudentApp() {
 	    _classCallCheck(this, StudentApp);
 	
-	    return _possibleConstructorReturn(this, (StudentApp.__proto__ || Object.getPrototypeOf(StudentApp)).apply(this, arguments));
+	    var _this = _possibleConstructorReturn(this, (StudentApp.__proto__ || Object.getPrototypeOf(StudentApp)).call(this));
+	
+	    _this.state = { currentPage: 'Questions' };
+	    return _this;
 	  }
 	
 	  _createClass(StudentApp, [{
+	    key: 'setCurrentPage',
+	    value: function setCurrentPage(newPage) {
+	      this.setState({ currentPage: newPage });
+	    }
+	  }, {
 	    key: 'render',
 	    value: function render() {
-	      return _react2.default.createElement(
-	        'div',
-	        null,
-	        _react2.default.createElement(
-	          'h1',
+	
+	      if (this.state.currentPage === 'Questions') {
+	        return _react2.default.createElement(
+	          'div',
 	          null,
-	          'This is the student view!'
-	        ),
-	        _react2.default.createElement('hr', null),
-	        _react2.default.createElement(_StudentReport2.default, null),
-	        _react2.default.createElement('hr', null),
-	        _react2.default.createElement(_Questions2.default, null)
-	      );
+	          _react2.default.createElement(_StudentNavigation2.default, { setCurrentPage: this.setCurrentPage.bind(this) }),
+	          _react2.default.createElement(_Questions2.default, null)
+	        );
+	      } else if (this.state.currentPage === 'StudentReport') {
+	        return _react2.default.createElement(
+	          'div',
+	          null,
+	          _react2.default.createElement(_StudentNavigation2.default, { setCurrentPage: this.setCurrentPage.bind(this) }),
+	          _react2.default.createElement(_StudentReport2.default, null)
+	        );
+	      }
 	    }
 	  }]);
 	
@@ -22013,7 +22028,7 @@
 	
 	var _Question2 = _interopRequireDefault(_Question);
 	
-	var _TeacherSelect = __webpack_require__(/*! ./TeacherSelect.jsx */ 175);
+	var _TeacherSelect = __webpack_require__(/*! ./TeacherSelect.jsx */ 174);
 	
 	var _TeacherSelect2 = _interopRequireDefault(_TeacherSelect);
 	
@@ -22051,7 +22066,8 @@
 	    key: 'getQuestions',
 	    value: function getQuestions() {
 	      //console.log('getQuestions triggered');
-	      var endpoint = 'http://127.0.0.1:4568/api/student/questions';
+	      var rootUrl = window.location.origin;
+	      var endpoint = rootUrl + '/api/student/questions';
 	      $.ajax({
 	        method: 'GET',
 	        url: endpoint,
@@ -22115,8 +22131,8 @@
 	  }, {
 	    key: 'postResponse',
 	    value: function postResponse(uid, qid, ans) {
-	
-	      var endpoint = 'http://127.0.0.1:4568/api/student/questions';
+	      var rootUrl = window.location.origin;
+	      var endpoint = rootUrl + '/api/student/questions';
 	
 	      $.ajax({
 	        method: 'POST',
@@ -22179,6 +22195,21 @@
 	            'You must select a teacher before you are able to view questions.'
 	          ),
 	          _react2.default.createElement(_TeacherSelect2.default, { setTeacherFoundToTrue: this.setTeacherFoundToTrue.bind(this) })
+	        );
+	      } else if (this.state.data.length === 0) {
+	        return _react2.default.createElement(
+	          'div',
+	          null,
+	          _react2.default.createElement(
+	            'h2',
+	            null,
+	            'Questions List Component'
+	          ),
+	          _react2.default.createElement(
+	            'h3',
+	            null,
+	            'You\'ve completed all the problems for the day!'
+	          )
 	        );
 	      } else {
 	        return _react2.default.createElement(
@@ -22285,7 +22316,7 @@
 	        'li',
 	        null,
 	        'Question: ',
-	        props.question.question
+	        props.question.questionText
 	      ),
 	      _react2.default.createElement(
 	        'li',
@@ -22303,7 +22334,7 @@
 	        'li',
 	        null,
 	        'Categories: ',
-	        props.question.categories
+	        props.question.category
 	      ),
 	      _react2.default.createElement(
 	        'li',
@@ -22332,8 +22363,7 @@
 	exports.default = Question;
 
 /***/ },
-/* 174 */,
-/* 175 */
+/* 174 */
 /*!***********************************!*\
   !*** ./src/app/TeacherSelect.jsx ***!
   \***********************************/
@@ -22391,7 +22421,8 @@
 	      // }"
 	
 	      // Perform an ajax call to GET list of teachers
-	      var endpoint = 'http://127.0.0.1:4568/api/student/teachers';
+	      var rootUrl = window.location.origin;
+	      var endpoint = rootUrl + '/api/student/teachers';
 	      $.ajax({
 	        method: 'GET',
 	        url: endpoint,
@@ -22436,7 +22467,8 @@
 	      console.log('setTeacher invoked.  teacherId is: ', teacherId);
 	      // //sample post data:  {"studentId":1,"teacherId":2}
 	      // Perform an ajax call to POST teacher.
-	      var endpoint = 'http://127.0.0.1:4568/api/student/teachers';
+	      var rootUrl = window.location.origin;
+	      var endpoint = rootUrl + '/api/student/teachers';
 	      $.ajax({
 	        method: 'POST',
 	        url: endpoint,
@@ -22502,7 +22534,7 @@
 	exports.default = TeacherSelect;
 
 /***/ },
-/* 176 */
+/* 175 */
 /*!***********************************!*\
   !*** ./src/app/StudentReport.jsx ***!
   \***********************************/
@@ -22520,11 +22552,11 @@
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _QuestionsHistory = __webpack_require__(/*! ./QuestionsHistory.jsx */ 177);
+	var _QuestionsHistory = __webpack_require__(/*! ./QuestionsHistory.jsx */ 176);
 	
 	var _QuestionsHistory2 = _interopRequireDefault(_QuestionsHistory);
 	
-	var _StudentCompetency = __webpack_require__(/*! ./StudentCompetency.jsx */ 178);
+	var _StudentCompetency = __webpack_require__(/*! ./StudentCompetency.jsx */ 177);
 	
 	var _StudentCompetency2 = _interopRequireDefault(_StudentCompetency);
 	
@@ -22606,8 +22638,8 @@
 	      //     ]
 	      //   }
 	      // };
-	
-	      var endpoint = 'http://127.0.0.1:4568/api/student/report';
+	      var rootUrl = window.location.origin;
+	      var endpoint = rootUrl + '/api/student/report';
 	      $.ajax({
 	        method: 'GET',
 	        url: endpoint,
@@ -22675,7 +22707,7 @@
 	exports.default = StudentReport;
 
 /***/ },
-/* 177 */
+/* 176 */
 /*!**************************************!*\
   !*** ./src/app/QuestionsHistory.jsx ***!
   \**************************************/
@@ -22780,7 +22812,7 @@
 	exports.default = QuestionsHistory;
 
 /***/ },
-/* 178 */
+/* 177 */
 /*!***************************************!*\
   !*** ./src/app/StudentCompetency.jsx ***!
   \***************************************/
@@ -22850,6 +22882,71 @@
 	};
 	
 	exports.default = StudentCompetency;
+
+/***/ },
+/* 178 */
+/*!***************************************!*\
+  !*** ./src/app/StudentNavigation.jsx ***!
+  \***************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _react = __webpack_require__(/*! react */ 1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var StudentNavigation = function StudentNavigation(props) {
+	
+	  return _react2.default.createElement(
+	    'div',
+	    null,
+	    _react2.default.createElement(
+	      'h1',
+	      null,
+	      'Smart Questions - Student'
+	    ),
+	    _react2.default.createElement(
+	      'h3',
+	      null,
+	      'Navigation'
+	    ),
+	    _react2.default.createElement(
+	      'ul',
+	      null,
+	      _react2.default.createElement(
+	        'li',
+	        null,
+	        _react2.default.createElement(
+	          'a',
+	          { onClick: function onClick() {
+	              return props.setCurrentPage('Questions');
+	            } },
+	          'Daily Questions'
+	        )
+	      ),
+	      _react2.default.createElement(
+	        'li',
+	        null,
+	        _react2.default.createElement(
+	          'a',
+	          { onClick: function onClick() {
+	              return props.setCurrentPage('StudentReport');
+	            } },
+	          'My Progress Report'
+	        )
+	      )
+	    )
+	  );
+	};
+	
+	exports.default = StudentNavigation;
 
 /***/ }
 /******/ ]);

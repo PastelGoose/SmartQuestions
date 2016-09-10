@@ -16,10 +16,10 @@ const Question = (props) => {
     <div>
       <h2>Question {props.questionIdx + 1} of {props.totalProblems}</h2>
       <ul>
-        <li>Question: {props.question.question}</li>
+        <li>Question: {props.question.questionText}</li>
         <li>QuestionId: {props.question.questionId}</li>
         <li>Difficulty: {props.question.difficulty}</li>
-        <li>Categories: {props.question.categories}</li>
+        <li>Categories: {props.question.category}</li>
         <li>Answered: {props.question.answered.toString()}</li>
       </ul>
       <p><textarea id="student-response" type="text" cols="50" rows="5" /></p>
