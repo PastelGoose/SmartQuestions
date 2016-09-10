@@ -5,6 +5,7 @@ var _ = require('underscore');
 var mystring= {"uid":1,"questions":[{"questionText":"what is the x kdjf","category":"recursion","difficulty":10},{"questionText":"y times kdjf","category":"logic","difficulty":1}]}
 
 var teacher = {
+	//teacher tries to see report and calls this function to see a list of students in his/her class
 	getStudents: function(req, res) {
 		var uid = req.query.uid || 1;
 		db.Student.findAll({
@@ -156,7 +157,7 @@ var teacher = {
 				}, 
 				include: [{
 					model: db.Question, 
-					// required: true,
+					// required: true, enable this if you only want students who answered questions
 					through: {
 						attributes: ['answer', 'question', 'grade', 'answerDate'],
 		    			where: {isAnswered: true, isGraded: true}
@@ -287,6 +288,30 @@ var student = {
 		//student category
 		//student questions
 
+	// db.Student.findAll({
+	// 	// where: {
+	// 	// 	workerReviewed: false
+	// 	// }, 
+	// 	attributes: ['id'],
+	// 	include: [
+	// 	    {
+	// 	        model: db.Question,
+	// 	        through: {
+	// 	        	attributes: ['grade', 'QuestionId', 'gradedDate', 'StudentId'],
+	// 	        	where: {workerReviewed: false, isGraded: true}
+	// 	        },
+	// 	        attributes: ['CategoryId']
+	// 	    }
+	// 	],
+	// 	// group: ['id']
+	// })
+	// .then(function(result) {
+	// 	console.log('results!!!', result)
+	// 	//this is by student by competency
+	// })
+
+
+
 		db.Student.findAll({
 				// where: {
 				// 	workerReviewed: false
@@ -297,7 +322,7 @@ var student = {
 				        model: db.Question,
 				        required: true,
 				        through: {
-				        	attributes: ['grade', 'QuestionId', 'gradedDate', 'StudentId', 'workerReviewed', 'isGraded'],
+				        	attributes: ['id', 'grade', 'QuestionId', 'gradedDate', 'StudentId', 'workerReviewed', 'isGraded'],
 				        	where: {workerReviewed: false, isGraded: true}
 
 				        },
@@ -352,6 +377,48 @@ var student = {
 
 				//
 					res.send(newCompetencyTable);
+
+				//update db marking these questions as workerReviewed
+				console.log('---------------', result)
+				result.forEach(function(studentObj) {
+					studentObj.Questions.forEach(function(question) {
+						console.log('ahahahahahah', question.StudentQuestion)
+						question.StudentQuestion.updateAttributes({workerReviewed: true})
+						.then(function(updated) {
+							console.log('yayy', updated);
+						})
+					})
+				})
+
+				//update IndividualCompetency Table
+				//for each student
+				//for each newcompetencies that not no change
+				//look for individualCompetency where grab studernid and newcompetencyid
+				//updateattributes
+
+				newCompetencyTable.forEach(function(student) {
+					_.each(student.newCompetencies, function(val, key) {
+						if(val !== 'no change') {
+							var isImproving = val > student.oldCompetencies[key] ? 1 : 0;
+							console.log('isImproving', isImproving)
+							db.IndividualCompetency.findOne( {
+								where: {
+									StudentId: student.studentId,
+									CategoryId: key * 1
+								}
+							})
+							.then(function(studentComp) {
+								studentComp.updateAttributes({
+									competencyScore: val,
+									isImproving: isImproving
+								})
+								.then(function(result) {
+									console.log('==============', result);
+								})
+							})
+						}
+					})
+				})
 			})
 	},
 	retrieveSmartQuestions: function(req, res) {
@@ -404,7 +471,7 @@ var student = {
 		console.log('i am in responseone')
 		db.StudentQuestion.findOne({where: {StudentId: response.uid, QuestionId: response.questionId}})
 		.then(function(foundQuestion) {
-			foundQuestion.updateAttributes({isAnswered: 1, answer: response.answer, answerDate: new Date()});
+			foundQuestion.fAttributes({isAnswered: 1, answer: response.answer, answerDate: new Date()});
 			res.send(foundQuestion);
 		})
 

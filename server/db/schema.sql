@@ -60,7 +60,7 @@ studentId int NOT NULL,
 categoryId int NOT NULL,
 createdAt datetime NOT NULL DEFAULT NOW(),
 competencyScore int DEFAULT 0,
-isImproving boolean,
+isImproving boolean DEFAULT 0,
 PRIMARY KEY (ID)
 );
 
