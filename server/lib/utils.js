@@ -60,9 +60,50 @@ module.exports = {
 			})
 		})
 	},
+	calculateCompetency: function(studentObj, tuningCoefficient){
+		var newCompetency = {
+			studentId: studentObj.studentId,
+			oldCompetencies: studentObj.competency,
+			newCompetencies: {}
+		};
+		console.log('=================', studentObj)
+		//check each category
+		_.each(studentObj.categories, function(val, key) {
+			var totalPoints = 0;
+			//check each question of each category to see how many points the student gets
+			console.log(val, key);
+			var currCompetencyScore = studentObj.competency[key];
+			_.each(val, function(tuple) {
+				var grade = tuple[0];
+				var difficulty = tuple[1];
+
+				if (grade >= 3 && difficulty >= currCompetencyScore) {
+					var point = (grade - 3) * (difficulty - currCompetencyScore) / tuningCoefficient;
+				} else if (grade < 3 && difficulty < currCompetencyScore) {
+					var point = -1 / tuningCoefficient;
+				} else {
+					var point = 0;
+				}
+
+				totalPoints += point;
+				//math.max( 0, (grade -3) * math.max(1, (level - your level) )/ tune + current competency
+				//1-3 * 7-6// 0 if level is higher and score is lower than 3
+				//1-3 1-6 -5 -2 // -1 if level is lower and score is lower than 3
+
+			})
+			console.log('waah', totalPoints, currCompetencyScore)
+			if (totalPoints) {
+				newCompetency.newCompetencies[key] = totalPoints + currCompetencyScore;
+			} else {
+				newCompetency.newCompetencies[key] = 'no change';
+			}
+		})
+
+		return newCompetency;
+	},
 	// this is the smart search function that looks for the lowest competencies of the student and find unanswered questions in these categories that have difficulty level around the student's level. this function expands search range three times if it doesn't find enough questions. 
-	findQuestions: function(studentId, categoryLimit, limitPerCategory, upperRange, lowerRange,res, callback) {
-		var search = function(categoryLimit, limitPerCategory, upperRange, lowerRange, searchCycles) {
+	findQuestions: function(studentId, categoryLimit, minQuestionCount, upperRange, lowerRange,res, callback) {
+		var search = function(categoryLimit, minQuestionCount, upperRange, lowerRange, searchCycles) {
 
 			db.IndividualCompetency.findAll({
 				where: {studentId: studentId},
@@ -90,7 +131,6 @@ module.exports = {
 							model: db.Question, 
 
 							where: {
-							// limit: limitPerCategory,
 								CategoryId: studentComps[i].CategoryId,
 								difficulty: {
 									$lt: studentComps[i].competencyScore + upperRange,
@@ -120,16 +160,14 @@ module.exports = {
 						} else {
 							finalresult.push([]);
 						}
-						if(finalresult.length === studentComps.length) {
-						// res.send(finalresult)
-						console.log('finalresult!!', questionsCount, searchCycles)
-							if(questionsCount < 3 && searchCycles < 2) {
+						if(finalresult.length === studentComps.length || questionsCount > 10) {
+							if(questionsCount < minQuestionCount && searchCycles < 2) {
 								console.log('==============in search cycle', finalresult.questionsCount, searchCycles)
 								searchCycles++;
-								search(categoryLimit * 2, limitPerCategory * 2, upperRange + 1, lowerRange, searchCycles);
-							} else if (questionsCount < 3 && searchCycles < 3) {
+								search(categoryLimit * 2, minQuestionCount, upperRange + 1, lowerRange, searchCycles);
+							} else if (questionsCount < minQuestionCount && searchCycles < 3) {
 								searchCycles++;
-								search(categoryLimit * 2, limitPerCategory * 2, upperRange + 2, lowerRange * 2, searchCycles);
+								search(categoryLimit * 2, minQuestionCount, upperRange + 2, lowerRange * 2, searchCycles);
 							} else {
 								console.log('count', questionsCount, finalresult);
 								callback({questionsCount: questionsCount,
@@ -142,7 +180,7 @@ module.exports = {
 			})
 		};
 
-		search(categoryLimit, limitPerCategory, upperRange, lowerRange, 1);
+		search(categoryLimit, minQuestionCount, upperRange, lowerRange, 1);
 
 	}
 

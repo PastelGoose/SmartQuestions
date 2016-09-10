@@ -10,6 +10,9 @@ router.post('/teacher/grading', controller.teacher.postGrades);
 
 router.get('/teacher/report', controller.teacher.getReport);
 
+router.get('/teacher/students', controller.teacher.getStudents);
+
+
 //allow students to get and post personalized questions
 router.get('/student/questions', controller.student.retrieveSmartQuestions);
 router.post('/student/questions', controller.student.respondOne);

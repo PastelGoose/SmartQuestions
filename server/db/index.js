@@ -33,6 +33,7 @@ var StudentQuestion = db.define('StudentQuestion', {
 	answerDate: Sequelize.DATE,
 	gradedDate: Sequelize.DATE,
 	answer: Sequelize.STRING,
+	workerReviewed: Sequelize.BOOLEAN,
 	confidenceScore: Sequelize.INTEGER,
 	isQueued: Sequelize.BOOLEAN,
 	orderInQueue: Sequelize.INTEGER,
@@ -76,7 +77,7 @@ Student.belongsToMany(Question, {through: 'StudentQuestion'})
 Category.belongsToMany(Student, {through: 'StudentCategory'})
 Student.belongsToMany(Category, {through: 'StudentCategory'})
 
-Category.belongsToMany(Student, {as: 'Individual', through: 'IndividualCompetency'})
+Category.belongsToMany(Student, {through: 'IndividualCompetency'})
 Student.belongsToMany(Category, {as: 'Competency', through: 'IndividualCompetency'})
 
 // Person.hasOne(Person, {as: 'Father', foreignKey: 'DadId'})

@@ -40,6 +40,7 @@ create table StudentQuestions (
 id int NOT NULL AUTO_INCREMENT,
 answerDate datetime,
 gradedDate datetime,
+workerReviewed boolean DEFAULT 0,
 studentId int,
 questionId int,
 orderInQueue int,
@@ -59,7 +60,7 @@ studentId int NOT NULL,
 categoryId int NOT NULL,
 createdAt datetime NOT NULL DEFAULT NOW(),
 competencyScore int DEFAULT 0,
-isImproving boolean,
+isImproving boolean DEFAULT 0,
 PRIMARY KEY (ID)
 );
 
