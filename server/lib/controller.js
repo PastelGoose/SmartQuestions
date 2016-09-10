@@ -63,8 +63,6 @@ var teacher = {
 			include: [{model:db.Category}]
 		})
 		.then(function(allQuestions) {
-			console.log(allQuestions)
-
 			res.json({data: allQuestions});
 		})
 	},
@@ -77,15 +75,15 @@ var teacher = {
 		})
 		.then(function(allQuestions) {
 			var ids = [];
+			//get a list of question ids for that teacher
 			allQuestions.forEach(function(question) {
 				ids.push(question.id);
 			})
-
+			//if the teacher has no questions, return
 			if (ids.length === 0 ) {
-				console.log('id length is 0')
 				return res.json({data: []})
 			}
-
+			//find questions in the id array. Look in the join table to see which questions are answered but have not been graded
 			db.Question.findAll({
 				where: {id: 
 					{$in: [ids]}
@@ -100,9 +98,9 @@ var teacher = {
 			})
 			.then(function(questionsResult) {
 				var allResults = [];
+				//formatting the resulting questions found for client
 				questionsResult.forEach(function(questionResult) {
 					if(questionResult.Students && questionResult.Students.length !== 0 && questionResult.Category) {
-						console.log('questionresult', questionResult)
 						var result = {
 							questionText: questionResult.questionText,
 							difficulty: questionResult.difficulty,
@@ -126,9 +124,10 @@ var teacher = {
 		var studentId = req.body.studentId;
 		var grade = req.body.grade;
 		var questionId = req.body.questionId;
-		console.log('request body in postGrades', req.body)
+
 		db.StudentQuestion.findOne({where: {StudentId: studentId, QuestionId: questionId}})
 		.then(function(foundQuestion) {
+			//change isgraded to true, add grade, and set grade date
 			foundQuestion.updateAttributes({isGraded: 1, grade: grade, gradedDate: new Date()});
 			res.send(foundQuestion);
 		})
@@ -147,7 +146,6 @@ var teacher = {
 			})
 
 			if (ids.length === 0 ) {
-				console.log('id length is 0')
 				return res.json({data: []})
 			}
 
@@ -157,7 +155,7 @@ var teacher = {
 				}, 
 				include: [{
 					model: db.Question, 
-					// required: true, enable this if you only want students who answered questions
+					// required: true <= enable this if you only want students who answered questions
 					through: {
 						attributes: ['answer', 'question', 'grade', 'answerDate'],
 		    			where: {isAnswered: true, isGraded: true}
