@@ -50,8 +50,11 @@ class QuestionsList extends React.Component {
         ));
 
       return (
-        <div className="question-list">
-          <ul> {questionNodes} </ul>
+        <div className="row">
+          <div className="col-4 centered">
+            <h2> Your Questions </h2>
+            <ul className="question-list"> {questionNodes} </ul>
+          </div>
         </div>
       );
     }

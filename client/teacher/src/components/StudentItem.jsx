@@ -1,5 +1,5 @@
 import React from 'react';
-import { browserHistory } from 'react-router';
+import { hashHistory } from 'react-router';
 
 class StudentItem extends React.Component {
 
@@ -8,16 +8,16 @@ class StudentItem extends React.Component {
   }
 
   handleClick(event) {
-    const path = `/students/${props.data.studentId}`;
-    browserHistory.push(path);
+    const path = `/students/${this.props.data.studentId}`;
+    hashHistory.push(path);
   }
 
-  render(props) {
+  render() {
     return (
-      <li onClick={this.handleClick.bind(this)}>
+      <li onClick={this.handleClick.bind(this)} className="student-item">
         <ul>
-          <li>ID: {props.data.studentId}</li>
-          <li>Name: {props.data.studentName}</li>
+          <li>ID: {this.props.data.studentId}</li>
+          <li>Name: {this.props.data.studentName}</li>
         </ul>
       </li>
     );

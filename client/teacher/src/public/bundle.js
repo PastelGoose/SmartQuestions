@@ -69,6 +69,10 @@
 	
 	var _StudentReport2 = _interopRequireDefault(_StudentReport);
 	
+	var _QuestionsHistory = __webpack_require__(/*! ./components/QuestionsHistory.jsx */ 245);
+	
+	var _QuestionsHistory2 = _interopRequireDefault(_QuestionsHistory);
+	
 	var _Questions = __webpack_require__(/*! ./components/Questions.jsx */ 240);
 	
 	var _Questions2 = _interopRequireDefault(_Questions);
@@ -95,7 +99,8 @@
 	    { path: '/', component: _App2.default },
 	    _react2.default.createElement(
 	      _reactRouter.Route,
-	      { path: '/students', component: _StudentsList2.default },
+	      { path: '/students' },
+	      _react2.default.createElement(_reactRouter.IndexRoute, { component: _StudentsList2.default }),
 	      _react2.default.createElement(_reactRouter.Route, { path: '/students/:studentId', component: _StudentReport2.default })
 	    ),
 	    _react2.default.createElement(
@@ -27864,16 +27869,16 @@
 	      { className: 'row header' },
 	      _react2.default.createElement(
 	        'h1',
-	        null,
+	        { className: 'title' },
 	        'Smart Questions'
 	      )
 	    ),
 	    _react2.default.createElement(
-	      'ul',
-	      { className: 'nav' },
+	      'div',
+	      { className: 'row nav top-nav' },
 	      _react2.default.createElement(
-	        'li',
-	        null,
+	        'div',
+	        { className: 'col-6 NavLink-box' },
 	        _react2.default.createElement(
 	          _NavLink2.default,
 	          { to: '/questions' },
@@ -27881,8 +27886,8 @@
 	        )
 	      ),
 	      _react2.default.createElement(
-	        'li',
-	        null,
+	        'div',
+	        { className: 'col-6 NavLink-box' },
 	        _react2.default.createElement(
 	          _NavLink2.default,
 	          { to: '/students' },
@@ -27890,7 +27895,8 @@
 	        )
 	      )
 	    ),
-	    props.children
+	    props.children,
+	    _react2.default.createElement('div', { className: 'row footer' })
 	  );
 	};
 	
@@ -27979,8 +27985,8 @@
 	        type: 'GET',
 	        options: { uid: 1 },
 	        success: function (response) {
-	          this.setState({ questions: response.data });
-	          console.log('Questions GETted');
+	          this.setState({ students: response.data });
+	          console.log('Students GETted');
 	        }.bind(this),
 	        error: function error(xhs, status, err) {
 	          console.log('error GETting questions to view ', err);
@@ -27996,9 +28002,9 @@
 	    key: 'render',
 	    value: function render() {
 	
-	      var questions = this.state.questions;
+	      var students = this.state.students;
 	
-	      if (questions === undefined) {
+	      if (students === undefined) {
 	        return _react2.default.createElement(
 	          'p',
 	          null,
@@ -28006,27 +28012,36 @@
 	        );
 	      }
 	
-	      if (questions.length === 0) {
+	      if (students.length === 0) {
 	        return _react2.default.createElement(
 	          'p',
 	          null,
-	          'No questions in the database.'
+	          'No students in the database.'
 	        );
 	      } else {
 	
-	        var studentNodes = students.map(function (student) {
-	          return _react2.default.createElement(_StudentItem2.default, { data: student });
+	        var studentNodes = students.map(function (student, i) {
+	          return _react2.default.createElement(_StudentItem2.default, { data: student, key: i });
 	        });
 	
 	        return _react2.default.createElement(
 	          'div',
-	          { className: 'student-list' },
+	          { className: 'row' },
 	          _react2.default.createElement(
-	            'ul',
-	            null,
-	            ' ',
-	            studentNodes,
-	            ' '
+	            'div',
+	            { className: 'col-4 centered' },
+	            _react2.default.createElement(
+	              'h2',
+	              null,
+	              ' Your Students '
+	            ),
+	            _react2.default.createElement(
+	              'ul',
+	              null,
+	              ' ',
+	              studentNodes,
+	              ' '
+	            )
 	          )
 	        );
 	      }
@@ -28079,15 +28094,15 @@
 	  _createClass(StudentItem, [{
 	    key: 'handleClick',
 	    value: function handleClick(event) {
-	      var path = '/students/' + props.data.studentId;
-	      _reactRouter.browserHistory.push(path);
+	      var path = '/students/' + this.props.data.studentId;
+	      _reactRouter.hashHistory.push(path);
 	    }
 	  }, {
 	    key: 'render',
-	    value: function render(props) {
+	    value: function render() {
 	      return _react2.default.createElement(
 	        'li',
-	        { onClick: this.handleClick.bind(this) },
+	        { onClick: this.handleClick.bind(this), className: 'student-item' },
 	        _react2.default.createElement(
 	          'ul',
 	          null,
@@ -28095,13 +28110,13 @@
 	            'li',
 	            null,
 	            'ID: ',
-	            props.data.studentId
+	            this.props.data.studentId
 	          ),
 	          _react2.default.createElement(
 	            'li',
 	            null,
 	            'Name: ',
-	            props.data.studentName
+	            this.props.data.studentName
 	          )
 	        )
 	      );
@@ -28118,14 +28133,122 @@
 /*!******************************************!*\
   !*** ./src/components/StudentReport.jsx ***!
   \******************************************/
-/***/ function(module, exports) {
+/***/ function(module, exports, __webpack_require__) {
 
-	"use strict";
+	'use strict';
 	
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	var StudentReport = function StudentReport() {};
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	var _react = __webpack_require__(/*! react */ 1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _QuestionsHistory = __webpack_require__(/*! ./QuestionsHistory.jsx */ 245);
+	
+	var _QuestionsHistory2 = _interopRequireDefault(_QuestionsHistory);
+	
+	var _StudentCompetency = __webpack_require__(/*! ./StudentCompetency.jsx */ 246);
+	
+	var _StudentCompetency2 = _interopRequireDefault(_StudentCompetency);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var StudentReport = function (_React$Component) {
+	  _inherits(StudentReport, _React$Component);
+	
+	  function StudentReport() {
+	    _classCallCheck(this, StudentReport);
+	
+	    var _this = _possibleConstructorReturn(this, (StudentReport.__proto__ || Object.getPrototypeOf(StudentReport)).call(this));
+	
+	    _this.state = {
+	      studentId: null,
+	      name: null,
+	      questionsAnswered: [],
+	      competency: []
+	    };
+	    return _this;
+	  }
+	
+	  _createClass(StudentReport, [{
+	    key: 'getReport',
+	    value: function getReport() {
+	      var rootUrl = window.location.origin;
+	      $.ajax({
+	        method: 'GET',
+	        url: rootUrl + '/api/student/report',
+	        data: this.props.params.studentId,
+	        success: function (results) {
+	          console.log('success');
+	          console.log(results);
+	          this.setState({
+	            studentId: results.data.studentId,
+	            name: results.data.name,
+	            questionsAnswered: results.data.questionsAnswered,
+	            competency: results.data.competency
+	          });
+	        }.bind(this),
+	        error: function error(err) {
+	          console.log('error', err);
+	        }
+	      });
+	
+	      console.log('report state: ', this.state);
+	    }
+	
+	    // Get the report immediately on component load
+	
+	  }, {
+	    key: 'componentDidMount',
+	    value: function componentDidMount() {
+	      this.getReport();
+	    }
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	
+	      return _react2.default.createElement(
+	        'div',
+	        { className: 'row' },
+	        _react2.default.createElement(
+	          'div',
+	          { className: 'col-4 centered' },
+	          _react2.default.createElement(
+	            'h2',
+	            null,
+	            'This is the Student Report component'
+	          ),
+	          _react2.default.createElement(
+	            'p',
+	            null,
+	            'studentId: ',
+	            this.state.studentId
+	          ),
+	          _react2.default.createElement(
+	            'p',
+	            null,
+	            'name: ',
+	            this.state.name
+	          ),
+	          _react2.default.createElement(_StudentCompetency2.default, { competency: this.state.competency }),
+	          _react2.default.createElement(_QuestionsHistory2.default, { questions: this.state.questionsAnswered })
+	        )
+	      );
+	    }
+	  }]);
+	
+	  return StudentReport;
+	}(_react2.default.Component);
 	
 	exports.default = StudentReport;
 
@@ -28159,11 +28282,11 @@
 	    'div',
 	    null,
 	    _react2.default.createElement(
-	      'ul',
-	      null,
+	      'div',
+	      { className: 'row nav' },
 	      _react2.default.createElement(
-	        'li',
-	        null,
+	        'div',
+	        { className: 'col-4' },
 	        _react2.default.createElement(
 	          _NavLink2.default,
 	          { to: 'questions/view' },
@@ -28171,8 +28294,8 @@
 	        )
 	      ),
 	      _react2.default.createElement(
-	        'li',
-	        null,
+	        'div',
+	        { className: 'col-4' },
 	        _react2.default.createElement(
 	          _NavLink2.default,
 	          { to: 'questions/add' },
@@ -28180,8 +28303,8 @@
 	        )
 	      ),
 	      _react2.default.createElement(
-	        'li',
-	        null,
+	        'div',
+	        { className: 'col-4' },
 	        _react2.default.createElement(
 	          _NavLink2.default,
 	          { to: 'questions/grade' },
@@ -28291,13 +28414,22 @@
 	
 	        return _react2.default.createElement(
 	          'div',
-	          { className: 'question-list' },
+	          { className: 'row' },
 	          _react2.default.createElement(
-	            'ul',
-	            null,
-	            ' ',
-	            questionNodes,
-	            ' '
+	            'div',
+	            { className: 'col-4 centered' },
+	            _react2.default.createElement(
+	              'h2',
+	              null,
+	              ' Your Questions '
+	            ),
+	            _react2.default.createElement(
+	              'ul',
+	              { className: 'question-list' },
+	              ' ',
+	              questionNodes,
+	              ' '
+	            )
 	          )
 	        );
 	      }
@@ -28466,29 +28598,33 @@
 	
 	      return _react2.default.createElement(
 	        'div',
-	        { className: 'add-form-container' },
+	        { className: 'row' },
 	        _react2.default.createElement(
-	          'form',
-	          { onSubmit: this.handleSubmit.bind(this) },
-	          _react2.default.createElement('input', { type: 'text',
-	            placeholder: 'Category',
-	            value: this.state.category,
-	            onChange: this.handleCategories.bind(this) }),
-	          _react2.default.createElement('br', null),
-	          _react2.default.createElement('input', { type: 'number',
-	            value: this.state.difficulty,
-	            placeholder: 'Difficulty',
-	            onChange: this.handleDifficulty.bind(this) }),
-	          _react2.default.createElement('br', null),
-	          _react2.default.createElement('input', { className: 'question-text-input',
-	            type: 'text', value: this.state.questionText,
-	            placeholder: 'Question Text',
-	            onChange: this.handleQuestionText.bind(this) }),
-	          _react2.default.createElement('br', null),
-	          _react2.default.createElement('input', { type: 'submit',
-	            value: 'Submit' })
-	        ),
-	        submitStatement
+	          'div',
+	          { className: 'col-4 centered' },
+	          _react2.default.createElement(
+	            'form',
+	            { onSubmit: this.handleSubmit.bind(this), className: 'add-form' },
+	            _react2.default.createElement('input', { type: 'text',
+	              placeholder: 'Category',
+	              value: this.state.category,
+	              onChange: this.handleCategories.bind(this) }),
+	            _react2.default.createElement('br', null),
+	            _react2.default.createElement('input', { type: 'number',
+	              value: this.state.difficulty,
+	              placeholder: 'Difficulty',
+	              onChange: this.handleDifficulty.bind(this) }),
+	            _react2.default.createElement('br', null),
+	            _react2.default.createElement('input', { className: 'question-text-input',
+	              type: 'text', value: this.state.questionText,
+	              placeholder: 'Question Text',
+	              onChange: this.handleQuestionText.bind(this) }),
+	            _react2.default.createElement('br', null),
+	            _react2.default.createElement('input', { type: 'submit',
+	              value: 'Submit' })
+	          ),
+	          submitStatement
+	        )
 	      );
 	    }
 	  }]);
@@ -28588,7 +28724,7 @@
 	      };
 	      console.log(dataObject);
 	
-	      var rootUrl = 'http://10.0.0.226:4568';
+	      var rootUrl = window.location.origin;
 	
 	      $.ajax({
 	        url: rootUrl + '/api/teacher/grading',
@@ -28719,6 +28855,138 @@
 	;
 	
 	exports.default = Grade;
+
+/***/ },
+/* 245 */
+/*!*********************************************!*\
+  !*** ./src/components/QuestionsHistory.jsx ***!
+  \*********************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _react = __webpack_require__(/*! react */ 1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var QuestionsHistory = function QuestionsHistory(props) {
+	  return _react2.default.createElement(
+	    'div',
+	    null,
+	    _react2.default.createElement(
+	      'h3',
+	      null,
+	      'Inside QuestionsHistory Component'
+	    ),
+	    props.questions.map(function (question) {
+	      return _react2.default.createElement(
+	        'ul',
+	        { key: question.questionId },
+	        _react2.default.createElement(
+	          'li',
+	          null,
+	          'Question: ',
+	          question.questionText
+	        ),
+	        _react2.default.createElement(
+	          'li',
+	          null,
+	          'Answered On: ',
+	          new Date(question.answerDate).toLocaleString('en-us')
+	        ),
+	        _react2.default.createElement(
+	          'li',
+	          null,
+	          'Category: ',
+	          question.categoryName
+	        ),
+	        _react2.default.createElement(
+	          'li',
+	          null,
+	          'Difficulty: ',
+	          question.difficulty
+	        ),
+	        _react2.default.createElement(
+	          'li',
+	          null,
+	          'Your response: ',
+	          question.answer
+	        ),
+	        _react2.default.createElement(
+	          'li',
+	          null,
+	          'Grade: ',
+	          question.grade
+	        )
+	      );
+	    })
+	  );
+	};
+	
+	exports.default = QuestionsHistory;
+
+/***/ },
+/* 246 */
+/*!**********************************************!*\
+  !*** ./src/components/StudentCompetency.jsx ***!
+  \**********************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _react = __webpack_require__(/*! react */ 1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var StudentCompetency = function StudentCompetency(props) {
+	  return _react2.default.createElement(
+	    'div',
+	    null,
+	    _react2.default.createElement(
+	      'h3',
+	      null,
+	      'Inside Student Competency Component'
+	    ),
+	    props.competency.map(function (category) {
+	      return _react2.default.createElement(
+	        'ul',
+	        { key: category.categoryId },
+	        _react2.default.createElement(
+	          'li',
+	          null,
+	          'Category: ',
+	          category.categoryName
+	        ),
+	        _react2.default.createElement(
+	          'li',
+	          null,
+	          'Competency Score: ',
+	          category.competencyScore
+	        ),
+	        _react2.default.createElement(
+	          'li',
+	          null,
+	          'Improving: ',
+	          category.isImproving.toString()
+	        )
+	      );
+	    })
+	  );
+	};
+	
+	exports.default = StudentCompetency;
 
 /***/ }
 /******/ ]);
