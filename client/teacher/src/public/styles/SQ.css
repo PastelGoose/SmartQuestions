@@ -67,11 +67,6 @@ input[type="number"] {
   width: 400px;
 }
 
-.question-list {
-  margin: auto;
-  display: block;
-}
-
 .student-item {
   cursor: pointer;
   color: #0000EE;
