@@ -17,8 +17,8 @@ class StudentsList extends React.Component {
       type: 'GET',
       options: {uid: 1},
       success: function(response) {
-        this.setState({questions: response.data})
-        console.log('Questions GETted')
+        this.setState({students: response.data})
+        console.log('Students GETted')
       }.bind(this),
       error: function(xhs, status, err) {
         console.log('error GETting questions to view ', err);
@@ -32,25 +32,28 @@ class StudentsList extends React.Component {
 
   render() {
 
-    var questions = this.state.questions;
+    var students = this.state.students;
 
-    if (questions === undefined) {
+    if (students === undefined) {
       return (<p>Loading...</p>);
     }
 
-    if (questions.length === 0) {
-      return (<p>No questions in the database.</p>);
+    if (students.length === 0) {
+      return (<p>No students in the database.</p>);
     }
 
     else {
 
-      var studentNodes = students.map((student) => (
-          <StudentItem data={student}/>
+      var studentNodes = students.map((student, i) => (
+          <StudentItem data={student} key={i}/>
         ));
 
       return (
-        <div className="student-list">
-          <ul> {studentNodes} </ul>
+        <div className="row">
+          <div className="col-4 centered">
+            <h2> Your Students </h2>
+            <ul> {studentNodes} </ul>
+          </div>
         </div>
       );
     }

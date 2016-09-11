@@ -1,3 +1,78 @@
+.header {
+  z-index: 1;
+  position: fixed;
+  top: 0; right: 0; bottom: 0; left: 0;
+  max-height: 80px;
+  background-color: black;
+  color: #FFe95c;
+}
+
+.title {
+  font-family: Baskerville, "Baskerville Old Face", "Hoefler Text", Garamond, "Times New Roman", serif;
+  font-size: 50px;
+  margin: 15px auto;
+}
+
+.top-nav {
+  margin-top: 100px;
+}
+
+.nav {
+  text-align: center;
+  list-style: none;
+  background-color: #ffe95c;
+}
+
+
+a {
+  text-decoration: none;
+  font-size: large;
+  padding: 8px;
+}
+
 .active {
-  background-color: #e6e6e6;
+  color: #FFe95c;
+  background-color: #5c72ff;
+}
+
+.footer {
+  z-index: 1;
+  position: fixed;
+  right: 0; bottom: 0; left: 0;
+  background-color: black;
+  min-height: 50px;
+}
+
+.centered {
+  margin: auto;
+}
+
+input[type="text"] {
+  font-size: large;
+  margin-bottom: 5px;
+  border-radius: 4px;
+  border: 1px solid #ccc
+}
+
+input[type="number"] {
+  font-size: large;
+  margin-bottom: 5px;
+  border-radius: 4px;
+  border: 1px solid #ccc
+}
+
+.question-text-input {
+  font-size: large;
+  height: 250px;
+  width: 400px;
+}
+
+.question-list {
+  margin: auto;
+  display: block;
+}
+
+.student-item {
+  cursor: pointer;
+  color: #0000EE;
 }

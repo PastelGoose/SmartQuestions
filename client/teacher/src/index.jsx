@@ -4,6 +4,7 @@ import { Router, Route, hashHistory, IndexRoute } from 'react-router';
 import App from './components/App.jsx';
 import StudentsList from './components/StudentsList.jsx';
 import StudentReport from './components/StudentReport.jsx';
+import QuestionsHistory from './components/QuestionsHistory.jsx';
 import Questions from './components/Questions.jsx';
 import QuestionsList from './components/QuestionsList.jsx';
 import Add from './components/Add.jsx';
@@ -12,7 +13,8 @@ import Grade from './components/Grade.jsx';
 render((
   <Router history={hashHistory}>
     <Route path="/" component={ App }>
-      <Route path="/students" component= { StudentsList }>
+      <Route path="/students">
+        <IndexRoute component={ StudentsList }/>
         <Route path="/students/:studentId" component={ StudentReport }/>
       </Route>
       <Route path="/questions" component={ Questions }>

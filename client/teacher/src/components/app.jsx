@@ -4,13 +4,21 @@ import NavLink from './NavLink.jsx';
 var App = (props) => (
   <div className="grid">
     <div className="row header">
-      <h1>Smart Questions</h1>
+      <h1 className="title">Smart Questions</h1>
     </div>
-      <ul className="nav">
-        <li><NavLink to="/questions">Questions</NavLink></li>
-        <li><NavLink to="/students">Students</NavLink></li>
-      </ul>
-  {props.children}
+    <div className="row nav top-nav">
+      <div className="col-6 NavLink-box">
+        <NavLink to="/questions">Questions</NavLink>
+      </div>
+      <div className="col-6 NavLink-box">
+        <NavLink to="/students">Students</NavLink>
+      </div>
+    </div>
+    
+    {props.children}
+    
+    <div className="row footer">
+    </div>
   </div>
 );
 

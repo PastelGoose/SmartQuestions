@@ -1,3 +1,66 @@
-var StudentReport = function(){};
+import React from 'react';
+import QuestionsHistory from './QuestionsHistory.jsx';
+import StudentCompetency from './StudentCompetency.jsx';
+
+class StudentReport extends React.Component {
+
+  constructor() {
+    super();
+    this.state = {
+      studentId: null,
+      name: null,
+      questionsAnswered: [],
+      competency: []
+    };
+  }
+
+  getReport() {
+    var rootUrl = window.location.origin;
+    $.ajax({
+      method: 'GET',
+      url: rootUrl + '/api/student/report',
+      data: this.props.params.studentId,
+      success: function(results) {
+        console.log('success');
+        console.log(results);
+        this.setState({
+          studentId: results.data.studentId,
+          name: results.data.name,
+          questionsAnswered: results.data.questionsAnswered,
+          competency: results.data.competency
+        });
+
+      }.bind(this),
+      error: function(err) {
+        console.log('error', err);
+      }
+    });
+
+    
+    console.log('report state: ', this.state);
+  }
+
+  // Get the report immediately on component load
+  componentDidMount() {
+    this.getReport();
+  }
+
+  render() {
+
+    return (
+      <div className="row">
+        <div className="col-4 centered">
+          <h2>This is the Student Report component</h2>
+          <p>studentId: {this.state.studentId}</p>
+          <p>name: {this.state.name}</p>
+
+          <StudentCompetency competency={this.state.competency} />
+          <QuestionsHistory questions={this.state.questionsAnswered} />
+        </div>
+      </div>
+    );
+  }
+
+}
 
 export default StudentReport;

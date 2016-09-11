@@ -70,24 +70,26 @@ class Add extends React.Component {
 
 
     return (
-      <div className="add-form-container">
-        <form onSubmit={ this.handleSubmit.bind(this) }>
-          <input type="text"   
-            placeholder="Category" 
-            value={ this.state.category }
-            onChange={ this.handleCategories.bind(this) }/><br/>
-          <input type="number" 
-            value = { this.state.difficulty } 
-            placeholder="Difficulty" 
-            onChange={this.handleDifficulty.bind(this) }/><br/>
-          <input className="question-text-input" 
-            type="text" value={this.state.questionText} 
-            placeholder="Question Text" 
-            onChange={this.handleQuestionText.bind(this)}/><br/>
-          <input type="submit" 
-            value="Submit"/>
-        </form>
-        {submitStatement}
+      <div className="row">
+        <div className="col-4 centered">
+          <form onSubmit={ this.handleSubmit.bind(this) } className="add-form">
+            <input type="text"
+              placeholder="Category" 
+              value={ this.state.category }
+              onChange={ this.handleCategories.bind(this) }/><br/>
+            <input type="number"
+              value={ this.state.difficulty } 
+              placeholder="Difficulty" 
+              onChange={this.handleDifficulty.bind(this) }/><br/>
+            <input className="question-text-input" 
+              type="text" value={this.state.questionText} 
+              placeholder="Question Text" 
+              onChange={this.handleQuestionText.bind(this)}/><br/>
+            <input type="submit" 
+              value="Submit"/>
+          </form>
+          {submitStatement}
+        </div>
       </div>
     );
   }
