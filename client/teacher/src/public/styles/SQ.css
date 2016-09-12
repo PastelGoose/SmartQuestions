@@ -1,3 +1,12 @@
+body {
+  background-color: #F5F5F5;
+}
+
+h2 {
+  text-align: center;
+}
+
+
 .header {
   z-index: 1;
   position: fixed;
@@ -63,6 +72,15 @@ a {
 .centered {
   margin: auto;
 }
+
+.white-frame {
+  margin-top: 20px;
+  background-color: white;
+  border: 1px solid #ccc;
+  padding: 10px;
+  width: 900px;
+}
+
 
 input[type="text"] {
   font-size: large;

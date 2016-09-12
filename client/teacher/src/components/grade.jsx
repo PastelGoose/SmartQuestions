@@ -83,7 +83,7 @@ class Grade extends React.Component {
     }
     else {
       return (
-        <div className="toGrade-container">
+        <div className="white-frame centered col-4">
           <ul>
             <li>Difficulty: {toGrade.difficulty}</li>
             <li>Category: {toGrade.category}</li>

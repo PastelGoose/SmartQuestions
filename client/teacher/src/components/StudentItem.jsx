@@ -1,6 +1,8 @@
 import React from 'react';
 import { hashHistory } from 'react-router';
 
+/* Single student item, for use in iteratory in "StudentList". */
+
 class StudentItem extends React.Component {
 
   constructor(props) {
@@ -11,6 +13,8 @@ class StudentItem extends React.Component {
     const path = `/students/${this.props.data.studentId}`;
     hashHistory.push(path);
   }
+
+  /* Programatically navigates, on click, to StudentReport component */
 
   render() {
     return (

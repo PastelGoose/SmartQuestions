@@ -52,7 +52,7 @@ class StudentsList extends React.Component {
 
       return (
         <div className="row">
-          <div className="col-4 centered">
+          <div className="col-4 centered white-frame">
             <h2> Your Students </h2>
             <ul> {studentNodes} </ul>
           </div>

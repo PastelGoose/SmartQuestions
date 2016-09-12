@@ -28038,7 +28038,7 @@
 	          { className: 'row' },
 	          _react2.default.createElement(
 	            'div',
-	            { className: 'col-4 centered' },
+	            { className: 'col-4 centered white-frame' },
 	            _react2.default.createElement(
 	              'h2',
 	              null,
@@ -28091,6 +28091,8 @@
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
+	/* Single student item, for use in iteratory in "StudentList". */
+	
 	var StudentItem = function (_React$Component) {
 	  _inherits(StudentItem, _React$Component);
 	
@@ -28106,6 +28108,9 @@
 	      var path = '/students/' + this.props.data.studentId;
 	      _reactRouter.hashHistory.push(path);
 	    }
+	
+	    /* Programatically navigates, on click, to StudentReport component */
+	
 	  }, {
 	    key: 'render',
 	    value: function render() {
@@ -28235,7 +28240,7 @@
 	        { className: 'row' },
 	        _react2.default.createElement(
 	          'div',
-	          { className: 'col-4 centered' },
+	          { className: 'col-4 centered white-frame' },
 	          _react2.default.createElement(
 	            'h2',
 	            null,
@@ -49383,7 +49388,7 @@
 	          { className: 'row' },
 	          _react2.default.createElement(
 	            'div',
-	            { className: 'col-4 centered' },
+	            { className: 'col-4 centered white-frame' },
 	            _react2.default.createElement(
 	              'h2',
 	              null,
@@ -49729,7 +49734,7 @@
 	      } else {
 	        return _react2.default.createElement(
 	          'div',
-	          { className: 'toGrade-container' },
+	          { className: 'white-frame centered col-4' },
 	          _react2.default.createElement(
 	            'ul',
 	            null,
