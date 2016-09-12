@@ -226,7 +226,7 @@ var student = {
 	retrieveSmartQuestions: function(req, res) {
 		studentId = req.query.uid || 2;
 
-		utils.findQuestions(studentId, 2, 3, 3, 2, res,function(result) {
+		utils.findQuestions(studentId, 2, 3, 3, 2,function(result) {
 				if(!result) {
 					res.send({data: []});
 				}
@@ -250,6 +250,7 @@ var student = {
 						}
 					})
 				}
+
 				res.send({data: response});
 		})
 	},

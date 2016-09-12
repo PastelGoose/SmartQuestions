@@ -35,19 +35,6 @@ module.exports = {
 			})
 		}
 	},
-	//this function adds questions to the student. it is not used now bc it is combined with addQuestionsCategoriesToStudent
-	// addCategoriesToStudent: function(teacherId, studentId) {
-	// 	console.log('in addQuestionsToStudent')
-	// 	db.Student.findById(studentId)
-	// 	.then(function(student) {
-	// 		db.Question.findAll({where: {TeacherId: teacherId}})
-	// 		.then(function(questions) {
-	// 			student.addQuestions(questions);
-	// 		})
-			
-	// 	})
-	// },
-
 	//when the teacher submits a question, this function is called to add the question to the teacher
 	addQuestionToExistingStudent: function(teacherId, questionId) {
 		db.Student.findAll({where: {teacherId: teacherId}})
@@ -85,17 +72,17 @@ module.exports = {
 				totalPoints += point;
 			})
 
-			if (totalPoints) {
+			// if (totalPoints) {
 				newCompetency.newCompetencies[key] = totalPoints + currCompetencyScore;
-			} else {
-				newCompetency.newCompetencies[key] = 'no change';
-			}
+			// } else {
+				// newCompetency.newCompetencies[key] = 'no change';
+			// }
 		})
 
 		return newCompetency;
 	},
 	// this is the smart search function that looks for the lowest competencies of the student and find unanswered questions in these categories that have difficulty level around the student's level. this function expands search range three times if it doesn't find enough questions. 
-	findQuestions: function(studentId, categoryLimit, minQuestionCount, upperRange, lowerRange,res, callback) {
+	findQuestions: function(studentId, categoryLimit, minQuestionCount, upperRange, lowerRange, callback) {
 		var search = function(categoryLimit, minQuestionCount, upperRange, lowerRange, searchCycles) {
 			db.IndividualCompetency.findAll({
 				where: {studentId: studentId},
@@ -107,7 +94,6 @@ module.exports = {
 					callback(null);
 					return;
 				}
-				// res.send(studentComps)
 				var questionsCount = 0;
 				var finalresult = [];
 
@@ -143,7 +129,7 @@ module.exports = {
 						} else {
 							finalresult.push([]);
 						}
-						
+
 						if(finalresult.length === studentComps.length || questionsCount > 10) {
 							if(questionsCount < minQuestionCount && searchCycles < 2) {
 								searchCycles++;

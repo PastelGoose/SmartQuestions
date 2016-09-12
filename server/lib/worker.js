@@ -70,9 +70,10 @@ var worker = function() {
 			})
 		})
 
+		//update db with new competency scores
 		newCompetencyTable.forEach(function(student) {
 			_.each(student.newCompetencies, function(val, key) {
-				if(val !== 'no change') {
+				// if(val !== 'no change') {
 					var isImproving = val > student.oldCompetencies[key] ? 1 : 0;
 					db.IndividualCompetency.findOne( {
 						where: {
@@ -83,13 +84,25 @@ var worker = function() {
 					.then(function(studentComp) {
 						studentComp.updateAttributes({
 							competencyScore: val,
-							isImproving: isImproving
+							isImproving: isImproving,
+							updatedAt: new Date()
 						})
 						.then(function(result) {
 							console.log('result:', result);
 						})
 					})
-				}
+					db.StudentCategory.upsert({
+						CategoryId: key,
+						StudentId: student.studentId,
+						competencyScore: val,
+						isImproving: isImproving,
+						updatedAt: new Date()
+					})
+					// db.Student.findById(student.studentId)
+					// .then(function(student) {
+					// 	student.addCategories(key, {competencyScore: val, isImproving: isImproving, createdAt: new Date()})
+					// })
+				// }
 			})
 		})
 	})
