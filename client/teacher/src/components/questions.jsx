@@ -2,17 +2,19 @@ import React from 'react';
 import { Link } from 'react-router';
 import NavLink from './NavLink.jsx'
 
+/* Top level component for the "Questions" section of the teacher view. */
+
 var Questions = (props) => (
   <div>
-    <div className="row nav">
+    <div className="row lower-nav nav question-nav-container">
       <div className="col-4">
-        <NavLink to="questions/view">View Questions</NavLink>
+        <Link className="lower" to="questions/view" activeClassName="active-lower">View Questions</Link>
       </div>
       <div className="col-4">
-        <NavLink to="questions/add">Add a Question</NavLink>
+        <Link className="lower" to="questions/add" activeClassName="active-lower">Add a Question</Link>
       </div>
       <div className="col-4">
-        <NavLink to="questions/grade">Grade Questions</NavLink>
+        <Link className="lower" to="questions/grade" activeClassName="active-lower">Grade Questions</Link>
       </div>
     </div>
     {props.children}

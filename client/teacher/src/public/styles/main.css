@@ -1,9 +1,13 @@
+/*basic grid for formatting purposes */
+
 * {
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
     -ms-box-sizing: border-box;
     box-sizing: border-box;
 }
+
+/* above: changes the way the box-size is calculated, to include padding and not include margins. Makes reasonsing about styling easier.*/
 
 .grid {
     margin: 0 auto;

@@ -1,6 +1,8 @@
 import React from 'react';
 import QuestionItem from './QuestionItem.jsx';
 
+/* For displaying all questions that a teacher has entered into the database */
+
 class QuestionsList extends React.Component {
 
   constructor() {

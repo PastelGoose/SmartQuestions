@@ -91,6 +91,8 @@
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
+	/*All that's here is the client-side router. See here: https://github.com/reactjs/react-router for info on how it works.*/
+	
 	(0, _reactDom.render)(_react2.default.createElement(
 	  _reactRouter.Router,
 	  { history: _reactRouter.hashHistory },
@@ -111,7 +113,7 @@
 	      _react2.default.createElement(_reactRouter.Route, { path: '/questions/grade', component: _Grade2.default })
 	    )
 	  )
-	), document.getElementById('app'));
+	), document.getElementById('app')); /* top-level render for the teacher view */
 
 /***/ },
 /* 1 */
@@ -27860,6 +27862,8 @@
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
+	/* Root component for teacher view */
+	
 	var App = function App(props) {
 	  return _react2.default.createElement(
 	    'div',
@@ -27925,6 +27929,9 @@
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
+	/* Wraps router Links so that you don't have to rememver to add the activeClassName attribute, as per the router
+	documentation. Probably not worth having, given that we ended up styling different nav links differently.*/
+	
 	var NavLink = function NavLink(props) {
 	  return _react2.default.createElement(_reactRouter.Link, _extends({}, props, { activeClassName: 'active' }));
 	};
@@ -27961,6 +27968,8 @@
 	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	/* For viewing the students registered in a teacher's class. */
 	
 	var StudentsList = function (_React$Component) {
 	  _inherits(StudentsList, _React$Component);
@@ -28163,6 +28172,9 @@
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
+	/* Top level component for viewing a given student's report. This is close to a duplicate of the StudentReport component
+	in the student view, though it has been altered to use url parameters. */
+	
 	var StudentReport = function (_React$Component) {
 	  _inherits(StudentReport, _React$Component);
 	
@@ -28188,6 +28200,7 @@
 	        method: 'GET',
 	        url: rootUrl + '/api/student/report',
 	        data: this.props.params.studentId,
+	        /*paramter gets used here. It's availabel because of router magic.*/
 	        success: function (results) {
 	          console.log('success');
 	          console.log(results);
@@ -28270,6 +28283,8 @@
 	var _react2 = _interopRequireDefault(_react);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	/* A duplicate of the "QuestionsHistory" in the student view. For displaying information about a students past performance. */
 	
 	var QuestionsHistory = function QuestionsHistory(props) {
 	  return _react2.default.createElement(
@@ -28356,6 +28371,9 @@
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
+	/* Duplicate of StudentCompetency component in the student view. For displaying the current ability, as measured by the program,
+	of a given student. */
+	
 	var StudentCompetency = function (_React$Component) {
 	  _inherits(StudentCompetency, _React$Component);
 	
@@ -28386,6 +28404,8 @@
 	        },
 	        series: [{ values: scores }]
 	      };
+	
+	      /* Note the use of a "zingchart", which is a library specifically for charting. */
 	
 	      zingchart.render({
 	        id: 'competency-chart',
@@ -49219,19 +49239,21 @@
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
+	/* Top level component for the "Questions" section of the teacher view. */
+	
 	var Questions = function Questions(props) {
 	  return _react2.default.createElement(
 	    'div',
 	    null,
 	    _react2.default.createElement(
 	      'div',
-	      { className: 'row nav' },
+	      { className: 'row lower-nav nav question-nav-container' },
 	      _react2.default.createElement(
 	        'div',
 	        { className: 'col-4' },
 	        _react2.default.createElement(
-	          _NavLink2.default,
-	          { to: 'questions/view' },
+	          _reactRouter.Link,
+	          { className: 'lower', to: 'questions/view', activeClassName: 'active-lower' },
 	          'View Questions'
 	        )
 	      ),
@@ -49239,8 +49261,8 @@
 	        'div',
 	        { className: 'col-4' },
 	        _react2.default.createElement(
-	          _NavLink2.default,
-	          { to: 'questions/add' },
+	          _reactRouter.Link,
+	          { className: 'lower', to: 'questions/add', activeClassName: 'active-lower' },
 	          'Add a Question'
 	        )
 	      ),
@@ -49248,8 +49270,8 @@
 	        'div',
 	        { className: 'col-4' },
 	        _react2.default.createElement(
-	          _NavLink2.default,
-	          { to: 'questions/grade' },
+	          _reactRouter.Link,
+	          { className: 'lower', to: 'questions/grade', activeClassName: 'active-lower' },
 	          'Grade Questions'
 	        )
 	      )
@@ -49290,6 +49312,8 @@
 	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	/* For displaying all questions that a teacher has entered into the database */
 	
 	var QuestionsList = function (_React$Component) {
 	  _inherits(QuestionsList, _React$Component);
@@ -49496,7 +49520,7 @@
 	      }
 	      var dataObject = {
 	        uid: 1,
-	        questions: [{ question: questionText,
+	        questions: [{ questionText: questionText,
 	          category: category,
 	          difficulty: difficulty
 	        }]
@@ -49557,12 +49581,12 @@
 	              placeholder: 'Difficulty',
 	              onChange: this.handleDifficulty.bind(this) }),
 	            _react2.default.createElement('br', null),
-	            _react2.default.createElement('input', { className: 'question-text-input',
+	            _react2.default.createElement('textarea', { className: 'question-text-input',
 	              type: 'text', value: this.state.questionText,
 	              placeholder: 'Question Text',
 	              onChange: this.handleQuestionText.bind(this) }),
 	            _react2.default.createElement('br', null),
-	            _react2.default.createElement('input', { type: 'submit',
+	            _react2.default.createElement('input', { className: 'submit-button', type: 'submit',
 	              value: 'Submit' })
 	          ),
 	          submitStatement
@@ -49606,6 +49630,8 @@
 	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	/* grading component for teacher view. GETs questions to grade, POSTS graded questions. */
 	
 	var Grade = function (_React$Component) {
 	  _inherits(Grade, _React$Component);

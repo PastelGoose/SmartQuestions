@@ -1,5 +1,7 @@
 import React from 'react';
 
+/* A duplicate of the "QuestionsHistory" in the student view. For displaying information about a students past performance. */
+
 const QuestionsHistory = (props) =>(
   <div>
     <h3>Inside QuestionsHistory Component</h3>

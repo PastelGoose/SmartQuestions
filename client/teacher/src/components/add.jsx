@@ -31,7 +31,7 @@ class Add extends React.Component {
     var dataObject = {
       uid: 1,
       questions: [
-        { question: questionText,
+        { questionText: questionText,
           category: category,
           difficulty: difficulty
         }
@@ -81,11 +81,11 @@ class Add extends React.Component {
               value={ this.state.difficulty } 
               placeholder="Difficulty" 
               onChange={this.handleDifficulty.bind(this) }/><br/>
-            <input className="question-text-input" 
+            <textarea className="question-text-input" 
               type="text" value={this.state.questionText} 
               placeholder="Question Text" 
               onChange={this.handleQuestionText.bind(this)}/><br/>
-            <input type="submit" 
+            <input className="submit-button" type="submit" 
               value="Submit"/>
           </form>
           {submitStatement}

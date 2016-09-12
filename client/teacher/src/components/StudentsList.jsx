@@ -1,6 +1,8 @@
 import React from 'react';
 import StudentItem from './StudentItem.jsx';
 
+/* For viewing the students registered in a teacher's class. */
+
 class StudentsList extends React.Component {
 
   constructor() {

@@ -1,6 +1,9 @@
 import React from 'react';
 import {core as Core} from 'zingchart-react';
 
+/* Duplicate of StudentCompetency component in the student view. For displaying the current ability, as measured by the program,
+of a given student. */
+
 class StudentCompetency extends React.Component {
 
   constructor(props) {
@@ -26,6 +29,8 @@ class StudentCompetency extends React.Component {
       },
       series: [{values: scores}]
     };
+
+/* Note the use of a "zingchart", which is a library specifically for charting. */
 
     zingchart.render({
       id: 'competency-chart',
