@@ -2,9 +2,9 @@
 
 import React from 'react';
 import {render} from 'react-dom';
+import Navigation from './StudentNavigation.jsx';
 import Questions from './Questions.jsx';
 import StudentReport from './StudentReport.jsx';
-import Navigation from './StudentNavigation.jsx';
 
 class StudentApp extends React.Component {
   constructor() {
@@ -20,14 +20,14 @@ class StudentApp extends React.Component {
 
     if (this.state.currentPage === 'Questions') {
       return (
-        <div>
-          <Navigation setCurrentPage={this.setCurrentPage.bind(this)} />
+        <div className="grid">
+          <Navigation setCurrentPage={this.setCurrentPage.bind(this)} currentPage={this.state.currentPage} />
           <Questions />
         </div>
       );
     } else if (this.state.currentPage === 'StudentReport') {
       return (
-        <div>
+        <div className="grid">
           <Navigation setCurrentPage={this.setCurrentPage.bind(this)} />
           <StudentReport />
         </div>

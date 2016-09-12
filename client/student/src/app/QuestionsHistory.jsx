@@ -32,8 +32,8 @@ const QuestionsHistory = (props) => {
   //   }
   // ]
   return (
-    <div>
-    <h3>Inside QuestionsHistory Component</h3>
+    <div className="centered">
+      <h3>Your Question History</h3>
       {props.questions.map(function(question) {
         return (
           <ul key={question.questionId}>

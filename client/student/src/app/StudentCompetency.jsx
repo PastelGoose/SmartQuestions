@@ -29,8 +29,8 @@ class StudentCompetency extends React.Component {
 
     zingchart.render({
       id: 'competency-chart',
-      width: 600,
-      height: 400,
+      width: 'auto',
+      height: 'auto',
       data: competencyChart
     });
   }

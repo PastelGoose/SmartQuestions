@@ -94,19 +94,21 @@ class TeacherSelect extends React.Component {
   render() {
 
     return (
-      <div>
-        <h2>Please select your teacher.</h2>
-        <h3>Teachers: 
-          <select id="selected-teacher" defaultValue="default">
-            <option value="default">Select New Teacher</option>
-            {
-              this.state.teacherList.map( (teacher) => {
-                return <option key={teacher.id} value={teacher.id}>{teacher.name}</option>;
-              })
-            }
-          </select>
-          <button onClick={this.setTeacher.bind(this)}>Set Teacher</button>
-        </h3>
+      <div className="row">
+        <div className="col-4 centered">
+          <h2>Please select your teacher.</h2>
+          <h3>Teachers: 
+            <select id="selected-teacher" defaultValue="default">
+              <option value="default">Select New Teacher</option>
+              {
+                this.state.teacherList.map( (teacher) => {
+                  return <option key={teacher.id} value={teacher.id}>{teacher.name}</option>;
+                })
+              }
+            </select>
+            <button onClick={this.setTeacher.bind(this)}>Set Teacher</button>
+          </h3>
+        </div>
       </div>
 
     );

@@ -57,6 +57,10 @@
 	
 	var _reactDom = __webpack_require__(/*! react-dom */ 34);
 	
+	var _StudentNavigation = __webpack_require__(/*! ./StudentNavigation.jsx */ 178);
+	
+	var _StudentNavigation2 = _interopRequireDefault(_StudentNavigation);
+	
 	var _Questions = __webpack_require__(/*! ./Questions.jsx */ 172);
 	
 	var _Questions2 = _interopRequireDefault(_Questions);
@@ -64,10 +68,6 @@
 	var _StudentReport = __webpack_require__(/*! ./StudentReport.jsx */ 175);
 	
 	var _StudentReport2 = _interopRequireDefault(_StudentReport);
-	
-	var _StudentNavigation = __webpack_require__(/*! ./StudentNavigation.jsx */ 178);
-	
-	var _StudentNavigation2 = _interopRequireDefault(_StudentNavigation);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -101,14 +101,14 @@
 	      if (this.state.currentPage === 'Questions') {
 	        return _react2.default.createElement(
 	          'div',
-	          null,
-	          _react2.default.createElement(_StudentNavigation2.default, { setCurrentPage: this.setCurrentPage.bind(this) }),
+	          { className: 'grid' },
+	          _react2.default.createElement(_StudentNavigation2.default, { setCurrentPage: this.setCurrentPage.bind(this), currentPage: this.state.currentPage }),
 	          _react2.default.createElement(_Questions2.default, null)
 	        );
 	      } else if (this.state.currentPage === 'StudentReport') {
 	        return _react2.default.createElement(
 	          'div',
-	          null,
+	          { className: 'grid' },
 	          _react2.default.createElement(_StudentNavigation2.default, { setCurrentPage: this.setCurrentPage.bind(this) }),
 	          _react2.default.createElement(_StudentReport2.default, null)
 	        );
@@ -22183,81 +22183,88 @@
 	      if (!this.state.teacherFound) {
 	        return _react2.default.createElement(
 	          'div',
-	          null,
+	          { className: 'row' },
 	          _react2.default.createElement(
-	            'h2',
-	            null,
-	            'Questions List Component'
-	          ),
-	          _react2.default.createElement(
-	            'h2',
-	            null,
-	            'You must select a teacher before you are able to view questions.'
-	          ),
-	          _react2.default.createElement(_TeacherSelect2.default, { setTeacherFoundToTrue: this.setTeacherFoundToTrue.bind(this) })
+	            'div',
+	            { className: 'col-4 centered' },
+	            _react2.default.createElement(
+	              'h2',
+	              null,
+	              'Questions List Component'
+	            ),
+	            _react2.default.createElement(
+	              'h2',
+	              null,
+	              'You must select a teacher before you are able to view questions.'
+	            ),
+	            _react2.default.createElement(_TeacherSelect2.default, { setTeacherFoundToTrue: this.setTeacherFoundToTrue.bind(this) })
+	          )
 	        );
 	      } else if (this.state.data.length === 0) {
 	        return _react2.default.createElement(
 	          'div',
-	          null,
+	          { className: 'row' },
 	          _react2.default.createElement(
-	            'h2',
-	            null,
-	            'Questions List Component'
-	          ),
-	          _react2.default.createElement(
-	            'h3',
-	            null,
-	            'You\'ve completed all the problems for the day!'
+	            'div',
+	            { className: 'col-4 centered' },
+	            _react2.default.createElement(
+	              'h2',
+	              null,
+	              'Questions List Component'
+	            ),
+	            _react2.default.createElement(
+	              'h3',
+	              null,
+	              'You\'ve completed all the problems for the day!'
+	            )
 	          )
 	        );
 	      } else {
 	        return _react2.default.createElement(
 	          'div',
-	          null,
+	          { className: 'row' },
 	          _react2.default.createElement(
-	            'h2',
-	            null,
-	            'Questions List Component'
-	          ),
+	            'div',
+	            { className: 'col-4 centered' },
 	
-	          // Find the first unanswered question
-	          this.state.data.map(function (question) {
-	            // Keep track of how many questions we've answered so far
-	            if (question.answered === true) {
-	              problemsComplete++;
-	            }
-	            // If the current problem has not yet been answered, show it to the student.
-	            // If the first unanswered question has already been found in this map loop,
-	            //   do not display another.
-	            if (question.answered === false && problemFound === false) {
-	              problemFound = true;
-	              return _react2.default.createElement(
-	                'div',
-	                { key: problemsComplete },
-	                _react2.default.createElement(_Question2.default, {
-	                  question: question,
-	                  questionIdx: problemsComplete,
-	                  totalProblems: totalProblems,
-	                  postResponse: this.postResponse.bind(this)
-	                })
-	              );
-	              // If we make it here and this is true, that means the user answered all questions.
-	            } else if (problemsComplete === totalProblems) {
-	              return _react2.default.createElement(
-	                'div',
-	                { key: question.order },
-	                _react2.default.createElement(
-	                  'h3',
-	                  null,
-	                  'You\'ve completed all the problems for the day!'
-	                )
-	              );
-	              // If we make it here, it means we are still looking for the first unanswered question
-	            } else {
-	              return;
-	            }
-	          }.bind(this))
+	            // Find the first unanswered question
+	            this.state.data.map(function (question) {
+	              // Keep track of how many questions we've answered so far
+	              if (question.answered === true) {
+	                problemsComplete++;
+	              }
+	              // If the current problem has not yet been answered, show it to the student.
+	              // If the first unanswered question has already been found in this map loop,
+	              //   do not display another.
+	              if (question.answered === false && problemFound === false) {
+	                problemFound = true;
+	                return _react2.default.createElement(
+	                  'div',
+	                  { key: problemsComplete },
+	                  _react2.default.createElement(_Question2.default, {
+	                    question: question,
+	                    questionIdx: problemsComplete,
+	                    totalProblems: totalProblems,
+	                    postResponse: this.postResponse.bind(this)
+	                  })
+	                );
+	                // If we make it here and this is true, that means the user answered all questions.
+	              } else if (problemsComplete === totalProblems) {
+	                return _react2.default.createElement(
+	                  'div',
+	                  { key: question.order },
+	                  _react2.default.createElement(
+	                    'h3',
+	                    null,
+	                    'You\'ve completed all the problems for the day!'
+	                  )
+	                );
+	                // If we make it here, it means we are still looking for the first unanswered question
+	              } else {
+	                return;
+	              }
+	            }.bind(this))
+	          )
 	        );
 	      }
 	    }
@@ -22302,59 +22309,43 @@
 	    'div',
 	    null,
 	    _react2.default.createElement(
-	      'h2',
-	      null,
-	      'Question ',
-	      props.questionIdx + 1,
-	      ' of ',
-	      props.totalProblems
-	    ),
-	    _react2.default.createElement(
 	      'ul',
 	      null,
 	      _react2.default.createElement(
 	        'li',
 	        null,
-	        'Question: ',
-	        props.question.questionText
+	        _react2.default.createElement(
+	          'h2',
+	          null,
+	          'Daily Question ',
+	          props.questionIdx + 1,
+	          ' of ',
+	          props.totalProblems
+	        )
 	      ),
 	      _react2.default.createElement(
 	        'li',
 	        null,
-	        'QuestionId: ',
-	        props.question.questionId
+	        _react2.default.createElement(
+	          'h3',
+	          null,
+	          'Question: ',
+	          props.question.questionText
+	        )
 	      ),
 	      _react2.default.createElement(
 	        'li',
 	        null,
-	        'Difficulty: ',
-	        props.question.difficulty
+	        _react2.default.createElement('textarea', { id: 'student-response', type: 'text', cols: '50', rows: '5' })
 	      ),
 	      _react2.default.createElement(
 	        'li',
 	        null,
-	        'Categories: ',
-	        props.question.category
-	      ),
-	      _react2.default.createElement(
-	        'li',
-	        null,
-	        'Answered: ',
-	        props.question.answered.toString()
-	      )
-	    ),
-	    _react2.default.createElement(
-	      'p',
-	      null,
-	      _react2.default.createElement('textarea', { id: 'student-response', type: 'text', cols: '50', rows: '5' })
-	    ),
-	    _react2.default.createElement(
-	      'p',
-	      null,
-	      _react2.default.createElement(
-	        'button',
-	        { onClick: handleSubmit },
-	        'Submit Answer'
+	        _react2.default.createElement(
+	          'button',
+	          { onClick: handleSubmit },
+	          'Submit Answer'
+	        )
 	      )
 	    )
 	  );
@@ -22492,36 +22483,40 @@
 	
 	      return _react2.default.createElement(
 	        'div',
-	        null,
+	        { className: 'row' },
 	        _react2.default.createElement(
-	          'h2',
-	          null,
-	          'Please select your teacher.'
-	        ),
-	        _react2.default.createElement(
-	          'h3',
-	          null,
-	          'Teachers:',
+	          'div',
+	          { className: 'col-4 centered' },
 	          _react2.default.createElement(
-	            'select',
-	            { id: 'selected-teacher', defaultValue: 'default' },
-	            _react2.default.createElement(
-	              'option',
-	              { value: 'default' },
-	              'Select New Teacher'
-	            ),
-	            this.state.teacherList.map(function (teacher) {
-	              return _react2.default.createElement(
-	                'option',
-	                { key: teacher.id, value: teacher.id },
-	                teacher.name
-	              );
-	            })
+	            'h2',
+	            null,
+	            'Please select your teacher.'
 	          ),
 	          _react2.default.createElement(
-	            'button',
-	            { onClick: this.setTeacher.bind(this) },
-	            'Set Teacher'
+	            'h3',
+	            null,
+	            'Teachers:',
+	            _react2.default.createElement(
+	              'select',
+	              { id: 'selected-teacher', defaultValue: 'default' },
+	              _react2.default.createElement(
+	                'option',
+	                { value: 'default' },
+	                'Select New Teacher'
+	              ),
+	              this.state.teacherList.map(function (teacher) {
+	                return _react2.default.createElement(
+	                  'option',
+	                  { key: teacher.id, value: teacher.id },
+	                  teacher.name
+	                );
+	              })
+	            ),
+	            _react2.default.createElement(
+	              'button',
+	              { onClick: this.setTeacher.bind(this) },
+	              'Set Teacher'
+	            )
 	          )
 	        )
 	      );
@@ -22677,26 +22672,18 @@
 	
 	      return _react2.default.createElement(
 	        'div',
-	        null,
+	        { className: 'row' },
 	        _react2.default.createElement(
-	          'h2',
-	          null,
-	          'This is the Student Report component'
-	        ),
-	        _react2.default.createElement(
-	          'p',
-	          null,
-	          'studentId: ',
-	          this.state.studentId
-	        ),
-	        _react2.default.createElement(
-	          'p',
-	          null,
-	          'name: ',
-	          this.state.name
-	        ),
-	        _react2.default.createElement(_StudentCompetency2.default, { competency: this.state.competency }),
-	        _react2.default.createElement(_QuestionsHistory2.default, { questions: this.state.questionsAnswered })
+	          'div',
+	          { className: 'col-6 centered' },
+	          _react2.default.createElement(
+	            'h2',
+	            null,
+	            this.state.name + "'s Individual Report"
+	          ),
+	          _react2.default.createElement(_StudentCompetency2.default, { competency: this.state.competency }),
+	          _react2.default.createElement(_QuestionsHistory2.default, { questions: this.state.questionsAnswered })
+	        )
 	      );
 	    }
 	  }]);
@@ -22758,11 +22745,11 @@
 	  // ]
 	  return _react2.default.createElement(
 	    'div',
-	    null,
+	    { className: 'centered' },
 	    _react2.default.createElement(
 	      'h3',
 	      null,
-	      'Inside QuestionsHistory Component'
+	      'Your Question History'
 	    ),
 	    props.questions.map(function (question) {
 	      return _react2.default.createElement(
@@ -22873,8 +22860,8 @@
 	
 	      zingchart.render({
 	        id: 'competency-chart',
-	        width: 600,
-	        height: 400,
+	        width: 'auto',
+	        height: 'auto',
 	        data: competencyChart
 	      });
 	    }
@@ -22904,7 +22891,7 @@
   \***************************************/
 /***/ function(module, exports, __webpack_require__) {
 
-	'use strict';
+	"use strict";
 	
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
@@ -22919,41 +22906,42 @@
 	var StudentNavigation = function StudentNavigation(props) {
 	
 	  return _react2.default.createElement(
-	    'div',
+	    "div",
 	    null,
 	    _react2.default.createElement(
-	      'h1',
-	      null,
-	      'Smart Questions - Student'
-	    ),
-	    _react2.default.createElement(
-	      'h3',
-	      null,
-	      'Navigation'
-	    ),
-	    _react2.default.createElement(
-	      'ul',
-	      null,
+	      "div",
+	      { className: "row header" },
 	      _react2.default.createElement(
-	        'li',
-	        null,
+	        "h1",
+	        { className: "title" },
+	        "Smart Questions"
+	      )
+	    ),
+	    _react2.default.createElement(
+	      "div",
+	      { className: "row nav top-nav" },
+	      _react2.default.createElement(
+	        "div",
+	        { className: "col-6 NavLink-box" },
 	        _react2.default.createElement(
-	          'a',
-	          { onClick: function onClick() {
+	          "a",
+	          { className: props.currentPage === 'Questions' ? 'active' : '',
+	            onClick: function onClick() {
 	              return props.setCurrentPage('Questions');
 	            } },
-	          'Daily Questions'
+	          "Daily Questions"
 	        )
 	      ),
 	      _react2.default.createElement(
-	        'li',
-	        null,
+	        "div",
+	        { className: "col-6 NavLink-box" },
 	        _react2.default.createElement(
-	          'a',
-	          { onClick: function onClick() {
+	          "a",
+	          { className: props.currentPage === 'Questions' ? '' : 'active',
+	            onClick: function onClick() {
 	              return props.setCurrentPage('StudentReport');
 	            } },
-	          'My Progress Report'
+	          "My Progress Report"
 	        )
 	      )
 	    )

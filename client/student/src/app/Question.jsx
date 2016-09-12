@@ -14,16 +14,12 @@ const Question = (props) => {
 
   return (
     <div>
-      <h2>Question {props.questionIdx + 1} of {props.totalProblems}</h2>
       <ul>
-        <li>Question: {props.question.questionText}</li>
-        <li>QuestionId: {props.question.questionId}</li>
-        <li>Difficulty: {props.question.difficulty}</li>
-        <li>Categories: {props.question.category}</li>
-        <li>Answered: {props.question.answered.toString()}</li>
+        <li><h2>Daily Question {props.questionIdx + 1} of {props.totalProblems}</h2></li>
+        <li><h3>Question: {props.question.questionText}</h3></li>
+        <li><textarea id="student-response" type="text" cols="50" rows="5" /></li>
+        <li><button onClick={ handleSubmit }>Submit Answer</button></li>
       </ul>
-      <p><textarea id="student-response" type="text" cols="50" rows="5" /></p>
-      <p><button onClick={ handleSubmit }>Submit Answer</button></p>
     </div>
   );
 

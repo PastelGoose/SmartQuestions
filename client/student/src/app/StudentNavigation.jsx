@@ -4,15 +4,23 @@ const StudentNavigation = (props) => {
 
   return (
     <div>
-      <h1>Smart Questions - Student</h1>
-      <h3>Navigation</h3>
-      <ul>
-        <li><a onClick={() => props.setCurrentPage('Questions')}>Daily Questions</a></li>
-        <li><a onClick={() => props.setCurrentPage('StudentReport')}>My Progress Report</a></li>
-      </ul>
+      <div className="row header">
+        <h1 className="title">Smart Questions</h1>
+      </div>
+      <div className="row nav top-nav">
+        <div className='col-6 NavLink-box'>
+          <a className={((props.currentPage === 'Questions') ? 'active' : '') } 
+            onClick={() => props.setCurrentPage('Questions')}>Daily Questions
+          </a>
+        </div>
+        <div className='col-6 NavLink-box'>
+          <a className={((props.currentPage === 'Questions') ? '' : 'active') } 
+            onClick={() => props.setCurrentPage('StudentReport')}>My Progress Report
+          </a>
+        </div>
+      </div>
     </div>
   );
-
 };
 
 export default StudentNavigation;

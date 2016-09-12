@@ -102,17 +102,17 @@ class StudentReport extends React.Component {
   render() {
 
     return (
-      <div>
-        <h2>This is the Student Report component</h2>
-        <p>studentId: {this.state.studentId}</p>
-        <p>name: {this.state.name}</p>
-
-        <StudentCompetency competency={this.state.competency} />
-        <QuestionsHistory questions={this.state.questionsAnswered} />
+      <div className="row">
+        <div className="col-6 centered">
+          <h2>{this.state.name + "'s Individual Report"}</h2>
+          <StudentCompetency competency={this.state.competency} />
+          <QuestionsHistory questions={this.state.questionsAnswered} />
+        </div>
       </div>
 
     );
   }
+  
 
 }
 
