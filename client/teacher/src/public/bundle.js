@@ -49225,13 +49225,13 @@
 	    null,
 	    _react2.default.createElement(
 	      'div',
-	      { className: 'row nav' },
+	      { className: 'row lower-nav nav question-nav-container' },
 	      _react2.default.createElement(
 	        'div',
 	        { className: 'col-4' },
 	        _react2.default.createElement(
-	          _NavLink2.default,
-	          { to: 'questions/view' },
+	          _reactRouter.Link,
+	          { className: 'lower', to: 'questions/view', activeClassName: 'active-lower' },
 	          'View Questions'
 	        )
 	      ),
@@ -49239,8 +49239,8 @@
 	        'div',
 	        { className: 'col-4' },
 	        _react2.default.createElement(
-	          _NavLink2.default,
-	          { to: 'questions/add' },
+	          _reactRouter.Link,
+	          { className: 'lower', to: 'questions/add', activeClassName: 'active-lower' },
 	          'Add a Question'
 	        )
 	      ),
@@ -49248,8 +49248,8 @@
 	        'div',
 	        { className: 'col-4' },
 	        _react2.default.createElement(
-	          _NavLink2.default,
-	          { to: 'questions/grade' },
+	          _reactRouter.Link,
+	          { className: 'lower', to: 'questions/grade', activeClassName: 'active-lower' },
 	          'Grade Questions'
 	        )
 	      )
@@ -49562,7 +49562,7 @@
 	              placeholder: 'Question Text',
 	              onChange: this.handleQuestionText.bind(this) }),
 	            _react2.default.createElement('br', null),
-	            _react2.default.createElement('input', { type: 'submit',
+	            _react2.default.createElement('input', { className: 'submit-button', type: 'submit',
 	              value: 'Submit' })
 	          ),
 	          submitStatement

@@ -85,7 +85,7 @@ class Add extends React.Component {
               type="text" value={this.state.questionText} 
               placeholder="Question Text" 
               onChange={this.handleQuestionText.bind(this)}/><br/>
-            <input type="submit" 
+            <input className="submit-button" type="submit" 
               value="Submit"/>
           </form>
           {submitStatement}
