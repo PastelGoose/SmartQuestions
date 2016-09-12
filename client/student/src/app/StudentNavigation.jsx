@@ -1,7 +1,8 @@
 import React from 'react';
 
+// Header + Navigation component
 const StudentNavigation = (props) => {
-
+  // Add class of active based on the state.currentPage from student.jsx
   return (
     <div>
       <div className="row header">

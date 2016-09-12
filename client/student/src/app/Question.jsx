@@ -1,5 +1,6 @@
 import React from 'react';
 
+// Display the current question and trigger POST on submission of response
 const Question = (props) => {
 
   const handleSubmit = () => {
@@ -8,8 +9,8 @@ const Question = (props) => {
     if (ans === '') {
       return;
     }
+    // Hard-code userID of 2 for the POST for Demo purposes
     props.postResponse(2, props.question.questionId, ans); 
-
   };
 
   return (

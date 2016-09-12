@@ -3,6 +3,7 @@ import React from 'react';
 import Question from './Question.jsx';
 import TeacherSelect from './TeacherSelect.jsx';
 
+// Display the questions of the day to the student to respond to
 class Questions extends React.Component {
 
   constructor(props) {
@@ -12,7 +13,8 @@ class Questions extends React.Component {
       data: []
     };
   }
-
+  // Called after the student selects a teacher for the first time. Gets
+  // the questions of the day afterwards.
   setTeacherFoundToTrue() {
     this.setState({teacherFound: true});
     // Now that the teacher has been selected, get the list of daily questions
@@ -20,18 +22,14 @@ class Questions extends React.Component {
   }
 
   getQuestions() {
-    //console.log('getQuestions triggered');
     var rootUrl = window.location.origin;
     var endpoint = rootUrl + '/api/student/questions';
     $.ajax({
       method: 'GET',
       url: endpoint,
+      // Hard-code studentID of 2 for Demo purposes
       data: {uid: 2},
       success: function(results) {
-        console.log('success');
-        console.log(results);
-        // Should sort the result set by order before inserting into setState.
-
         // If results is 'No teacher found', do not display questions.  The user needs to set a teacher first
         if (results !== 'No teacher found') {
           this.setState({
@@ -42,46 +40,17 @@ class Questions extends React.Component {
 
       }.bind(this),
       error: function(err) {
-        console.log('error');
         console.log(err);
       }
     });
 
-    // Dummy data without ajax
-    // this.setState({
-    //   data: [
-    //     {
-    //       questionId: 2,
-    //       question: 'what\'s one times seven',
-    //       categories: 'recursion',
-    //       difficulty: 2,
-    //       answered: false,
-    //       order: 2
-    //     },
-    //     {
-    //       questionId: 1,
-    //       question: 'what\'s five times five',
-    //       categories: 'logic',
-    //       difficulty: 5,
-    //       answered: false,
-    //       order: 1
-    //     },
-    //     {
-    //       questionId: 3,
-    //       question: 'what\'s eleven times twelve',
-    //       categories: 'times-tables',
-    //       difficulty: 8,
-    //       answered: false,
-    //       order: 3
-    //     }
-    //   ]
-    // });
   }
 
   componentDidMount() {
     this.getQuestions();
   }
 
+  // Send the student response to the question to the server
   postResponse(uid, qid, ans) {
     var rootUrl = window.location.origin;
     var endpoint = rootUrl + '/api/student/questions';
@@ -91,25 +60,11 @@ class Questions extends React.Component {
       url: endpoint,
       data: {uid: uid, questionId: qid, answer: ans},
       success: function(results) {
-        console.log('success');
-        console.log(results);
       },
       error: function(err) {
-        console.log('error');
         console.log(err);
       }
     });
-
-    // Note: Client post data should be in this form
-    // "{
-    //  uid: 343,
-    //  questionid: 2,
-    //  answer: “x is the multiple..”
-    //  }"
-    // console.log('Question submitted!');
-    // console.log('uid: ', uid);
-    // console.log('qid: ', qid);
-    // console.log('ans: ', ans);
     
     // After successful post, update the question on the state (answered: true)
     // Slice used here so we don't modify the state directly without setState.
@@ -123,15 +78,16 @@ class Questions extends React.Component {
     this.setState({data: tempStateData});
   }
 
-
   render() {
-    // This area has logic that sorts the questions by order, then displays the first problem that has
-    // not yet been answered.  It only displays one problem at a time per render.  Once all the questions
-    // have been answered, display "completed all questions".
+    // This area has logic that displays the first problem that has
+    // not yet been answered.  It only displays one problem at a time 
+    // per render.  Once all the questions have been answered, display 
+    // "completed all questions".
+
     var problemFound = false;
     var problemsComplete = 0;
     var totalProblems = this.state.data.length;
-    
+    // If no teacher has been selected yet, display the TeacherSelect component
     if (!this.state.teacherFound) {
       return (
         <div className="row">
@@ -142,6 +98,7 @@ class Questions extends React.Component {
           </div>
         </div>
       );
+      // If there are no more questions queued for the day, show "completed"
     } else if (this.state.data.length === 0) {
       return (
         <div className="row">
@@ -151,6 +108,7 @@ class Questions extends React.Component {
           </div>
         </div>
       );
+      // Else, render the questions to do, one at a time
     } else {
       return (
         <div className="row">
@@ -164,7 +122,7 @@ class Questions extends React.Component {
                 }
                 // If the current problem has not yet been answered, show it to the student.
                 // If the first unanswered question has already been found in this map loop,
-                //   do not display another.
+                // do not display another.
                 if ((question.answered === false) && (problemFound === false)) {
                   problemFound = true;
                   return (
@@ -184,7 +142,8 @@ class Questions extends React.Component {
                       <h3>You've completed all the problems for the day!</h3>
                     </div>
                   );
-                  // If we make it here, it means we are still looking for the first unanswered question
+                  // If we make it here, it means the "question" is not a valid candidate to be displayed;
+                  // i.e. the first problem to display was already found
                 } else {
                   return;
                 }
@@ -192,13 +151,9 @@ class Questions extends React.Component {
             }
           </div>
         </div>
-      );
-      
+      ); 
     }
-
-
   }
-
 }
 
 export default Questions;
