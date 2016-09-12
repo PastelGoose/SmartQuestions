@@ -57,6 +57,10 @@
 	
 	var _reactDom = __webpack_require__(/*! react-dom */ 34);
 	
+	var _StudentNavigation = __webpack_require__(/*! ./StudentNavigation.jsx */ 178);
+	
+	var _StudentNavigation2 = _interopRequireDefault(_StudentNavigation);
+	
 	var _Questions = __webpack_require__(/*! ./Questions.jsx */ 172);
 	
 	var _Questions2 = _interopRequireDefault(_Questions);
@@ -64,10 +68,6 @@
 	var _StudentReport = __webpack_require__(/*! ./StudentReport.jsx */ 175);
 	
 	var _StudentReport2 = _interopRequireDefault(_StudentReport);
-	
-	var _StudentNavigation = __webpack_require__(/*! ./StudentNavigation.jsx */ 178);
-	
-	var _StudentNavigation2 = _interopRequireDefault(_StudentNavigation);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -83,11 +83,16 @@
 	  function StudentApp() {
 	    _classCallCheck(this, StudentApp);
 	
+	    // The state is used to determine which component to render
 	    var _this = _possibleConstructorReturn(this, (StudentApp.__proto__ || Object.getPrototypeOf(StudentApp)).call(this));
 	
 	    _this.state = { currentPage: 'Questions' };
 	    return _this;
 	  }
+	
+	  // Helper function to set the current page view.  Passed
+	  // down as props.
+	
 	
 	  _createClass(StudentApp, [{
 	    key: 'setCurrentPage',
@@ -97,19 +102,24 @@
 	  }, {
 	    key: 'render',
 	    value: function render() {
-	
+	      // Depending on the state, render different views
 	      if (this.state.currentPage === 'Questions') {
 	        return _react2.default.createElement(
 	          'div',
-	          null,
-	          _react2.default.createElement(_StudentNavigation2.default, { setCurrentPage: this.setCurrentPage.bind(this) }),
+	          { className: 'grid' },
+	          _react2.default.createElement(_StudentNavigation2.default, {
+	            setCurrentPage: this.setCurrentPage.bind(this),
+	            currentPage: this.state.currentPage
+	          }),
 	          _react2.default.createElement(_Questions2.default, null)
 	        );
 	      } else if (this.state.currentPage === 'StudentReport') {
 	        return _react2.default.createElement(
 	          'div',
-	          null,
-	          _react2.default.createElement(_StudentNavigation2.default, { setCurrentPage: this.setCurrentPage.bind(this) }),
+	          { className: 'grid' },
+	          _react2.default.createElement(_StudentNavigation2.default, {
+	            setCurrentPage: this.setCurrentPage.bind(this)
+	          }),
 	          _react2.default.createElement(_StudentReport2.default, null)
 	        );
 	      }
@@ -22040,6 +22050,7 @@
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
+	// Display the questions of the day to the student to respond to
 	var Questions = function (_React$Component) {
 	  _inherits(Questions, _React$Component);
 	
@@ -22054,6 +22065,9 @@
 	    };
 	    return _this;
 	  }
+	  // Called after the student selects a teacher for the first time. Gets
+	  // the questions of the day afterwards.
+	
 	
 	  _createClass(Questions, [{
 	    key: 'setTeacherFoundToTrue',
@@ -22065,18 +22079,14 @@
 	  }, {
 	    key: 'getQuestions',
 	    value: function getQuestions() {
-	      //console.log('getQuestions triggered');
 	      var rootUrl = window.location.origin;
 	      var endpoint = rootUrl + '/api/student/questions';
 	      $.ajax({
 	        method: 'GET',
 	        url: endpoint,
+	        // Hard-code studentID of 2 for Demo purposes
 	        data: { uid: 2 },
 	        success: function (results) {
-	          console.log('success');
-	          console.log(results);
-	          // Should sort the result set by order before inserting into setState.
-	
 	          // If results is 'No teacher found', do not display questions.  The user needs to set a teacher first
 	          if (results !== 'No teacher found') {
 	            this.setState({
@@ -22088,46 +22098,18 @@
 	          }
 	        }.bind(this),
 	        error: function error(err) {
-	          console.log('error');
 	          console.log(err);
 	        }
 	      });
-	
-	      // Dummy data without ajax
-	      // this.setState({
-	      //   data: [
-	      //     {
-	      //       questionId: 2,
-	      //       question: 'what\'s one times seven',
-	      //       categories: 'recursion',
-	      //       difficulty: 2,
-	      //       answered: false,
-	      //       order: 2
-	      //     },
-	      //     {
-	      //       questionId: 1,
-	      //       question: 'what\'s five times five',
-	      //       categories: 'logic',
-	      //       difficulty: 5,
-	      //       answered: false,
-	      //       order: 1
-	      //     },
-	      //     {
-	      //       questionId: 3,
-	      //       question: 'what\'s eleven times twelve',
-	      //       categories: 'times-tables',
-	      //       difficulty: 8,
-	      //       answered: false,
-	      //       order: 3
-	      //     }
-	      //   ]
-	      // });
 	    }
 	  }, {
 	    key: 'componentDidMount',
 	    value: function componentDidMount() {
 	      this.getQuestions();
 	    }
+	
+	    // Send the student response to the question to the server
+	
 	  }, {
 	    key: 'postResponse',
 	    value: function postResponse(uid, qid, ans) {
@@ -22138,26 +22120,11 @@
 	        method: 'POST',
 	        url: endpoint,
 	        data: { uid: uid, questionId: qid, answer: ans },
-	        success: function success(results) {
-	          console.log('success');
-	          console.log(results);
-	        },
+	        success: function success(results) {},
 	        error: function error(err) {
-	          console.log('error');
 	          console.log(err);
 	        }
 	      });
-	
-	      // Note: Client post data should be in this form
-	      // "{
-	      //  uid: 343,
-	      //  questionid: 2,
-	      //  answer: “x is the multiple..”
-	      //  }"
-	      // console.log('Question submitted!');
-	      // console.log('uid: ', uid);
-	      // console.log('qid: ', qid);
-	      // console.log('ans: ', ans);
 	
 	      // After successful post, update the question on the state (answered: true)
 	      // Slice used here so we don't modify the state directly without setState.
@@ -22173,91 +22140,103 @@
 	  }, {
 	    key: 'render',
 	    value: function render() {
-	      // This area has logic that sorts the questions by order, then displays the first problem that has
-	      // not yet been answered.  It only displays one problem at a time per render.  Once all the questions
-	      // have been answered, display "completed all questions".
+	      // This area has logic that displays the first problem that has
+	      // not yet been answered.  It only displays one problem at a time 
+	      // per render.  Once all the questions have been answered, display 
+	      // "completed all questions".
+	
 	      var problemFound = false;
 	      var problemsComplete = 0;
 	      var totalProblems = this.state.data.length;
-	
+	      // If no teacher has been selected yet, display the TeacherSelect component
 	      if (!this.state.teacherFound) {
 	        return _react2.default.createElement(
 	          'div',
-	          null,
+	          { className: 'row' },
 	          _react2.default.createElement(
-	            'h2',
-	            null,
-	            'Questions List Component'
-	          ),
-	          _react2.default.createElement(
-	            'h2',
-	            null,
-	            'You must select a teacher before you are able to view questions.'
-	          ),
-	          _react2.default.createElement(_TeacherSelect2.default, { setTeacherFoundToTrue: this.setTeacherFoundToTrue.bind(this) })
+	            'div',
+	            { className: 'col-4 centered' },
+	            _react2.default.createElement(
+	              'h2',
+	              null,
+	              'Questions List Component'
+	            ),
+	            _react2.default.createElement(
+	              'h2',
+	              null,
+	              'You must select a teacher before you are able to view questions.'
+	            ),
+	            _react2.default.createElement(_TeacherSelect2.default, { setTeacherFoundToTrue: this.setTeacherFoundToTrue.bind(this) })
+	          )
 	        );
+	        // If there are no more questions queued for the day, show "completed"
 	      } else if (this.state.data.length === 0) {
 	        return _react2.default.createElement(
 	          'div',
-	          null,
+	          { className: 'row' },
 	          _react2.default.createElement(
-	            'h2',
-	            null,
-	            'Questions List Component'
-	          ),
-	          _react2.default.createElement(
-	            'h3',
-	            null,
-	            'You\'ve completed all the problems for the day!'
+	            'div',
+	            { className: 'col-4 centered' },
+	            _react2.default.createElement(
+	              'h2',
+	              null,
+	              'Questions List Component'
+	            ),
+	            _react2.default.createElement(
+	              'h3',
+	              null,
+	              'You\'ve completed all the problems for the day!'
+	            )
 	          )
 	        );
+	        // Else, render the questions to do, one at a time
 	      } else {
 	        return _react2.default.createElement(
 	          'div',
-	          null,
+	          { className: 'row' },
 	          _react2.default.createElement(
-	            'h2',
-	            null,
-	            'Questions List Component'
-	          ),
+	            'div',
+	            { className: 'col-4 centered' },
 	
-	          // Find the first unanswered question
-	          this.state.data.map(function (question) {
-	            // Keep track of how many questions we've answered so far
-	            if (question.answered === true) {
-	              problemsComplete++;
-	            }
-	            // If the current problem has not yet been answered, show it to the student.
-	            // If the first unanswered question has already been found in this map loop,
-	            //   do not display another.
-	            if (question.answered === false && problemFound === false) {
-	              problemFound = true;
-	              return _react2.default.createElement(
-	                'div',
-	                { key: problemsComplete },
-	                _react2.default.createElement(_Question2.default, {
-	                  question: question,
-	                  questionIdx: problemsComplete,
-	                  totalProblems: totalProblems,
-	                  postResponse: this.postResponse.bind(this)
-	                })
-	              );
-	              // If we make it here and this is true, that means the user answered all questions.
-	            } else if (problemsComplete === totalProblems) {
-	              return _react2.default.createElement(
-	                'div',
-	                { key: question.order },
-	                _react2.default.createElement(
-	                  'h3',
-	                  null,
-	                  'You\'ve completed all the problems for the day!'
-	                )
-	              );
-	              // If we make it here, it means we are still looking for the first unanswered question
-	            } else {
-	              return;
-	            }
-	          }.bind(this))
+	            // Find the first unanswered question
+	            this.state.data.map(function (question) {
+	              // Keep track of how many questions we've answered so far
+	              if (question.answered === true) {
+	                problemsComplete++;
+	              }
+	              // If the current problem has not yet been answered, show it to the student.
+	              // If the first unanswered question has already been found in this map loop,
+	              // do not display another.
+	              if (question.answered === false && problemFound === false) {
+	                problemFound = true;
+	                return _react2.default.createElement(
+	                  'div',
+	                  { key: problemsComplete },
+	                  _react2.default.createElement(_Question2.default, {
+	                    question: question,
+	                    questionIdx: problemsComplete,
+	                    totalProblems: totalProblems,
+	                    postResponse: this.postResponse.bind(this)
+	                  })
+	                );
+	                // If we make it here and this is true, that means the user answered all questions.
+	              } else if (problemsComplete === totalProblems) {
+	                return _react2.default.createElement(
+	                  'div',
+	                  { key: question.order },
+	                  _react2.default.createElement(
+	                    'h3',
+	                    null,
+	                    'You\'ve completed all the problems for the day!'
+	                  )
+	                );
+	                // If we make it here, it means the "question" is not a valid candidate to be displayed;
+	                // i.e. the first problem to display was already found
+	              } else {
+	                return;
+	              }
+	            }.bind(this))
+	          )
 	        );
 	      }
 	    }
@@ -22287,6 +22266,7 @@
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
+	// Display the current question and trigger POST on submission of response
 	var Question = function Question(props) {
 	
 	  var handleSubmit = function handleSubmit() {
@@ -22295,6 +22275,7 @@
 	    if (ans === '') {
 	      return;
 	    }
+	    // Hard-code userID of 2 for the POST for Demo purposes
 	    props.postResponse(2, props.question.questionId, ans);
 	  };
 	
@@ -22302,59 +22283,43 @@
 	    'div',
 	    null,
 	    _react2.default.createElement(
-	      'h2',
-	      null,
-	      'Question ',
-	      props.questionIdx + 1,
-	      ' of ',
-	      props.totalProblems
-	    ),
-	    _react2.default.createElement(
 	      'ul',
 	      null,
 	      _react2.default.createElement(
 	        'li',
 	        null,
-	        'Question: ',
-	        props.question.questionText
+	        _react2.default.createElement(
+	          'h2',
+	          null,
+	          'Daily Question ',
+	          props.questionIdx + 1,
+	          ' of ',
+	          props.totalProblems
+	        )
 	      ),
 	      _react2.default.createElement(
 	        'li',
 	        null,
-	        'QuestionId: ',
-	        props.question.questionId
+	        _react2.default.createElement(
+	          'h3',
+	          null,
+	          'Question: ',
+	          props.question.questionText
+	        )
 	      ),
 	      _react2.default.createElement(
 	        'li',
 	        null,
-	        'Difficulty: ',
-	        props.question.difficulty
+	        _react2.default.createElement('textarea', { id: 'student-response', type: 'text', cols: '50', rows: '5' })
 	      ),
 	      _react2.default.createElement(
 	        'li',
 	        null,
-	        'Categories: ',
-	        props.question.category
-	      ),
-	      _react2.default.createElement(
-	        'li',
-	        null,
-	        'Answered: ',
-	        props.question.answered.toString()
-	      )
-	    ),
-	    _react2.default.createElement(
-	      'p',
-	      null,
-	      _react2.default.createElement('textarea', { id: 'student-response', type: 'text', cols: '50', rows: '5' })
-	    ),
-	    _react2.default.createElement(
-	      'p',
-	      null,
-	      _react2.default.createElement(
-	        'button',
-	        { onClick: handleSubmit },
-	        'Submit Answer'
+	        _react2.default.createElement(
+	          'button',
+	          { onClick: handleSubmit },
+	          'Submit Answer'
+	        )
 	      )
 	    )
 	  );
@@ -22389,6 +22354,7 @@
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
+	// This is rendered when the student has not selected a teacher yet.
 	var TeacherSelect = function (_React$Component) {
 	  _inherits(TeacherSelect, _React$Component);
 	
@@ -22406,19 +22372,6 @@
 	  _createClass(TeacherSelect, [{
 	    key: 'getTeachersList',
 	    value: function getTeachersList() {
-	      // sample GET response
-	      // "{
-	      //   ""data"": [
-	      //     {
-	      //       ""name"": ""stephen notwong"",
-	      //       ""id"": 1
-	      //     },
-	      //     {
-	      //       ""name"": ""damien mccool"",
-	      //       ""id"": 2
-	      //     }
-	      //   ]
-	      // }"
 	
 	      // Perform an ajax call to GET list of teachers
 	      var rootUrl = window.location.origin;
@@ -22428,35 +22381,21 @@
 	        url: endpoint,
 	        data: { uid: 2 },
 	        success: function (results) {
-	          console.log('successfully got list of teachers');
-	          console.log(results);
 	          this.setState({ teacherList: results.data });
 	        }.bind(this),
 	        error: function error(err) {
-	          console.log('error');
 	          console.log(err);
 	        }
 	      });
-	
-	      // Dummy Data
-	      // var data = [
-	      //   {
-	      //     name: 'stephen notwong',
-	      //     id: 1
-	      //   },
-	      //   {
-	      //     name: 'damien mccool',
-	      //     id: 2
-	      //   }
-	      // ];
-	
-	      // this.setState({teacherList: data});
 	    }
 	  }, {
 	    key: 'componentDidMount',
 	    value: function componentDidMount() {
 	      this.getTeachersList();
 	    }
+	
+	    // Perform an ajax call to POST the selected teacher.
+	
 	  }, {
 	    key: 'setTeacher',
 	    value: function setTeacher() {
@@ -22464,24 +22403,16 @@
 	      if (teacherId === 'default') {
 	        return;
 	      }
-	      console.log('setTeacher invoked.  teacherId is: ', teacherId);
-	      // //sample post data:  {"studentId":1,"teacherId":2}
-	      // Perform an ajax call to POST teacher.
 	      var rootUrl = window.location.origin;
 	      var endpoint = rootUrl + '/api/student/teachers';
 	      $.ajax({
 	        method: 'POST',
 	        url: endpoint,
-	        // student and teacher uid should be sent?
 	        data: { studentId: 2, teacherId: teacherId },
 	        success: function (results) {
-	          console.log('success');
-	          console.log(results);
-	          console.log('props in TeacherSelect is', this.props);
 	          this.props.setTeacherFoundToTrue();
 	        }.bind(this),
 	        error: function error(err) {
-	          console.log('error');
 	          console.log(err);
 	        }
 	      });
@@ -22492,36 +22423,40 @@
 	
 	      return _react2.default.createElement(
 	        'div',
-	        null,
+	        { className: 'row' },
 	        _react2.default.createElement(
-	          'h2',
-	          null,
-	          'Please select your teacher.'
-	        ),
-	        _react2.default.createElement(
-	          'h3',
-	          null,
-	          'Teachers:',
+	          'div',
+	          { className: 'col-4 centered' },
 	          _react2.default.createElement(
-	            'select',
-	            { id: 'selected-teacher', defaultValue: 'default' },
-	            _react2.default.createElement(
-	              'option',
-	              { value: 'default' },
-	              'Select New Teacher'
-	            ),
-	            this.state.teacherList.map(function (teacher) {
-	              return _react2.default.createElement(
-	                'option',
-	                { key: teacher.id, value: teacher.id },
-	                teacher.name
-	              );
-	            })
+	            'h2',
+	            null,
+	            'Please select your teacher.'
 	          ),
 	          _react2.default.createElement(
-	            'button',
-	            { onClick: this.setTeacher.bind(this) },
-	            'Set Teacher'
+	            'h3',
+	            null,
+	            'Teachers:',
+	            _react2.default.createElement(
+	              'select',
+	              { id: 'selected-teacher', defaultValue: 'default' },
+	              _react2.default.createElement(
+	                'option',
+	                { value: 'default' },
+	                'Select New Teacher'
+	              ),
+	              this.state.teacherList.map(function (teacher) {
+	                return _react2.default.createElement(
+	                  'option',
+	                  { key: teacher.id, value: teacher.id },
+	                  teacher.name
+	                );
+	              })
+	            ),
+	            _react2.default.createElement(
+	              'button',
+	              { onClick: this.setTeacher.bind(this) },
+	              'Set Teacher'
+	            )
 	          )
 	        )
 	      );
@@ -22568,6 +22503,7 @@
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
+	// This component is to show the student's Individual Progress Report
 	var StudentReport = function (_React$Component) {
 	  _inherits(StudentReport, _React$Component);
 	
@@ -22585,69 +22521,21 @@
 	    return _this;
 	  }
 	
+	  // Perform the ajax call to get the student's individual report.
+	
+	
 	  _createClass(StudentReport, [{
 	    key: 'getReport',
 	    value: function getReport() {
-	      //Sample shape of GET response for student report
-	      // var results = {
-	      //   'data': {
-	      //     'studentId': 2,
-	      //     'name': 'damien mccool',
-	      //     'questionsAnswered': [
-	      //       {
-	      //         'questionId': 3,
-	      //         'questionText': 'why do cats cross the street',
-	      //         'difficulty': 10,
-	      //         'categoryName': 'recursion',
-	      //         'answer': 'x is the multiple',
-	      //         'grade': 1,
-	      //         'answerDate': 123
-	      //       },
-	      //       {
-	      //         'questionId': 1,
-	      //         'questionText': 'what is the x kdjf',
-	      //         'difficulty': 10,
-	      //         'categoryName': 'recursion',
-	      //         'answer': 'x is the multiple',
-	      //         'grade': 1,
-	      //         'answerDate': 456
-	      //       },
-	      //       {
-	      //         'questionId': 2,
-	      //         'questionText': 'y times kdjf',
-	      //         'difficulty': 1,
-	      //         'categoryName': 'logic',
-	      //         'answer': 'x is the multiple',
-	      //         'grade': 1,
-	      //         'answerDate': 789
-	      //       }
-	      //     ],
-	      //     'competency': [
-	      //       {
-	      //         'categoryId': 1,
-	      //         'categoryName': 'recursion',
-	      //         'competencyScore': 4,
-	      //         'isImproving': true
-	      //       },
-	      //       {
-	      //         'categoryId': 2,
-	      //         'categoryName': 'logic',
-	      //         'competencyScore': 1,
-	      //         'isImproving': false
-	      //       }
-	      //     ]
-	      //   }
-	      // };
+	
 	      var rootUrl = window.location.origin;
 	      var endpoint = rootUrl + '/api/student/report';
 	      $.ajax({
 	        method: 'GET',
 	        url: endpoint,
+	        // Hardcode student ID of 2 for demo purposes
 	        data: { uid: 2 },
 	        success: function (results) {
-	          console.log('success');
-	          console.log(results);
-	
 	          this.setState({
 	            studentId: results.data.studentId,
 	            name: results.data.name,
@@ -22656,12 +22544,9 @@
 	          });
 	        }.bind(this),
 	        error: function error(err) {
-	          console.log('error');
 	          console.log(err);
 	        }
 	      });
-	
-	      console.log('report state: ', this.state);
 	    }
 	
 	    // Get the report immediately on component load
@@ -22677,26 +22562,18 @@
 	
 	      return _react2.default.createElement(
 	        'div',
-	        null,
+	        { className: 'row' },
 	        _react2.default.createElement(
-	          'h2',
-	          null,
-	          'This is the Student Report component'
-	        ),
-	        _react2.default.createElement(
-	          'p',
-	          null,
-	          'studentId: ',
-	          this.state.studentId
-	        ),
-	        _react2.default.createElement(
-	          'p',
-	          null,
-	          'name: ',
-	          this.state.name
-	        ),
-	        _react2.default.createElement(_StudentCompetency2.default, { competency: this.state.competency }),
-	        _react2.default.createElement(_QuestionsHistory2.default, { questions: this.state.questionsAnswered })
+	          'div',
+	          { className: 'col-6 centered' },
+	          _react2.default.createElement(
+	            'h2',
+	            null,
+	            this.state.name + "'s Individual Report"
+	          ),
+	          _react2.default.createElement(_StudentCompetency2.default, { competency: this.state.competency }),
+	          _react2.default.createElement(_QuestionsHistory2.default, { questions: this.state.questionsAnswered })
+	        )
 	      );
 	    }
 	  }]);
@@ -22725,44 +22602,16 @@
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
+	// Show the history of previously graded questions
 	var QuestionsHistory = function QuestionsHistory(props) {
-	  // props.questions has this shape:
-	  // [
-	  //   {
-	  //     'questionId': 3,
-	  //     'questionText': 'why do cats cross the street',
-	  //     'difficulty': 10,
-	  //     'categoryName': 'recursion',
-	  //     'answer': 'x is the multiple',
-	  //     'grade': 1,
-	  //     'answerDate': 123
-	  //   },
-	  //   {
-	  //     'questionId': 1,
-	  //     'questionText': 'what is the x kdjf',
-	  //     'difficulty': 10,
-	  //     'categoryName': 'recursion',
-	  //     'answer': 'x is the multiple',
-	  //     'grade': 1,
-	  //     'answerDate': 456
-	  //   },
-	  //   {
-	  //     'questionId': 2,
-	  //     'questionText': 'y times kdjf',
-	  //     'difficulty': 1,
-	  //     'categoryName': 'logic',
-	  //     'answer': 'x is the multiple',
-	  //     'grade': 1,
-	  //     'answerDate': 789
-	  //   }
-	  // ]
+	
 	  return _react2.default.createElement(
 	    'div',
-	    null,
+	    { className: 'centered' },
 	    _react2.default.createElement(
 	      'h3',
 	      null,
-	      'Inside QuestionsHistory Component'
+	      'Your Question History'
 	    ),
 	    props.questions.map(function (question) {
 	      return _react2.default.createElement(
@@ -22840,6 +22689,7 @@
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
+	// Shows the student's competency per category
 	var StudentCompetency = function (_React$Component) {
 	  _inherits(StudentCompetency, _React$Component);
 	
@@ -22855,11 +22705,14 @@
 	      // Best viewed with at least 3 categories
 	      var categories = [];
 	      var scores = [];
+	      // The radar chart expects the data to be in arrays.  Push categories and scores accordingly.
+	      // Competency categories and scores comes from the parent, StudentReport.
 	      this.props.competency.forEach(function (category) {
 	        categories.push(category.categoryName);
 	        scores.push(category.competencyScore);
 	      });
 	
+	      // To be passed into the zingchart render function as 'data'
 	      var competencyChart = {
 	        type: 'radar',
 	        plot: {
@@ -22871,17 +22724,18 @@
 	        series: [{ values: scores }]
 	      };
 	
+	      // Renders the chart to the target id
 	      zingchart.render({
 	        id: 'competency-chart',
-	        width: 600,
-	        height: 400,
+	        width: 'auto',
+	        height: 'auto',
 	        data: competencyChart
 	      });
 	    }
 	  }, {
 	    key: 'render',
 	    value: function render() {
-	
+	      // Call the helper function on render
 	      this.loadRadarChart();
 	
 	      return _react2.default.createElement(
@@ -22904,7 +22758,7 @@
   \***************************************/
 /***/ function(module, exports, __webpack_require__) {
 
-	'use strict';
+	"use strict";
 	
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
@@ -22916,44 +22770,46 @@
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
+	// Header + Navigation component
 	var StudentNavigation = function StudentNavigation(props) {
-	
+	  // Add class of active based on the state.currentPage from student.jsx
 	  return _react2.default.createElement(
-	    'div',
+	    "div",
 	    null,
 	    _react2.default.createElement(
-	      'h1',
-	      null,
-	      'Smart Questions - Student'
-	    ),
-	    _react2.default.createElement(
-	      'h3',
-	      null,
-	      'Navigation'
-	    ),
-	    _react2.default.createElement(
-	      'ul',
-	      null,
+	      "div",
+	      { className: "row header" },
 	      _react2.default.createElement(
-	        'li',
-	        null,
+	        "h1",
+	        { className: "title" },
+	        "Smart Questions"
+	      )
+	    ),
+	    _react2.default.createElement(
+	      "div",
+	      { className: "row nav top-nav" },
+	      _react2.default.createElement(
+	        "div",
+	        { className: "col-6 NavLink-box" },
 	        _react2.default.createElement(
-	          'a',
-	          { onClick: function onClick() {
+	          "a",
+	          { className: props.currentPage === 'Questions' ? 'active' : '',
+	            onClick: function onClick() {
 	              return props.setCurrentPage('Questions');
 	            } },
-	          'Daily Questions'
+	          "Daily Questions"
 	        )
 	      ),
 	      _react2.default.createElement(
-	        'li',
-	        null,
+	        "div",
+	        { className: "col-6 NavLink-box" },
 	        _react2.default.createElement(
-	          'a',
-	          { onClick: function onClick() {
+	          "a",
+	          { className: props.currentPage === 'Questions' ? '' : 'active',
+	            onClick: function onClick() {
 	              return props.setCurrentPage('StudentReport');
 	            } },
-	          'My Progress Report'
+	          "My Progress Report"
 	        )
 	      )
 	    )

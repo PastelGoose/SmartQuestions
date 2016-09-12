@@ -1,6 +1,7 @@
 import React from 'react';
 import {core as Core} from 'zingchart-react';
 
+// Shows the student's competency per category
 class StudentCompetency extends React.Component {
 
   constructor(props) {
@@ -11,11 +12,14 @@ class StudentCompetency extends React.Component {
     // Best viewed with at least 3 categories
     var categories = [];
     var scores = [];
+    // The radar chart expects the data to be in arrays.  Push categories and scores accordingly.
+    // Competency categories and scores comes from the parent, StudentReport.
     this.props.competency.forEach((category) => {
       categories.push(category.categoryName);
       scores.push(category.competencyScore);
     });
 
+    // To be passed into the zingchart render function as 'data'
     var competencyChart = {
       type: 'radar',
       plot: {
@@ -27,16 +31,17 @@ class StudentCompetency extends React.Component {
       series: [{values: scores}]
     };
 
+    // Renders the chart to the target id
     zingchart.render({
       id: 'competency-chart',
-      width: 600,
-      height: 400,
+      width: 'auto',
+      height: 'auto',
       data: competencyChart
     });
   }
 
   render() {
-
+    // Call the helper function on render
     this.loadRadarChart();
 
     return (
