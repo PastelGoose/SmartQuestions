@@ -471,7 +471,7 @@ var student = {
 		console.log('i am in responseone')
 		db.StudentQuestion.findOne({where: {StudentId: response.uid, QuestionId: response.questionId}})
 		.then(function(foundQuestion) {
-			foundQuestion.fAttributes({isAnswered: 1, answer: response.answer, answerDate: new Date()});
+			foundQuestion.updateAttributes({isAnswered: 1, answer: response.answer, answerDate: new Date()});
 			res.send(foundQuestion);
 		})
 
