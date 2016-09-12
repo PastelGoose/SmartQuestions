@@ -49520,7 +49520,7 @@
 	      }
 	      var dataObject = {
 	        uid: 1,
-	        questions: [{ question: questionText,
+	        questions: [{ questionText: questionText,
 	          category: category,
 	          difficulty: difficulty
 	        }]

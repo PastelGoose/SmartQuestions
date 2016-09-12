@@ -31,7 +31,7 @@ class Add extends React.Component {
     var dataObject = {
       uid: 1,
       questions: [
-        { question: questionText,
+        { questionText: questionText,
           category: category,
           difficulty: difficulty
         }
