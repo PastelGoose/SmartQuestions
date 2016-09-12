@@ -13,7 +13,7 @@ PRIMARY KEY (ID)
 
 create table Questions (
 id int NOT NULL AUTO_INCREMENT,
-questionText varchar(300),
+questionText varchar(3000),
 difficulty int NOT NULL,
 teacherId int,
 categoryId int,
@@ -44,7 +44,7 @@ workerReviewed boolean DEFAULT 0,
 studentId int,
 questionId int,
 orderInQueue int,
-answer varchar(1000),
+answer varchar(3000),
 isViewed boolean NOT NULL DEFAULT 0,
 isAnswered boolean NOT NULL DEFAULT 0,
 confidenceScore int DEFAULT 3,

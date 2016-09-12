@@ -1,17 +1,8 @@
-//goes to studentquestions table and looks for graded questions from today
-//group by student by category
-//score - 3 /3 + current competency
-//eg 4 grade on a level 10 question
-//diff level and self level. eg 7 - 6 / 3
-//2/3 * 1
-//math.max( 0, (grade -3) * math.max(1, (level - your level) )/ tune + current competency
-//1-3 * 7-6// 0 if level is higher and score is lower than 3
-//1-3 1-6 -5 -2 // -1 if level is lower and score is lower than 3
-
 var db = require('../db');
 var utils = require('./utils');
 var _ = require('underscore');
 
+//the worker updates the students' competencies by category 
 var worker = function() {
 
 	db.Student.findAll({
@@ -69,30 +60,20 @@ var worker = function() {
 			
 		})
 
-
 		//update db marking these questions as workerReviewed
-		console.log('---------------', result)
 		result.forEach(function(studentObj) {
 			studentObj.Questions.forEach(function(question) {
-				console.log('ahahahahahah', question.StudentQuestion)
 				question.StudentQuestion.updateAttributes({workerReviewed: true})
 				.then(function(updated) {
-					console.log('yayy', updated);
+					console.log('updated!', updated);
 				})
 			})
 		})
-
-		//update IndividualCompetency Table
-		//for each student
-		//for each newcompetencies that not no change
-		//look for individualCompetency where grab studernid and newcompetencyid
-		//updateattributes
 
 		newCompetencyTable.forEach(function(student) {
 			_.each(student.newCompetencies, function(val, key) {
 				if(val !== 'no change') {
 					var isImproving = val > student.oldCompetencies[key] ? 1 : 0;
-					console.log('isImproving', isImproving)
 					db.IndividualCompetency.findOne( {
 						where: {
 							StudentId: student.studentId,
@@ -105,7 +86,7 @@ var worker = function() {
 							isImproving: isImproving
 						})
 						.then(function(result) {
-							console.log('==============', result);
+							console.log('result:', result);
 						})
 					})
 				}
