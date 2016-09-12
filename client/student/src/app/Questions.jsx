@@ -102,8 +102,7 @@ class Questions extends React.Component {
     } else if (this.state.data.length === 0) {
       return (
         <div className="row">
-          <div className="col-4 centered">
-            <h2>Questions List Component</h2>
+          <div className="col-4 centered white-frame text-centered">
             <h3>You've completed all the problems for the day!</h3>
           </div>
         </div>
@@ -112,7 +111,7 @@ class Questions extends React.Component {
     } else {
       return (
         <div className="row">
-          <div className="col-4 centered">
+          <div className="col-4 centered white-frame">
             { 
               // Find the first unanswered question
               this.state.data.map(function(question) {
@@ -138,7 +137,7 @@ class Questions extends React.Component {
                   // If we make it here and this is true, that means the user answered all questions.
                 } else if (problemsComplete === totalProblems) {
                   return (
-                    <div key={question.order}>
+                    <div key={question.order} className="text-centered">
                       <h3>You've completed all the problems for the day!</h3>
                     </div>
                   );

@@ -100,7 +100,7 @@ class Grade extends React.Component {
               value="3" 
               checked={this.state.grade === '3'}
               onChange={this.handleSelect.bind(this)}/> 
-            Mostly Compelte
+            Mostly Complete
             <input type="radio" 
               value="2" 
               checked={this.state.grade === '2'}
@@ -116,7 +116,9 @@ class Grade extends React.Component {
               checked={this.state.grade === '0'}
               onChange={this.handleSelect.bind(this)}/> 
             Words with Beth
-            <input type="submit" value="Submit"/>
+            <br />
+            <br />
+            <input className="submit-button" type="submit" value="Submit"/>
           </form>
           <Link to="/questions">Back to Questions</Link><br/> <Link to="/">Back to Home</Link>
         </div> 
@@ -124,6 +126,6 @@ class Grade extends React.Component {
     }
   }
 
-};
+}
 
 export default Grade;

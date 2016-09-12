@@ -73,6 +73,10 @@ a {
   margin: auto;
 }
 
+.text-centered {
+  text-align: center;
+}
+
 .white-frame {
   margin-top: 20px;
   background-color: white;
