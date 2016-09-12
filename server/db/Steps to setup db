@@ -1,5 +1,7 @@
 Steps to setup db
 
+0. change port number
+
 1. change root password for sequelize in index.js in db folder
 
 2. go to db folder in Terminal. run mysql -u root -p<insert your password> < schema.sql

@@ -3,7 +3,6 @@ var db = new Sequelize('smartquestions', 'root', 'hi', {define: {
         timestamps: false
     }});
 
-
 var Teacher = db.define('Teacher', {
 	firstname: Sequelize.STRING, 
 	lastname: Sequelize.STRING,
@@ -53,12 +52,6 @@ var IndividualCompetency = db.define('IndividualCompetency', {
 	updatedAt: Sequelize.DATE
 });
 
-// var DailyQuestion = db.define('DailyQuestion', {
-
-// 	order: Sequelize.INTEGER,
-// 	isServed: Sequelize.BOOLEAN
-// });
-
 Question.belongsTo(Teacher);
 Teacher.hasMany(Question);
 
@@ -68,9 +61,6 @@ Teacher.hasMany(Student);
 Question.belongsTo(Category);
 Category.hasMany(Question);
 
-// Question.belongsToMany(Student, {as: '', through: 'QueuedQuestion'})
-// Student.belongsToMany(Question, {as: '', through: 'QueuedQuestion'})
-
 Question.belongsToMany(Student, {through: 'StudentQuestion'})
 Student.belongsToMany(Question, {through: 'StudentQuestion'})
 
@@ -79,8 +69,6 @@ Student.belongsToMany(Category, {through: 'StudentCategory'})
 
 Category.belongsToMany(Student, {through: 'IndividualCompetency'})
 Student.belongsToMany(Category, {as: 'Competency', through: 'IndividualCompetency'})
-
-// Person.hasOne(Person, {as: 'Father', foreignKey: 'DadId'})
 
 
 Question.sync();
