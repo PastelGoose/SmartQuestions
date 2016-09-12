@@ -53,7 +53,7 @@ class QuestionsList extends React.Component {
 
       return (
         <div className="row">
-          <div className="col-4 centered">
+          <div className="col-4 centered white-frame">
             <h2> Your Questions </h2>
             <ul className="question-list"> {questionNodes} </ul>
           </div>
