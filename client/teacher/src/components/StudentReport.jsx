@@ -2,6 +2,9 @@ import React from 'react';
 import QuestionsHistory from './QuestionsHistory.jsx';
 import StudentCompetency from './StudentCompetency.jsx';
 
+/* Top level component for viewing a given student's report. This is close to a duplicate of the StudentReport component
+in the student view, though it has been altered to use url parameters. */
+
 class StudentReport extends React.Component {
 
   constructor() {
@@ -20,6 +23,7 @@ class StudentReport extends React.Component {
       method: 'GET',
       url: rootUrl + '/api/student/report',
       data: this.props.params.studentId,
+      /*paramter gets used here. It's availabel because of router magic.*/
       success: function(results) {
         console.log('success');
         console.log(results);

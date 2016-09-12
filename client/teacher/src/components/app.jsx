@@ -1,6 +1,8 @@
 import React from 'react';
 import NavLink from './NavLink.jsx';
 
+/* Root component for teacher view */
+
 var App = (props) => (
   <div className="grid">
     <div className="row header">

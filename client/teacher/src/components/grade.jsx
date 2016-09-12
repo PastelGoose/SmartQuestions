@@ -1,6 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router';
 
+/* grading component for teacher view. GETs questions to grade, POSTS graded questions. */
+
 class Grade extends React.Component {
   
   constructor() {

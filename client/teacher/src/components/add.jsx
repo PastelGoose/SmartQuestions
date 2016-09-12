@@ -81,7 +81,7 @@ class Add extends React.Component {
               value={ this.state.difficulty } 
               placeholder="Difficulty" 
               onChange={this.handleDifficulty.bind(this) }/><br/>
-            <input className="question-text-input" 
+            <textarea className="question-text-input" 
               type="text" value={this.state.questionText} 
               placeholder="Question Text" 
               onChange={this.handleQuestionText.bind(this)}/><br/>
