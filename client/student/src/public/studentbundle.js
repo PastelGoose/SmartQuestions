@@ -57,15 +57,15 @@
 	
 	var _reactDom = __webpack_require__(/*! react-dom */ 34);
 	
-	var _StudentNavigation = __webpack_require__(/*! ./StudentNavigation.jsx */ 178);
+	var _StudentNavigation = __webpack_require__(/*! ./StudentNavigation.jsx */ 172);
 	
 	var _StudentNavigation2 = _interopRequireDefault(_StudentNavigation);
 	
-	var _Questions = __webpack_require__(/*! ./Questions.jsx */ 172);
+	var _Questions = __webpack_require__(/*! ./Questions.jsx */ 173);
 	
 	var _Questions2 = _interopRequireDefault(_Questions);
 	
-	var _StudentReport = __webpack_require__(/*! ./StudentReport.jsx */ 175);
+	var _StudentReport = __webpack_require__(/*! ./StudentReport.jsx */ 176);
 	
 	var _StudentReport2 = _interopRequireDefault(_StudentReport);
 	
@@ -22017,6 +22017,73 @@
 
 /***/ },
 /* 172 */
+/*!***************************************!*\
+  !*** ./src/app/StudentNavigation.jsx ***!
+  \***************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _react = __webpack_require__(/*! react */ 1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	// Header + Navigation component
+	var StudentNavigation = function StudentNavigation(props) {
+	  // Add class of active based on the state.currentPage from student.jsx
+	  return _react2.default.createElement(
+	    "div",
+	    null,
+	    _react2.default.createElement(
+	      "div",
+	      { className: "row header" },
+	      _react2.default.createElement(
+	        "h1",
+	        { className: "title" },
+	        "Smart Questions"
+	      )
+	    ),
+	    _react2.default.createElement(
+	      "div",
+	      { className: "row nav top-nav" },
+	      _react2.default.createElement(
+	        "div",
+	        { className: "col-6 NavLink-box" },
+	        _react2.default.createElement(
+	          "a",
+	          { className: props.currentPage === 'Questions' ? 'active' : '',
+	            onClick: function onClick() {
+	              return props.setCurrentPage('Questions');
+	            } },
+	          "Daily Questions"
+	        )
+	      ),
+	      _react2.default.createElement(
+	        "div",
+	        { className: "col-6 NavLink-box" },
+	        _react2.default.createElement(
+	          "a",
+	          { className: props.currentPage === 'Questions' ? '' : 'active',
+	            onClick: function onClick() {
+	              return props.setCurrentPage('StudentReport');
+	            } },
+	          "My Progress Report"
+	        )
+	      )
+	    )
+	  );
+	};
+	
+	exports.default = StudentNavigation;
+
+/***/ },
+/* 173 */
 /*!*******************************!*\
   !*** ./src/app/Questions.jsx ***!
   \*******************************/
@@ -22034,11 +22101,11 @@
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _Question = __webpack_require__(/*! ./Question.jsx */ 173);
+	var _Question = __webpack_require__(/*! ./Question.jsx */ 174);
 	
 	var _Question2 = _interopRequireDefault(_Question);
 	
-	var _TeacherSelect = __webpack_require__(/*! ./TeacherSelect.jsx */ 174);
+	var _TeacherSelect = __webpack_require__(/*! ./TeacherSelect.jsx */ 175);
 	
 	var _TeacherSelect2 = _interopRequireDefault(_TeacherSelect);
 	
@@ -22176,12 +22243,7 @@
 	          { className: 'row' },
 	          _react2.default.createElement(
 	            'div',
-	            { className: 'col-4 centered' },
-	            _react2.default.createElement(
-	              'h2',
-	              null,
-	              'Questions List Component'
-	            ),
+	            { className: 'col-4 centered white-frame text-centered' },
 	            _react2.default.createElement(
 	              'h3',
 	              null,
@@ -22196,7 +22258,7 @@
 	          { className: 'row' },
 	          _react2.default.createElement(
 	            'div',
-	            { className: 'col-4 centered' },
+	            { className: 'col-4 centered white-frame' },
 	
 	            // Find the first unanswered question
 	            this.state.data.map(function (question) {
@@ -22223,7 +22285,7 @@
 	              } else if (problemsComplete === totalProblems) {
 	                return _react2.default.createElement(
 	                  'div',
-	                  { key: question.order },
+	                  { key: question.order, className: 'text-centered' },
 	                  _react2.default.createElement(
 	                    'h3',
 	                    null,
@@ -22248,7 +22310,7 @@
 	exports.default = Questions;
 
 /***/ },
-/* 173 */
+/* 174 */
 /*!******************************!*\
   !*** ./src/app/Question.jsx ***!
   \******************************/
@@ -22283,22 +22345,22 @@
 	    'div',
 	    null,
 	    _react2.default.createElement(
-	      'ul',
+	      'p',
 	      null,
 	      _react2.default.createElement(
-	        'li',
+	        'h2',
 	        null,
-	        _react2.default.createElement(
-	          'h2',
-	          null,
-	          'Daily Question ',
-	          props.questionIdx + 1,
-	          ' of ',
-	          props.totalProblems
-	        )
-	      ),
+	        'Daily Question ',
+	        props.questionIdx + 1,
+	        ' of ',
+	        props.totalProblems
+	      )
+	    ),
+	    _react2.default.createElement(
+	      'div',
+	      { className: 'text-centered' },
 	      _react2.default.createElement(
-	        'li',
+	        'p',
 	        null,
 	        _react2.default.createElement(
 	          'h3',
@@ -22308,17 +22370,17 @@
 	        )
 	      ),
 	      _react2.default.createElement(
-	        'li',
+	        'p',
 	        null,
-	        _react2.default.createElement('textarea', { id: 'student-response', type: 'text', cols: '50', rows: '5' })
+	        _react2.default.createElement('textarea', { className: 'question-text-input', id: 'student-response', type: 'text' })
 	      ),
 	      _react2.default.createElement(
-	        'li',
+	        'p',
 	        null,
 	        _react2.default.createElement(
 	          'button',
-	          { onClick: handleSubmit },
-	          'Submit Answer'
+	          { className: 'submit-button', onClick: handleSubmit },
+	          'Submit'
 	        )
 	      )
 	    )
@@ -22328,7 +22390,7 @@
 	exports.default = Question;
 
 /***/ },
-/* 174 */
+/* 175 */
 /*!***********************************!*\
   !*** ./src/app/TeacherSelect.jsx ***!
   \***********************************/
@@ -22469,7 +22531,7 @@
 	exports.default = TeacherSelect;
 
 /***/ },
-/* 175 */
+/* 176 */
 /*!***********************************!*\
   !*** ./src/app/StudentReport.jsx ***!
   \***********************************/
@@ -22487,11 +22549,11 @@
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _QuestionsHistory = __webpack_require__(/*! ./QuestionsHistory.jsx */ 176);
+	var _QuestionsHistory = __webpack_require__(/*! ./QuestionsHistory.jsx */ 177);
 	
 	var _QuestionsHistory2 = _interopRequireDefault(_QuestionsHistory);
 	
-	var _StudentCompetency = __webpack_require__(/*! ./StudentCompetency.jsx */ 177);
+	var _StudentCompetency = __webpack_require__(/*! ./StudentCompetency.jsx */ 178);
 	
 	var _StudentCompetency2 = _interopRequireDefault(_StudentCompetency);
 	
@@ -22565,7 +22627,7 @@
 	        { className: 'row' },
 	        _react2.default.createElement(
 	          'div',
-	          { className: 'col-6 centered' },
+	          { className: 'col-6 centered white-frame' },
 	          _react2.default.createElement(
 	            'h2',
 	            null,
@@ -22584,7 +22646,7 @@
 	exports.default = StudentReport;
 
 /***/ },
-/* 176 */
+/* 177 */
 /*!**************************************!*\
   !*** ./src/app/QuestionsHistory.jsx ***!
   \**************************************/
@@ -22661,7 +22723,7 @@
 	exports.default = QuestionsHistory;
 
 /***/ },
-/* 177 */
+/* 178 */
 /*!***************************************!*\
   !*** ./src/app/StudentCompetency.jsx ***!
   \***************************************/
@@ -22750,73 +22812,6 @@
 	}(_react2.default.Component);
 	
 	exports.default = StudentCompetency;
-
-/***/ },
-/* 178 */
-/*!***************************************!*\
-  !*** ./src/app/StudentNavigation.jsx ***!
-  \***************************************/
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	
-	var _react = __webpack_require__(/*! react */ 1);
-	
-	var _react2 = _interopRequireDefault(_react);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	// Header + Navigation component
-	var StudentNavigation = function StudentNavigation(props) {
-	  // Add class of active based on the state.currentPage from student.jsx
-	  return _react2.default.createElement(
-	    "div",
-	    null,
-	    _react2.default.createElement(
-	      "div",
-	      { className: "row header" },
-	      _react2.default.createElement(
-	        "h1",
-	        { className: "title" },
-	        "Smart Questions"
-	      )
-	    ),
-	    _react2.default.createElement(
-	      "div",
-	      { className: "row nav top-nav" },
-	      _react2.default.createElement(
-	        "div",
-	        { className: "col-6 NavLink-box" },
-	        _react2.default.createElement(
-	          "a",
-	          { className: props.currentPage === 'Questions' ? 'active' : '',
-	            onClick: function onClick() {
-	              return props.setCurrentPage('Questions');
-	            } },
-	          "Daily Questions"
-	        )
-	      ),
-	      _react2.default.createElement(
-	        "div",
-	        { className: "col-6 NavLink-box" },
-	        _react2.default.createElement(
-	          "a",
-	          { className: props.currentPage === 'Questions' ? '' : 'active',
-	            onClick: function onClick() {
-	              return props.setCurrentPage('StudentReport');
-	            } },
-	          "My Progress Report"
-	        )
-	      )
-	    )
-	  );
-	};
-	
-	exports.default = StudentNavigation;
 
 /***/ },
 /* 179 */

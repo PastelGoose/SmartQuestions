@@ -51,7 +51,7 @@ class StudentReport extends React.Component {
 
     return (
       <div className="row">
-        <div className="col-6 centered">
+        <div className="col-6 centered white-frame">
           <h2>{this.state.name + "'s Individual Report"}</h2>
           <StudentCompetency competency={this.state.competency} />
           <QuestionsHistory questions={this.state.questionsAnswered} />

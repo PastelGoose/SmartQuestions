@@ -54,10 +54,7 @@ class StudentReport extends React.Component {
     return (
       <div className="row">
         <div className="col-4 centered white-frame">
-          <h2>This is the Student Report component</h2>
-          <p>studentId: {this.state.studentId}</p>
-          <p>name: {this.state.name}</p>
-
+          <h2>{this.state.name + "'s Individual Report"}</h2>
           <StudentCompetency competency={this.state.competency} />
           <QuestionsHistory questions={this.state.questionsAnswered} />
         </div>

@@ -15,12 +15,12 @@ const Question = (props) => {
 
   return (
     <div>
-      <ul>
-        <li><h2>Daily Question {props.questionIdx + 1} of {props.totalProblems}</h2></li>
-        <li><h3>Question: {props.question.questionText}</h3></li>
-        <li><textarea id="student-response" type="text" cols="50" rows="5" /></li>
-        <li><button onClick={ handleSubmit }>Submit Answer</button></li>
-      </ul>
+      <p><h2>Daily Question {props.questionIdx + 1} of {props.totalProblems}</h2></p>
+      <div className="text-centered">
+        <p><h3>Question: {props.question.questionText}</h3></p>
+        <p><textarea className="question-text-input" id="student-response" type="text"/></p>
+        <p><button className="submit-button" onClick={ handleSubmit }>Submit</button></p>
+      </div>
     </div>
   );
 
