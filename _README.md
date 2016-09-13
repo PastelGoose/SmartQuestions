@@ -1,5 +1,15 @@
 #Getting Started
 
+## Package installation.
+
+You need to do *three* npm installs:
+1. In terminal, in server folder, run:
+  - npm install
+2. In client/teacher folder, run:
+  - npm install
+3. In client/student folder, run:
+  - npm install
+
 ## Setup the Database
 
 1. Install MySQL on your machine. Run by typing in terminal: 
@@ -13,6 +23,21 @@ This will create the database and tables.
   - mysql -u root -p < script.sql
   - Enter root password when prompted.
 This will insert some teachers, students, questions, and queue some questions in db.
+
+## To Run Server
+
+To run server with live update, in SmartQuestions folder, run:
+  - nodemon server/server.js
+
+Without live update, run:
+  - node server/server.js
+
+## To Run Live Compilation of Front End
+In terminal, in client/teacher folder, run:
+  - npm run dev
+In terminal, in client/student folder, run:
+  - npm run dev
+
 
 #Links to helpful documents:
 
