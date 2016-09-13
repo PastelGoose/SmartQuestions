@@ -24976,7 +24976,7 @@
 	          if (error) {
 	            listener(error);
 	          } else if (redirectLocation) {
-	            history.transitionTo(redirectLocation);
+	            history.replace(redirectLocation);
 	          } else if (nextState) {
 	            listener(null, nextState);
 	          } else {
@@ -26177,7 +26177,7 @@
 	  },
 	
 	  propTypes: {
-	    to: oneOfType([string, object]).isRequired,
+	    to: oneOfType([string, object]),
 	    query: object,
 	    hash: string,
 	    state: object,
@@ -26238,6 +26238,11 @@
 	
 	
 	    if (router) {
+	      // If user does not specify a `to` prop, return an empty anchor tag.
+	      if (to == null) {
+	        return _react2.default.createElement('a', props);
+	      }
+	
 	      var location = createLocationDescriptor(to, { query: query, hash: hash, state: state });
 	      props.href = router.createHref(location);
 	
@@ -28244,19 +28249,7 @@
 	          _react2.default.createElement(
 	            'h2',
 	            null,
-	            'This is the Student Report component'
-	          ),
-	          _react2.default.createElement(
-	            'p',
-	            null,
-	            'studentId: ',
-	            this.state.studentId
-	          ),
-	          _react2.default.createElement(
-	            'p',
-	            null,
-	            'name: ',
-	            this.state.name
+	            this.state.name + "'s Individual Report"
 	          ),
 	          _react2.default.createElement(_StudentCompetency2.default, { competency: this.state.competency }),
 	          _react2.default.createElement(_QuestionsHistory2.default, { questions: this.state.questionsAnswered })
@@ -28298,7 +28291,7 @@
 	    _react2.default.createElement(
 	      'h3',
 	      null,
-	      'Inside QuestionsHistory Component'
+	      'Question History'
 	    ),
 	    props.questions.map(function (question) {
 	      return _react2.default.createElement(
@@ -28414,8 +28407,8 @@
 	
 	      zingchart.render({
 	        id: 'competency-chart',
-	        width: 600,
-	        height: 400,
+	        width: 'auto',
+	        height: 'auto',
 	        data: competencyChart
 	      });
 	    }
@@ -49787,7 +49780,7 @@
 	              value: '3',
 	              checked: this.state.grade === '3',
 	              onChange: this.handleSelect.bind(this) }),
-	            'Mostly Compelte',
+	            'Mostly Complete',
 	            _react2.default.createElement('input', { type: 'radio',
 	              value: '2',
 	              checked: this.state.grade === '2',
@@ -49803,7 +49796,9 @@
 	              checked: this.state.grade === '0',
 	              onChange: this.handleSelect.bind(this) }),
 	            'Words with Beth',
-	            _react2.default.createElement('input', { type: 'submit', value: 'Submit' })
+	            _react2.default.createElement('br', null),
+	            _react2.default.createElement('br', null),
+	            _react2.default.createElement('input', { className: 'submit-button', type: 'submit', value: 'Submit' })
 	          ),
 	          _react2.default.createElement(
 	            _reactRouter.Link,
@@ -49824,8 +49819,6 @@
 	
 	  return Grade;
 	}(_react2.default.Component);
-	
-	;
 	
 	exports.default = Grade;
 
