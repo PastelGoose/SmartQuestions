@@ -36,6 +36,7 @@ Without live update, run:
 ## To Run Live Compilation of Front End
 In terminal, in client/teacher folder, run:
   - npm run dev
+
 In terminal, in client/student folder, run:
   - npm run dev
 
