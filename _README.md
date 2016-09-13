@@ -3,6 +3,7 @@
 ## Package installation.
 
 You need to do *three* npm installs:
+
 1. In terminal, in server folder, run:
   - npm install
 2. In client/teacher folder, run:
