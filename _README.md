@@ -1,3 +1,19 @@
+#Getting Started
+
+## Setup the Database
+
+1. Install MySQL on your machine. Run by typing in terminal: 
+  - mysql.sever start
+2. Change root password for sequelize in index.js in db folder to whatever your root password is. It is set to 'hi' currently. (If you didn't do a secure install of MySQL, your root password will just be the empty-string.) 
+3. Go to db folder in terminal. Run:
+  - mysql -u root -p < schema.sql
+  - Enter root password when prompted.
+This will create the database and tables.
+4. For some dummy data: in db folder, run:
+  - mysql -u root -p < script.sql
+  - Enter root password when prompted.
+This will insert some teachers, students, questions, and queue some questions in db.
+
 #Links to helpful documents:
 
 - [Flow charts for the algorithm that assigns competencies and the algorithm that determines which questions to serve.][1]
