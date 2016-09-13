@@ -1,52 +1,8 @@
-# Project Name
+#Links to helpful documents:
 
-> Pithy project description
-
-## Team
-
-  - __Product Owner__: teamMember
-  - __Scrum Master__: teamMember
-  - __Development Team Members__: teamMember, teamMember
-
-## Table of Contents
-
-1. [Usage](#Usage)
-1. [Requirements](#requirements)
-1. [Development](#development)
-    1. [Installing Dependencies](#installing-dependencies)
-    1. [Tasks](#tasks)
-1. [Team](#team)
-1. [Contributing](#contributing)
-
-## Usage
-
-> Some usage instructions
-
-## Requirements
-
-- Node 0.10.x
-- Redis 2.6.x
-- Postgresql 9.1.x
-- etc
-- etc
-
-## Development
-
-### Installing Dependencies
-
-From within the root directory:
-
-```sh
-sudo npm install -g bower
-npm install
-bower install
-```
-
-### Roadmap
-
-View the project roadmap [here](LINK_TO_PROJECT_ISSUES)
-
-
-## Contributing
-
-See [CONTRIBUTING.md](CONTRIBUTING.md) for contribution guidelines.
+- [Flow charts for the algorithm that assigns competencies and the algorithm that determines which questions to serve.][1]
+- [Database schemas and their relationships.][2]
+- [List of endpoints and the data they serve/expect][3]
+[1]:https://drive.google.com/file/d/0Bwr5hGM9k3SUYnhrbldaVWNnbFE/view?ts=57d7695e
+[2]:https://drive.google.com/file/d/0Bwr5hGM9k3SUZGhDSUxRTy1DLWc/view?ts=57d76a4c
+[3]:https://docs.google.com/spreadsheets/d/1aqNWiwDfv5kisZA-WFoUan4rOEKXZ4wA4Q9zD3HGH0s/edit#gid=0
