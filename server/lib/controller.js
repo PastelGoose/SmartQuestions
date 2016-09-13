@@ -2,6 +2,7 @@ var db = require('../db');
 var utils = require('./utils');
 var _ = require('underscore');
 
+//string for testing adding a question
 var mystring= {"uid":1,"questions":[{"questionText":"what is the x kdjf","category":"recursion","difficulty":10},{"questionText":"y times kdjf","category":"logic","difficulty":1}]}
 
 var teacher = {
@@ -34,7 +35,6 @@ var teacher = {
 			submission.questions.forEach(function(question) {
 				db.Question.findOrCreate({where: {questionText: question.questionText, difficulty: question.difficulty}})
 				.spread(function(questionObj, createdQuestion) {
-					console.log('my question id!!', questionObj.id)
 					utils.addQuestionToExistingStudent(submission.uid, questionObj.id);
 					return questionObj.setTeacher(teacher);
 				})
@@ -63,8 +63,6 @@ var teacher = {
 			include: [{model:db.Category}]
 		})
 		.then(function(allQuestions) {
-			console.log(allQuestions)
-
 			res.json({data: allQuestions});
 		})
 	},
@@ -77,15 +75,15 @@ var teacher = {
 		})
 		.then(function(allQuestions) {
 			var ids = [];
+			//get a list of question ids for that teacher
 			allQuestions.forEach(function(question) {
 				ids.push(question.id);
 			})
-
+			//if the teacher has no questions, return
 			if (ids.length === 0 ) {
-				console.log('id length is 0')
 				return res.json({data: []})
 			}
-
+			//find questions in the id array. Look in the join table to see which questions are answered but have not been graded
 			db.Question.findAll({
 				where: {id: 
 					{$in: [ids]}
@@ -100,9 +98,9 @@ var teacher = {
 			})
 			.then(function(questionsResult) {
 				var allResults = [];
+				//formatting the resulting questions found for client
 				questionsResult.forEach(function(questionResult) {
 					if(questionResult.Students && questionResult.Students.length !== 0 && questionResult.Category) {
-						console.log('questionresult', questionResult)
 						var result = {
 							questionText: questionResult.questionText,
 							difficulty: questionResult.difficulty,
@@ -126,9 +124,10 @@ var teacher = {
 		var studentId = req.body.studentId;
 		var grade = req.body.grade;
 		var questionId = req.body.questionId;
-		console.log('request body in postGrades', req.body)
+
 		db.StudentQuestion.findOne({where: {StudentId: studentId, QuestionId: questionId}})
 		.then(function(foundQuestion) {
+			//change isgraded to true, add grade, and set grade date
 			foundQuestion.updateAttributes({isGraded: 1, grade: grade, gradedDate: new Date()});
 			res.send(foundQuestion);
 		})
@@ -147,8 +146,7 @@ var teacher = {
 			})
 
 			if (ids.length === 0 ) {
-				console.log('id length is 0')
-				return res.json({data: []})
+				return res.json({data: []});
 			}
 
 			db.Student.findAll({
@@ -157,7 +155,7 @@ var teacher = {
 				}, 
 				include: [{
 					model: db.Question, 
-					// required: true, enable this if you only want students who answered questions
+					// required: true <= enable this if you only want students who answered questions
 					through: {
 						attributes: ['answer', 'question', 'grade', 'answerDate'],
 		    			where: {isAnswered: true, isGraded: true}
@@ -174,12 +172,9 @@ var teacher = {
 			})
 			.then(function(results) {
 				var allResults = [];
-				console.log('results found!', results)
-				// res.json(results)
 
 				results.forEach(function(studentResult) {
 					// if(studentResult.Questions && studentResult.Questions.length !== 0 && studentResult.Categories) {
-						console.log('questionresult', studentResult)
 						var studentReport = {
 							studentId: studentResult.id,
 							name: studentResult.firstname + ' ' + studentResult.lastname,
@@ -210,17 +205,12 @@ var teacher = {
 							}
 							studentReport.competency.push(currCategory);
 						})
-
-						console.log('after scrubbing', studentReport);
 						allResults.push(studentReport);
-						console.log('final report', allResults);
 
 						if (allResults.length === results.length) {
 							res.json({data:allResults});
 						}
-					// }
 				})
-				// res.json({data: allResults});
 			})
 		})
 	}
@@ -229,222 +219,24 @@ var teacher = {
 
 
 var student = {
-	test2: function(req, res) {
-		db.Student.findAll({
-			include: [
-				{
-					model: db.Category,
-					as: 'Competency'
-				}
-			]
-		})
-		.then(function(result) {
-			console.log('result', result);
-			res.send(result)
-		})
-	
-		db.Student.findAll({
-			as: 'currstudent',
-			attributes: [['id', 'studentId']],
-			include: [
-			    {
-			    	model: db.Category,
-			    	// attributes: ['id'],
-			    	// group: ['id'],
-			    	include: {
-				    	model: db.Question,
-				    	attributes: ['difficulty'],
-				    	where: {id : student.studentId},
-				        // required: true,
-				        include: {
-				        	model: db.Student,
-					        through: {
-					        	attributes: ['grade', 'QuestionId', 'gradedDate', 'StudentId', 'workerReviewed', 'isGraded'],
-					        	where: {workerReviewed: false, isGraded: true}
-
-					        },
-				        },
-				        group: ['CategoryId']
-			    		
-			    	}
-			    }
-			],
-			// group: ['studentId']
-		})
-		.then(function(result) {
-			// result.updateAttributes({workerReviewed: true})
-			//by student by categoryid
-			console.log('results!!!', result)
-			var master = {
-				StudentId: 2,
-				categoryId: 4,
-			}
-			result.studentId
-			res.send(result)
-		})
-
-	},
 	test: function(req, res) {
-		//student category
-		//student questions
 
-	// db.Student.findAll({
-	// 	// where: {
-	// 	// 	workerReviewed: false
-	// 	// }, 
-	// 	attributes: ['id'],
-	// 	include: [
-	// 	    {
-	// 	        model: db.Question,
-	// 	        through: {
-	// 	        	attributes: ['grade', 'QuestionId', 'gradedDate', 'StudentId'],
-	// 	        	where: {workerReviewed: false, isGraded: true}
-	// 	        },
-	// 	        attributes: ['CategoryId']
-	// 	    }
-	// 	],
-	// 	// group: ['id']
-	// })
-	// .then(function(result) {
-	// 	console.log('results!!!', result)
-	// 	//this is by student by competency
-	// })
-
-
-
-		db.Student.findAll({
-				// where: {
-				// 	workerReviewed: false
-				// }, 
-				attributes: [['id', 'studentId']],
-				include: [
-				    {
-				        model: db.Question,
-				        required: true,
-				        through: {
-				        	attributes: ['id', 'grade', 'QuestionId', 'gradedDate', 'StudentId', 'workerReviewed', 'isGraded'],
-				        	where: {workerReviewed: false, isGraded: true}
-
-				        },
-				        attributes: ['CategoryId', 'difficulty'],
-				        group: ['CategoryId']
-				    }, 
-				    {
-				    	model: db.Category,
-				    	as: 'Competency',
-				    	through: {
-				    		attributes: ['competencyScore']
-				    	}
-				    }
-				],
-				// group: ['studentId']
-			})
-			.then(function(result) {
-				// result.updateAttributes({workerReviewed: true})
-				//by student by categoryid
-				// res.send(result)
-				var currCompetencyTable = [];
-				result.forEach(function(student) {
-					console.log('==============',student.get({plain:true}).studentId)
-					var currStudent = {
-						studentId: student.get({plain:true}).studentId,
-						categories: {},
-						competency: {}
-					}
-					student.Questions.forEach(function(question) {
-						var bundle = currStudent.categories[question.CategoryId] || [];
-						bundle.push([question.StudentQuestion.grade, question.difficulty])
-						if (bundle.length === 1) {
-							currStudent.categories[question.CategoryId] = bundle;
-						}
-					})
-					student.Competency.forEach(function(competency) {
-						if(!currStudent.competency[competency.id]) {
-							currStudent.competency[competency.id] = competency.IndividualCompetency.competencyScore;
-						}
-					})
-					currCompetencyTable.push(currStudent);
-				})
-
-				console.log('results!!!', result)
-				var newCompetencyTable = [];
-				currCompetencyTable.forEach(function(eachStudentObj) {
-					//inputs are the student's object with has it's grades and current competency scores and a tuning variable. larger the turning variable, the harder it is to improve
-					var newCompetency = utils.calculateCompetency(eachStudentObj, 3)
-					newCompetencyTable.push(newCompetency);
-					
-				})
-
-				//
-					res.send(newCompetencyTable);
-
-				//update db marking these questions as workerReviewed
-				console.log('---------------', result)
-				result.forEach(function(studentObj) {
-					studentObj.Questions.forEach(function(question) {
-						console.log('ahahahahahah', question.StudentQuestion)
-						question.StudentQuestion.updateAttributes({workerReviewed: true})
-						.then(function(updated) {
-							console.log('yayy', updated);
-						})
-					})
-				})
-
-				//update IndividualCompetency Table
-				//for each student
-				//for each newcompetencies that not no change
-				//look for individualCompetency where grab studernid and newcompetencyid
-				//updateattributes
-
-				newCompetencyTable.forEach(function(student) {
-					_.each(student.newCompetencies, function(val, key) {
-						if(val !== 'no change') {
-							var isImproving = val > student.oldCompetencies[key] ? 1 : 0;
-							console.log('isImproving', isImproving)
-							db.IndividualCompetency.findOne( {
-								where: {
-									StudentId: student.studentId,
-									CategoryId: key * 1
-								}
-							})
-							.then(function(studentComp) {
-								studentComp.updateAttributes({
-									competencyScore: val,
-									isImproving: isImproving
-								})
-								.then(function(result) {
-									console.log('==============', result);
-								})
-							})
-						}
-					})
-				})
-			})
 	},
+	//this is called when the student requests for new questions
 	retrieveSmartQuestions: function(req, res) {
 		studentId = req.query.uid || 2;
 
-		utils.findQuestions(studentId, 2, 3, 3, 2, res,function(result) {
-			console.log('myresult', result)
-			// if(result.questionsCount < 1) {
-			// 	utils.findQuestions(studentId, 6, 1, 4,0, function(result) {
-			// 		res.send(result);
-			// 	})
-			// // } else if (result.questionsCount < 10) {
-			// // 	res.send(result.questions);
-			// } else {
+		utils.findQuestions(studentId, 2, 3, 3, 2,function(result) {
 				if(!result) {
-					res.send({data: []})
+					res.send({data: []});
 				}
 				var orderCounter = 0;
 				var response = [];
-				var sortedResult = _.sortBy(result.questions, 'length')
-				// res.send(dani)
+				var sortedResult = _.sortBy(result.questions, 'length');
 				for (var i = 0; i < Math.min(sortedResult[sortedResult.length - 1].length, 5); i++){
 					if(orderCounter > 10) { break; }
 					sortedResult.forEach(function(question){
 						if (question[i]) {
-							console.log('inside', question[i])
 							var currQuestion = {
 								questionId: question[i].id,
 								difficulty: question[i].difficulty,
@@ -454,27 +246,23 @@ var student = {
 								answered: false,
 								category: question[i].Category.name
 							}
-						console.log('wah================', currQuestion)
-						response.push(currQuestion);
+							response.push(currQuestion);
 						}
 					})
 				}
-				console.log('finals')
+
 				res.send({data: response});
-			// }
 		})
 	},
 	//this is called when the student respond to one question. It logs the response in DB
 	respondOne: function(req, res) {
 		var uid = req.query.uid || 2;
 		var response = req.body;
-		console.log('i am in responseone')
 		db.StudentQuestion.findOne({where: {StudentId: response.uid, QuestionId: response.questionId}})
 		.then(function(foundQuestion) {
 			foundQuestion.updateAttributes({isAnswered: 1, answer: response.answer, answerDate: new Date()});
 			res.send(foundQuestion);
 		})
-
 	},
 	//this is called when the client asks for all questions for the student for the day. these are the question that are marked isQueued
 	retrieveQueuedQuestions: function(req, res) {
@@ -491,11 +279,8 @@ var student = {
 		})
 		.then(function(result) {
 			if (result.TeacherId === null) {
-			// console.log('result!!',result)
 				return res.send('No teacher found');
-				// console.log('after return')
 			}
-			console.log('result', result)
 			var result = result.get({plain: true});
 
 			if (result.Questions.length !== 0) {
@@ -516,11 +301,9 @@ var student = {
 						if(questionArray.length === result.Questions.length) {
 							res.json({data: questionArray});
 						}
-						
 					})
 				})
 			} else {
-				// console.log('did not find questions')
 				res.json({data: []});
 			}
 		})
@@ -538,7 +321,6 @@ var student = {
 				currTeacher.id = teacher.id;
 				result.push(currTeacher);
 			})
-			console.log('teachers!',result);
 			if (result.length === teachers.length) {
 				res.json({data: result});
 			}
@@ -552,11 +334,6 @@ var student = {
 		db.Student.findById(studentId)
 		.then(function(student) {
 			student.setTeacher(teacherId);
-			//grab questions from teacher 
-			//populate db with all question from the teacher. 
-// get questions and put them through a function
-	// the resulting questionIDs  get marked as queued
-
 			res.send(student);
 			utils.addQuestionsCategoriesToStudent(teacherId, studentId);
 		})
@@ -575,19 +352,6 @@ var student = {
 				include: [db.Category]
 			},
 			{
-		// 				db.Student.findAll({
-		// 	include: [
-		// 		{
-		// 			model: db.Category,
-		// 			as: 'Competency'
-		// 		}
-		// 	]
-		// })
-		// .then(function(result) {
-		// 	console.log('result', result);
-		// 	res.send(result)
-		// })
-
      			model: db.Category,
      			as: 'Competency',
 				through: {
@@ -596,9 +360,6 @@ var student = {
 			}]
 		})
 		.then(function(studentResult) {
-			console.log('results found!', studentResult)
-			// res.send(studentResult)
-			// res.send(studentResult)
 			var studentReport = {
 				studentId: studentResult.id,
 				name: studentResult.firstname + ' ' + studentResult.lastname,
@@ -626,7 +387,6 @@ var student = {
 					categoryName: category.name,
 					competencyScore: category.IndividualCompetency.competencyScore,
 					isImproving: category.IndividualCompetency.isImproving,
-
 				}
 				studentReport.competency.push(currCategory);
 			})
