@@ -19,11 +19,11 @@ You need to do **three** npm installs:
 3. Go to db folder in terminal. Run:
   - mysql -u root -p < schema.sql
   - Enter root password when prompted.
-This will create the database and tables.
+  - This will create the database and tables.
 4. For some dummy data: in db folder, run:
   - mysql -u root -p < script.sql
   - Enter root password when prompted.
-This will insert some teachers, students, questions, and queue some questions in db.
+  - This will insert some teachers, students, questions, and queue some questions in db.
 
 ## To Run Server
 
