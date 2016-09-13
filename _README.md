@@ -70,5 +70,6 @@ The database is ready for this. At the moment both teacher and student user ids 
 - Use react router on the student side too.
 - Markdown functionality for entering questions. Maybe see the formatted question appear in another field as you type.
 - Single landing page for both student and teacher.
+- unify packaging to the top level, so that only one npm install is required.
 
 [4]: https://github.com/reactjs/react-router-tutorial/tree/master/lessons/12-navigating
