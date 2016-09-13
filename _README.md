@@ -49,3 +49,23 @@ In terminal, in client/student folder, run:
 [1]:https://drive.google.com/file/d/0Bwr5hGM9k3SUYnhrbldaVWNnbFE/view?ts=57d7695e
 [2]:https://drive.google.com/file/d/0Bwr5hGM9k3SUZGhDSUxRTy1DLWc/view?ts=57d76a4c
 [3]:https://docs.google.com/spreadsheets/d/1aqNWiwDfv5kisZA-WFoUan4rOEKXZ4wA4Q9zD3HGH0s/edit#gid=0
+
+#Wish List
+
+##Big
+- No explicit assignment of difficulty to questions; algorithm assigns a difficulty based on students' performance.
+- Authentication
+  - Goalt 1; enable multiple students.
+  - Goal 2: enable multiple teachers.
+
+The database is ready for this. At the moment both teacher and student user ids are hard-coded; you'll need to change that.
+
+- Conglomeration of data from students in a class, metrics for the performance of a class as a whole.
+
+- Fancier data visualisation.
+
+##Small
+
+- The react router should use *browserHistory*, rather than *hashHistory*. See [here][4], and the next lesson.
+
+[4]: https://github.com/reactjs/react-router-tutorial/tree/master/lessons/12-navigating
