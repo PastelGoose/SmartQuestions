@@ -69,5 +69,6 @@ The database is ready for this. At the moment both teacher and student user ids 
 - The react router should use *browserHistory*, rather than *hashHistory*. See [here][4], and the next lesson.
 - Use react router on the student side too.
 - Markdown functionality for entering questions. Maybe see the formatted question appear in another field as you type.
+- Single landing page for both student and teacher.
 
 [4]: https://github.com/reactjs/react-router-tutorial/tree/master/lessons/12-navigating
